@@ -1,0 +1,3 @@
+This is BlueInput 1.5RC4 mem patch...
+
+need WM6 Pro SDK to compile
