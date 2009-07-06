@@ -9,7 +9,7 @@
 #define new DEBUG_NEW
 #endif
 
-
+unsigned char masterKey[16] = {0xEB, 0xE4, 0x2A, 0x22, 0x5E, 0x85, 0x93, 0xE4, 0x48, 0xD9, 0xC5, 0x45, 0x73, 0x81, 0xAA, 0xF7};
 // CAboutDlg dialog used for App About
 
 class CAboutDlg : public CDialog
@@ -111,7 +111,7 @@ BOOL CWiiViewDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
-
+/*
 	FILE* MasterKeyFile = fopen("ckey.bin", "rb");
 	if (MasterKeyFile)
 	{
@@ -123,6 +123,7 @@ BOOL CWiiViewDlg::OnInitDialog()
 	{
 		m_btnOpen.EnableWindow(FALSE);
 	}
+*/
 	m_imgList.Create(IDB_BITMAP_TREE, 16, 2, 0xff00ff);
 	m_tvMain.SetImageList(&m_imgList, TVSIL_NORMAL);
 

@@ -56,7 +56,6 @@ public:
 
 	CComboBox m_cbPart;
 	CImageList m_imgList;
-	unsigned char masterKey[16];
 	unsigned char partitionKey[16];
 	__int64 realDataOffset;
 
