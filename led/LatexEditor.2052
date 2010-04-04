@@ -1141,17 +1141,17 @@ Compressed:   No
 10944 Sort
 10945 /m173/m /bSort
 
-11000 START 
-11001 STOP
-11002 (compilation stoped)
+11000 开始 
+11001 停止
+11002 (编译停止)
 
-11020 Statistics
-11021 Current project:
-11022 files:
-11023 size:
-11024 rows:
-11025 chars:
-11026 Current file:
+11020 统计
+11021 当前项目:
+11022 文件:
+11023 大小:
+11024 行:
+11025 字符:
+11026 当前文件:
 
 11030 defined in
 11031 row
@@ -1189,13 +1189,13 @@ Compressed:   No
 11066 category unspecified!
 
 11067 /b0/b - Main
-11068 /b1/b - Mathematics, Computer Science
-11069 /b2/b - Physics, Chemistry
-11070 /b3/b - Biology, Medicine
-11071 /b4/b - Geology
+11068 /b1/b - 数学, 计算机科学
+11069 /b2/b - 物理, 化学
+11070 /b3/b - 生物学, 医学
+11071 /b4/b - 地质学
 
 // User commands
-11100 User commands
+11100 用户命令
 11101
 11102 save the category
 11103 change the category's name
@@ -1214,7 +1214,7 @@ Compressed:   No
 11116 /m120/m A place for a new command./nClick to add.
 
 //Code completion
-11120 Code completion
+11120 代码完成
 11121
 11122 completion list for selected commands:
 11123
@@ -1228,9 +1228,9 @@ Compressed:   No
 11131 Delay of command list appearance.
 11132 Show command list without delay.
 
-11150 line endings:
-11151 Specify line endings mode in files.
-11152 automatic
+11150 行结束符:
+11151 指定文件的行结束符模式.
+11152 自动
 11153 Check line endings mode used in the file.
 11154 Windows//DOS (CR+LF)
 11155
@@ -1241,7 +1241,7 @@ Compressed:   No
 11160 tab size:
 11161
 
-11200 Shortcuts
+11200 快捷键
 11201
 11202 find shortcut:
 11203
@@ -1259,7 +1259,7 @@ Compressed:   No
 11215 - incorrect shortcut
 
 // Messages
-12001 The file cannot be opened!
+12001 文件无法打开!
 12002 Unknown binary file!/nDo you want to open it?
 
 // DVI Errors:
@@ -1270,7 +1270,7 @@ Compressed:   No
 12104 Build-in DVI-viewer is disabled!/n/nTo enable it, choose: /n/bConfiguration//Options; Application//DVI viewer
 12105
 
-12110 /c1/c/b错误!/b/nDVI 浏览器 - Unknown error.
+12110 /c1/c/b错误!/b/nDVI 浏览器 - 未知错误.
 12111
 12112 /c1/c/b错误!/b/nDVI 浏览器 - KPathSEA library error.
 12113
@@ -1298,21 +1298,21 @@ Compressed:   No
 12137
 12138 /c1/c/b错误!/b/nDVI 浏览器 - Unsupported version of .dvi file.
 12139
-12140 /c1/c/b错误!/b/nDVI 浏览器 - No .dvi file.
+12140 /c1/c/b错误!/b/nDVI 浏览器 - 没有 .dvi 文件.
 12141
 12150 /c1/c/b错误!/b/nDVI 浏览器 - Error in font file.
 12151
-12152 /c1/c/b错误!/b/nDVI 浏览器 - No font file.
+12152 /c1/c/b错误!/b/nDVI 浏览器 - 没有字体文件.
 12153
 12154 /c1/c/b错误!/b/nDVI 浏览器 - Font file cannot be opened.
 12155
 12156 /c1/c/b错误!/b/nDVI 浏览器 - Wrong data in font file.
 12157
-12160 /c1/c/b错误!/b/nDVI 浏览器 - Wrong parameters.
+12160 /c1/c/b错误!/b/nDVI 浏览器 - 参数错误.
 12161
 12162 /c1/c/b错误!/b/nDVI 浏览器 - Wrong base resolution.
 12163
-12164 /c1/c/b错误!/b/nDVI 浏览器 - Wrong page sizes.
+12164 /c1/c/b错误!/b/nDVI 浏览器 - 页面大小错误.
 12165
 12166 /c1/c/b错误!/b/nDVI 浏览器 - No such a page.
 12167
@@ -1347,14 +1347,14 @@ Compressed:   No
 10002052	中文 (PRC)
 10003076	中文 (Hong Kong SAR
 10004100	中文 (Singapore)
-10001029	Czech
-10001030	Danish
-10001031	German (Standard)
-10002055	German (Swiss)
-10003079	German (Austrian)
-10004103	German (Luxembourg)
-10005127	German (Liechtenstein)
-10001032	Greek
+10001029	捷克语
+10001030	丹麦语
+10001031	德语 (Standard)
+10002055	德语 (Swiss)
+10003079	德语 (Austrian)
+10004103	德语 (Luxembourg)
+10005127	德语 (Liechtenstein)
+10001032	希腊语
 10001033	英语 (United States)
 10002057	英语 (United Kingdom)
 10003081	英语 (Australian)
@@ -1386,47 +1386,47 @@ Compressed:   No
 10018442	西班牙语 (Honduras)
 10019466	西班牙语 (Nicaragua)
 10020490	西班牙语 (Puerto Rico)
-10001035	Finnish
-10001036	French (Standard)
-10002060	French (Belgian)
-10003084	French (Canadian)
-10004108	French (Swiss)
-10005132	French (Luxembourg)
-10001037	Hebrew
-10001038	Hungarian
-10001039	Icelandic
-10001040	Italian (Standard)
-10002064	Italian (Swiss)
-10001041	Japanese
-10001042	Korean
-10002066	Korean (Johab)
-10001043	Dutch (Standard)
-10002067	Dutch (Belgian)
-10001044	Norwegian (Bokmal)
-10002068	Norwegian (Nynorsk)
-10001045	Polish
-10001046	Portuguese (Brazil)
-10002070	Portuguese (Portugal)
-10001048	Romanian
-10001049	Russian
-10001050	Croatian
-10002074	Serbian (Latin)
-10003098	Serbian (Cyrillic)
-10001051	Slovak
-10001052	Albanian
-10001053	Swedish
-10002077	Swedish (Finland)
-10001054	Thai
-10001055	Turkish
-10001057	Indonesian
-10001058	Ukrainian
-10001059	Belarusian
-10001060	Slovenian
-10001061	Estonian
-10001062	Latvian
-10001063	Lithuanian
-10001065	Farsi
-10001066	Vietnamese
-10001069	Basque
-10001078	Afrikaans
-10001080	Faeroese
+10001035	芬兰语
+10001036	法语 (Standard)
+10002060	法语 (Belgian)
+10003084	法语 (Canadian)
+10004108	法语 (Swiss)
+10005132	法语 (Luxembourg)
+10001037	希伯来语
+10001038	匈牙利语
+10001039	冰岛语
+10001040	意大利语 (Standard)
+10002064	意大利语 (Swiss)
+10001041	日语
+10001042	韩语
+10002066	韩语 (Johab)
+10001043	荷兰语 (Standard)
+10002067	荷兰语 (Belgian)
+10001044	挪威语 (Bokmal)
+10002068	挪威语 (Nynorsk)
+10001045	波兰语
+10001046	葡萄牙语 (Brazil)
+10002070	葡萄牙语 (Portugal)
+10001048	罗马尼亚语
+10001049	俄语
+10001050	克罗地亚语
+10002074	塞尔维亚语 (Latin)
+10003098	塞尔维亚语 (Cyrillic)
+10001051	斯洛伐克语
+10001052	阿尔巴尼亚语
+10001053	瑞典语
+10002077	瑞典语 (Finland)
+10001054	泰语
+10001055	土耳其语
+10001057	印度尼西亚语
+10001058	乌克兰语
+10001059	白俄罗斯语
+10001060	斯洛文尼亚语
+10001061	爱沙尼亚语
+10001062	拉脱维亚语
+10001063	立陶宛语
+10001065	波斯语
+10001066	越南语
+10001069	巴斯克语
+10001078	斐语
+10001080	费罗语
