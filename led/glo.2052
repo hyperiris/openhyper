@@ -1,0 +1,26 @@
+AFCSTRINGTABLE
+LanguageID:   2052
+Default:      No
+LanguageVer:  0.30
+LanguageName: Simplified Chinese
+Author:       HyperIris
+Info:         Additional glossary file commands
+Compressed:   No
+
+// Makra
+#include<macros.1033>
+
+// Nazwa grupy
+50006	术语文件的附件命令
+
+// Dodatkowe komendy
+59001	/ddef/d/b\glossaryxentry/b{keyword}{page_no}/n
+	</ddesc/dThe /b\glossaryentry/b command prepars an glossary entry./n
+	</dparn/d
+	</dparitem/dkeyword/dpardesc/d a keyword to appear in the glossary,/n
+	</dparitem/dpage_no/dpardesc/d page number of the /demphon/dkeyword/demphoff/d appearance./n
+	</dex1/d
+	<\glossaryentry{Euler}{23}
+
+// Dodatkowe teksty
+59101	你确定要编辑术语文件?

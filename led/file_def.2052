@@ -1,0 +1,28 @@
+AFCSTRINGTABLE
+LanguageID:   2052
+Default:      No
+LanguageVer:  0.30
+LanguageName: Simplified Chinese
+Author:       HyperIris
+Info:         File type names for File-New dialog
+Compressed:   No
+
+// Makra
+#include<macros.1033>
+
+// Nazwa grupy
+20001	Bibliography file in BibTeX 格式
+20002	Bibliography file in BibTeX 格式
+20003	main
+20004	Font definition file in METAFONT 格式
+20005	Font definition file in METAFONT 格式
+20006	main
+20007	Graphics source file in MetaPost 格式
+20008	Graphics source file in MetaPost 格式
+20009	main
+20010	TeX//LaTeX 文档
+20011	TeX//LaTeX 文档
+20012	main
+20013	正文文件
+20014	正文文件
+20015	text

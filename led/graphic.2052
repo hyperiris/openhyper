@@ -1,0 +1,13 @@
+AFCSTRINGTABLE
+LanguageID:   2052
+Default:      No
+LanguageVer:  0.30
+LanguageName: Simplified Chinese
+Author:       HyperIris
+Info:         Graphic files
+Compressed:   No
+
+#include <macros.1033>
+
+// Group name
+50013	м╪пннд╪Ч

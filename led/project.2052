@@ -1,0 +1,33 @@
+AFCSTRINGTABLE
+LanguageID:   2052
+Default:      No
+LanguageVer:  0.30
+LanguageName: Simplified Chinese
+Author:       HyperIris
+Info:         Strings for project description file
+Compressed:   No
+
+// Group name
+50008	TeX//LaTeX - 项目描述文件
+
+// Additional commands
+60001	TeX//LaTeX 文件
+60002	Bibliography 文件
+60003	Glossary 文件
+60004	Graphical 文件
+60005	Index 文件
+60006	List of tables, graphics, contents 文件
+60007	Styl and package 文件
+60008	Compilation log 文件
+60009	MetaPost 文件
+
+
+60201	TeX//LaTeX 文件
+60202	Bibliography 文件
+60203	Glossary 文件
+60204	Graphical 文件
+60205	Index 文件
+60206	List of tables, graphics, contents 文件
+60207	Styl and package 文件
+60208	Compilation log 文件
+60209	MetaPost 文件
