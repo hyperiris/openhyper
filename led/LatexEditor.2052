@@ -500,12 +500,12 @@ Compressed:   No
 9999 uncomment
 10000 change of letters capitalisation
 10001 <new line>
-10002 deletion
-10003 pasting
-10004 typing
-10005 replacement
-10006 Undo
-10007 Redo
+10002 删除
+10003 粘贴
+10004 输入
+10005 替换
+10006 撤销
+10007 重做
 10008 of
 
 10009 项目:
@@ -629,9 +629,9 @@ Compressed:   No
 
 // New Dialog
 10200 添加到项目:
-10201 新建
-10202 新建项目
-10203 新建
+10201 new
+10202 new project
+10203 new
 10204 There is a file of given name!
 10205 Creating the file of given name will cause/nthe actual contents of the existing file!/n/nDo you want to continue?
 10206 The directory of given name exists and is not empty!
@@ -1134,11 +1134,11 @@ Compressed:   No
 10932 Move down
 10933 /m161/m /bMoves down   />/m119/m/>[Ctrl+Down]
 
-10940 Add
+10940 添加
 10941 /m167/m /bAdd   />/m119/m/>[Ctrl+Ins]
-10942 Remove
+10942 删除
 10943 /m169/m /bRemove   />/m119/m/>[Ctrl+Del]
-10944 Sort
+10944 排序
 10945 /m173/m /bSort
 
 11000 开始 
@@ -1157,18 +1157,18 @@ Compressed:   No
 11031 row
 11032 unknown TeX//LaTeX command
 
-11040 Dictionary maintenance
-11041 language:
+11040 维护字典
+11041 语言:
 11042 language and dialect.
-11043 category:
+11043 分类:
 11044 Dictionary category.
-11045 size:
+11045 大小:
 11046 Dictionary size.
-11047 name:
+11047 名称:
 11048 Dictionary name.
-11049 version:
+11049 版本:
 11050 Dictionary version number.
-11051 info:
+11051 信息:
 11052 Additional information.
 11053 Make new empty dictionary.
 11054 Import wordlist.
@@ -1206,11 +1206,11 @@ Compressed:   No
 11108
 11109 category's range:
 11110 Specify when the category should be used,/nuse file mask, e.g., /b/n/t*.tex;*.sty 
-11111 command
+11111 命令
 11112 
-11113 hint
+11113 提示
 11114
-11115 <new>
+11115 <新建>
 11116 /m120/m A place for a new command./nClick to add.
 
 //Code completion
@@ -1222,9 +1222,9 @@ Compressed:   No
 11125
 11126 completion
 11127 use:/n/t/b//n/b for new row,/n/t/b//|/b for cursor position,/n/t/b/////b for //
-11128 <new>
+11128 <新建>
 11129 /m120/m A place for a new completion./nClick to add.
-11130 delay (ms):
+11130 延迟 (毫秒):
 11131 Delay of command list appearance.
 11132 Show command list without delay.
 
@@ -1300,7 +1300,7 @@ Compressed:   No
 12139
 12140 /c1/c/b错误!/b/nDVI 浏览器 - 没有 .dvi 文件.
 12141
-12150 /c1/c/b错误!/b/nDVI 浏览器 - Error in font file.
+12150 /c1/c/b错误!/b/nDVI 浏览器 - 字体文件错误.
 12151
 12152 /c1/c/b错误!/b/nDVI 浏览器 - 没有字体文件.
 12153
