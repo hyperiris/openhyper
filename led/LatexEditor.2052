@@ -571,7 +571,7 @@ Compressed:   No
 10087 文件没有保存!
 10088 Do you want to save changes now?
 10089 new, unsaved
-10090 closed
+10090 已关闭
 
 10091 Default highlighting scheme
 10092 Project was not saved!
@@ -594,7 +594,7 @@ Compressed:   No
       </nYou can define /b10/b bookmarks (numbered /b0-9/b)/nfor each file./n To add a bookmark no. /bX />/m119/m/>[Ctrl+Shift+'X']
 10115 &Bookmarks
 10116 row
-10117 File:
+10117 文件:
 10118 Row:
 10120 (no suggestions)
 10121 Show all suggestions...
@@ -628,10 +628,10 @@ Compressed:   No
 10161 Ignore the read-only flag and overwrite?
 
 // New Dialog
-10200 add to project:
-10201 New
-10202 New project
-10203 New
+10200 添加到项目:
+10201 新建
+10202 新建项目
+10203 新建
 10204 There is a file of given name!
 10205 Creating the file of given name will cause/nthe actual contents of the existing file!/n/nDo you want to continue?
 10206 The directory of given name exists and is not empty!
@@ -641,9 +641,9 @@ Compressed:   No
 10240 The following files are unsaved! Do you want to save them?
 10241 Save selected
 10242 Save selected file and remove it from the list.
-10243 Save all
+10243 全部保存
 10244 
-10245 Do not save
+10245 不保存
 10246 
 
 // Reload Dialog
@@ -656,13 +656,13 @@ Compressed:   No
 10262 do not show this window
 
 // Abort Printing Dialog
-10270 Printing
+10270 正在打印
 
 // Print Dialog
-10280 Print
-10281 printer:
+10280 打印
+10281 打印机:
 10282 Select printer which you want to use.
-10283 settings...
+10283 设置...
 10285 print heading and page numbers
 10286 print row numbers
 10287 print syntax highlighting
@@ -671,42 +671,42 @@ Compressed:   No
 10290 print selected block only
 10291 print colorings
 
-10295 File: 
-10296 Page
+10295 文件: 
+10296 页
 10297 from
 10298 Printed: 
 
 
 // LEd Options Ddialog
-10300 Spellchecking
+10300 拼写检查
 10301
-10302 Dictionaries
+10302 字典
 10303
-10304 Language settings
+10304 语言设置
 10305
 10306 Thesauri
 10307
 10308 Thesauri
 10309 
-10310 Application
+10310 应用程序
 10311
-10312 Directories
+10312 目录
 10313
 10314 Associated file types
 10315
-10316 Editor
+10316 编辑器
 10317
 10318 Filters
 10319
-10320 Group definitions
+10320 组定义
 10321
-10322 DVI Viewer
+10322 DVI 浏览器
 10323
-10324 Syntax highlight
+10324 语法加亮
 10325
 10326 Parenthesis highlight
 10327
-10328 Archive
+10328 归档
 10329
 
 10330 check whether some new messages are available at LEd's home page
@@ -753,11 +753,11 @@ Compressed:   No
 10368 /b/c9/cError! /b/c/cAn integer number should be entered.
 10369 /b/c9/cError! /b/c/cAn entered number should be from range
 
-10370 main dictionary:
+10370 主字典:
 10371
 10372 all available dictionaries:
 10373 Specify default additional dictionaries.
-10374 Main dictionary
+10374 主字典
 10375 Default scheme
 
 10376 available substitution schemes:
@@ -789,21 +789,21 @@ Compressed:   No
 10401
 10402 definitions:
 10403
-10404 dictionaries:
+10404 字典:
 10405
-10406 languages:
+10406 语言:
 10407
-10408 projects:
+10408 项目:
 10409
-10410 templates:
+10410 模板:
 10411
-10412 resources:
+10412 资源:
 10413
 10414 thesauri:
 10415 
-10416 language:
+10416 语言:
 10417
-10418 <default>
+10418 <缺省>
 10419
 10420 hints alphablending:
 10421
@@ -820,11 +820,11 @@ Compressed:   No
 10438 enable build-in DVI viewer
 10439
 
-10440 hints
-10441 turn on//turn off hints
-10442 highlights
-10443 turn on//turn off keyword highlights
-10444 commands
+10440 提示
+10441 打开//关闭提示
+10442 加亮
+10443 打开//关闭关键字加亮
+10444 命令
 10445 turn on//turn off commands
 10448 TeX distribution:
 10449
@@ -832,21 +832,21 @@ Compressed:   No
 10451
 10452 GSDLL32.DLL directory:
 10453
-10454 PostScript fonts:
+10454 PostScript 字体:
 10455
 10456 temporary files:
 10457
-10458 resolution:
+10458 分辨率:
 10459 default base resolution of DVI files in preview
-10460 paper size:
+10460 纸张大小:
 10461
-10462 DVI file name:
+10462 DVI 文件名称:
 10463
 10464 <project name>.dvi
 10465 <main file>.dvi 
-10466 mm
-10467 inch
-10468 other
+10466 毫米
+10467 英寸
+10468 其它
 10469 DVI:
 10470 font searching library:
 10471
@@ -854,7 +854,7 @@ Compressed:   No
 10473 font making script:
 10474
 10475 mktexpk.exe; makepk.exe
-10477 rotate
+10477 旋转
 
 10478 show page contents when it is scrolled
 10479
@@ -867,7 +867,7 @@ Compressed:   No
 10486 Zoom
 10487 fallback font:
 10488 Font used, when there is no possibility to produce font specified in a DVI file
-10489 mode:
+10489 模式:
 10490 Mode specifying printer type
 10491 cmr10
 10492 ljfour; sunl; nextscrn; toshiba; cx; nexthi; linoone  
@@ -880,8 +880,8 @@ Compressed:   No
 10499 /m240/m square;/m241/m rectangle;/m250/m circle
 
 // Find Dialog
-10500 Find
-10502 find:
+10500 查找
+10502 查找:
 10503 Enter text to find.
 10504 uppercase sensitivity
 10505 color found text:
@@ -892,10 +892,10 @@ Compressed:   No
 10510 Use regular expressions
 
 // Replace Dialog
-10530 Replace
-10532 replace:
+10530 替换
+10532 替换:
 10533 Enter text to replace the found text.
-10534 Replace all
+10534 全部替换
 10536 ask before a replacement
 10538 replacements only in selected block
 10544 Find and Replace
@@ -905,9 +905,9 @@ Compressed:   No
 
 10550 line wrapping
 10551
-10552 code folding
+10552 代码折叠
 10553
-10554 font:
+10554 字体:
 10555
 10556 highlighting of matched parenthesizes
 10557
@@ -916,10 +916,10 @@ Compressed:   No
 
 10560 show TeX source specials
 10561
-10562 highlight current line
+10562 加亮当前行
 10563
 
-10570 Hints
+10570 提示
 10571
 
 // Project Options Dialog
@@ -932,7 +932,7 @@ Compressed:   No
 10644 after closing, but not more frequenlty than a month
 10645 make archive in:
 10646
-10647 archive name:
+10647 归档名称:
 10648
 10649 archive components:
 
@@ -955,10 +955,10 @@ Compressed:   No
 10683 Connecting to server and downloading selected add-ons.
 10684 downloading of add-ons list...
 
-10690 Add-ons downloading
-10691 Preparing for download...
-10692 Add-ons downloading finished.
-10693 file
+10690 正在下载插件
+10691 准备下载...
+10692 插件下载完成.
+10693 文件
 10694 downloaded
 10695 of
 10696 /c9/c/bError!/n/eSome packages are not downloaded.
@@ -969,20 +969,20 @@ Compressed:   No
 10703 Name(description) of the command.
 10704 hint:
 10705 Command hint/nin NT format.
-10706 hotkey:
-10707 Hotkey.
-10708 bitmap:
+10706 热键:
+10707 热键.
+10708 位图:
 10709 Bitmap identifier in /b*.crf/b resources.
 10710 /bBatch file
 10711 Command executes a batch file.
-10712 /bText
+10712 /b文本
 10713 Command puts text in the edited file.
-10714 /bMacro
+10714 /b宏
 10715 Command executes a macro/n(will be available in version 0.5)
 10716 Nowadays, macros are not supported./nThey should be added in version 0.5.
 10717 batch file:
 10718 
-10719 parameters:
+10719 参数:
 10720 /zList of special parameters:/g(2,1)(_,_)N0S0E0W0/g
 </b<PROGRAMDIR>/n<PROJECT>/n<PROJECTDIR>/n<PROJECTNAME>/n<PROJECTNAMEEXT>/n<MAINFILE>/n<MAINFILEDIR>/n<MAINFILENAME>/n<MAINFILENAMEEXT>/n<FILE>/n<FILEDIR>/n<FILENAME>/n<FILENAMEEXT>/,
 <- LEd directory/n
@@ -1015,30 +1015,30 @@ Compressed:   No
 10753 path
 10754 
 
-10760 Toolbars
+10760 工具栏
 10761
 10762 Tool paletes
 10763
-10764 Commands
+10764 命令
 10765
-10766 Settings
+10766 设置
 10767
-10768 new toolbar
-10769 remove toolbar
-10770 restore defaults
+10768 新建工具栏
+10769 删除工具栏
+10770 恢复缺省设置
 10771 show hints for menu commands
 10772
 10773 show hints for toolbar commands
 10774
-10775 separator
+10775 分隔符
 10776
-10777 New toolbar
-10778 Name:
+10777 新建工具栏
+10778 名称:
 10779 show tool paletes pointed by mouse
 10780
-10781 new command
-10782 remove command
-10783 change command
+10781 新建命令
+10782 删除命令
+10783 改变命令
 10784 show suggestions from spellchecking dictionaries
 10785
 10786 show suggestions from thesauri
@@ -1046,7 +1046,7 @@ Compressed:   No
 10788 show hints for commands in editor
 10789
 10790 Enter text for insertion
-10791 Text:
+10791 文本:
 10792 Move to page no.
 10793 Page no.:
 
@@ -1057,7 +1057,7 @@ Compressed:   No
 
 // Spellchecking dialog
 10820 Spellchecking
-10822 Next
+10822 下一个
 10823 Go to next error.
 10824 Make a correction
 10825 Replace with a selected word.
@@ -1270,83 +1270,83 @@ Compressed:   No
 12104 Build-in DVI-viewer is disabled!/n/nTo enable it, choose: /n/bConfiguration//Options; Application//DVI viewer
 12105
 
-12110 /c1/c/bError!/b/nDVI Viewer - Unknown error.
+12110 /c1/c/b错误!/b/nDVI 浏览器 - Unknown error.
 12111
-12112 /c1/c/bError!/b/nDVI Viewer - KPathSEA library error.
+12112 /c1/c/b错误!/b/nDVI 浏览器 - KPathSEA library error.
 12113
-12114 /c1/c/bError!/b/nDVI Viewer - No KPathSEA library.
+12114 /c1/c/b错误!/b/nDVI 浏览器 - No KPathSEA library.
 12115
-12116 /c1/c/bError!/b/nDVI Viewer - Current vesrsion of KPathSEA library is not supported.
+12116 /c1/c/b错误!/b/nDVI 浏览器 - Current vesrsion of KPathSEA library is not supported.
 12117
-12120 /c1/c/bError!/b/nDVI Viewer - GSDLL32 libraty error.
+12120 /c1/c/b错误!/b/nDVI 浏览器 - GSDLL32 libraty error.
 12121
-12122 /c1/c/bError!/b/nDVI Viewer - No GSDLL32 library.
+12122 /c1/c/b错误!/b/nDVI 浏览器 - No GSDLL32 library.
 12123
-12124 /c1/c/bError!/b/nDVI Viewer - Current vesrion of GSDLL32 library is not supported.
+12124 /c1/c/b错误!/b/nDVI 浏览器 - Current vesrion of GSDLL32 library is not supported.
 12125
-12126 /c1/c/bError!/b/nDVI Viewer - GSDLL32 library internal error.
+12126 /c1/c/b错误!/b/nDVI 浏览器 - GSDLL32 library internal error.
 12127
-12128 /c1/c/bError!/b/nDVI Viewer - No EPS file to include.
+12128 /c1/c/b错误!/b/nDVI 浏览器 - No EPS file to include.
 12129
-12130 /c1/c/bError!/b/nDVI Viewer - Error in .dvi file.
+12130 /c1/c/b错误!/b/nDVI 浏览器 - Error in .dvi file.
 12131
-12132 /c1/c/bError!/b/nDVI Viewer - Error in preambule of .dvi file.
+12132 /c1/c/b错误!/b/nDVI 浏览器 - Error in preambule of .dvi file.
 12133
-12134 /c1/c/bError!/b/nDVI Viewer - Unkonwn command in .dvi file.
+12134 /c1/c/b错误!/b/nDVI 浏览器 - Unkonwn command in .dvi file.
 12135
-12136 /c1/c/bError!/b/nDVI Viewer - It is not file of DVI type.
+12136 /c1/c/b错误!/b/nDVI 浏览器 - It is not file of DVI type.
 12137
-12138 /c1/c/bError!/b/nDVI Viewer - Unsupported version of .dvi file.
+12138 /c1/c/b错误!/b/nDVI 浏览器 - Unsupported version of .dvi file.
 12139
-12140 /c1/c/bError!/b/nDVI Viewer - No .dvi file.
+12140 /c1/c/b错误!/b/nDVI 浏览器 - No .dvi file.
 12141
-12150 /c1/c/bError!/b/nDVI Viewer - Error in font file.
+12150 /c1/c/b错误!/b/nDVI 浏览器 - Error in font file.
 12151
-12152 /c1/c/bError!/b/nDVI Viewer - No font file.
+12152 /c1/c/b错误!/b/nDVI 浏览器 - No font file.
 12153
-12154 /c1/c/bError!/b/nDVI Viewer - Font file cannot be opened.
+12154 /c1/c/b错误!/b/nDVI 浏览器 - Font file cannot be opened.
 12155
-12156 /c1/c/bError!/b/nDVI Viewer - Wrong data in font file.
+12156 /c1/c/b错误!/b/nDVI 浏览器 - Wrong data in font file.
 12157
-12160 /c1/c/bError!/b/nDVI Viewer - Wrong parameters.
+12160 /c1/c/b错误!/b/nDVI 浏览器 - Wrong parameters.
 12161
-12162 /c1/c/bError!/b/nDVI Viewer - Wrong base resolution.
+12162 /c1/c/b错误!/b/nDVI 浏览器 - Wrong base resolution.
 12163
-12164 /c1/c/bError!/b/nDVI Viewer - Wrong page sizes.
+12164 /c1/c/b错误!/b/nDVI 浏览器 - Wrong page sizes.
 12165
-12166 /c1/c/bError!/b/nDVI Viewer - No such a page.
+12166 /c1/c/b错误!/b/nDVI 浏览器 - No such a page.
 12167
-12168 /c1/c/bError!/b/nDVI Viewer - Wrong page coordinates.
+12168 /c1/c/b错误!/b/nDVI 浏览器 - Wrong page coordinates.
 12169
 
 //DVIFontMaker
-12200 /c4/c/bMaking font:
-12201 /c4/c/bSearching font:
+12200 /c4/c/b生成字体:
+12201 /c4/c/b搜索字体:
 
 
 // Language names
-10001025	Arabic (Saudi Arabia)
-10002049	Arabic (Iraq)
-10003073	Arabic (Egypt)
-10004097	Arabic (Libya)
-10005121	Arabic (Algeria)
-10006145	Arabic (Morocco)
-10007169	Arabic (Tunisia)
-10008193	Arabic (Oman)
-10009217	Arabic (Yemen)
-10010241	Arabic (Syria)
-10011265	Arabic (Jordan)
-10012289	Arabic (Lebanon)
-10013313	Arabic (Kuwait)
-10014337	Arabic (U.A.E.)
-10015361	Arabic (Bahrain)
-10016385	Arabic (Qatar)
-10001026	Bulgarian
-10001027	Catalan
-10001028	Chinese (Taiwan)
-10002052	Chinese (PRC)
-10003076	Chinese (Hong Kong SAR
-10004100	Chinese (Singapore)
+10001025	阿位伯语 (Saudi Arabia)
+10002049	阿位伯语 (Iraq)
+10003073	阿位伯语 (Egypt)
+10004097	阿位伯语 (Libya)
+10005121	阿位伯语 (Algeria)
+10006145	阿位伯语 (Morocco)
+10007169	阿位伯语 (Tunisia)
+10008193	阿位伯语 (Oman)
+10009217	阿位伯语 (Yemen)
+10010241	阿位伯语 (Syria)
+10011265	阿位伯语 (Jordan)
+10012289	阿位伯语 (Lebanon)
+10013313	阿位伯语 (Kuwait)
+10014337	阿位伯语 (U.A.E.)
+10015361	阿位伯语 (Bahrain)
+10016385	阿位伯语 (Qatar)
+10001026	保加利亚语
+10001027	加泰罗尼亚语
+10001028	中文 (Taiwan)
+10002052	中文 (PRC)
+10003076	中文 (Hong Kong SAR
+10004100	中文 (Singapore)
 10001029	Czech
 10001030	Danish
 10001031	German (Standard)
@@ -1355,37 +1355,37 @@ Compressed:   No
 10004103	German (Luxembourg)
 10005127	German (Liechtenstein)
 10001032	Greek
-10001033	English (United States)
-10002057	English (United Kingdom)
-10003081	English (Australian)
-10004105	English (Canadian)
-10005129	English (New Zealand)
-10006153	English (Ireland)
-10007177	English (South Africa)
-10008201	English (Jamaica)
-10009225	English (Caribbean)
-10010249	English (Belize)
-10011273	English (Trinidad)
-10001034	Spanish (Traditional Sort)
-10002058	Spanish (Mexican)
-10003082	Spanish (Modern Sort)
-10004106	Spanish (Guatemala)
-10005130	Spanish (Costa Rica)
-10006154	Spanish (Panama)
-10007178	Spanish (Dominican Republic)
-10008202	Spanish (Venezuela)
-10009226	Spanish (Colombia)
-10010250	Spanish (Peru)
-10011274	Spanish (Argentina)
-10012298	Spanish (Ecuador)
-10013322	Spanish (Chile)
-10014346	Spanish (Uruguay)
-10015370	Spanish (Paraguay)
-10016394	Spanish (Bolivia)
-10017418	Spanish (El Salvador)
-10018442	Spanish (Honduras)
-10019466	Spanish (Nicaragua)
-10020490	Spanish (Puerto Rico)
+10001033	英语 (United States)
+10002057	英语 (United Kingdom)
+10003081	英语 (Australian)
+10004105	英语 (Canadian)
+10005129	英语 (New Zealand)
+10006153	英语 (Ireland)
+10007177	英语 (South Africa)
+10008201	英语 (Jamaica)
+10009225	英语 (Caribbean)
+10010249	英语 (Belize)
+10011273	英语 (Trinidad)
+10001034	西班牙语 (Traditional Sort)
+10002058	西班牙语 (Mexican)
+10003082	西班牙语 (Modern Sort)
+10004106	西班牙语 (Guatemala)
+10005130	西班牙语 (Costa Rica)
+10006154	西班牙语 (Panama)
+10007178	西班牙语 (Dominican Republic)
+10008202	西班牙语 (Venezuela)
+10009226	西班牙语 (Colombia)
+10010250	西班牙语 (Peru)
+10011274	西班牙语 (Argentina)
+10012298	西班牙语 (Ecuador)
+10013322	西班牙语 (Chile)
+10014346	西班牙语 (Uruguay)
+10015370	西班牙语 (Paraguay)
+10016394	西班牙语 (Bolivia)
+10017418	西班牙语 (El Salvador)
+10018442	西班牙语 (Honduras)
+10019466	西班牙语 (Nicaragua)
+10020490	西班牙语 (Puerto Rico)
 10001035	Finnish
 10001036	French (Standard)
 10002060	French (Belgian)
