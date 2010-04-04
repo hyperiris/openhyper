@@ -7,41 +7,41 @@ Author:       HyperIris
 Info:         
 Compressed:   No
 // AFC strings, read only
-00001  Yes
-00002  No
+00001  是
+00002  否
 00003  确定
 00004  取消
 00005  帮助
 00006  忽略
 00007  重试
-00008  Stop
-00009  Start
+00008  停止
+00009  开始
 00010  Go
-00011  Error
+00011  错误
 00012  信息
-00013  Are you sure?
+00013  你确定吗?
 00014  退出
 00015  全部
-00016  Abort
+00016  终止
 00017  应用
-00018  Next
-00019  Back
+00018  下一个
+00019  上一个
 
 50 ANSI
-51 Baltic
+51 波罗的语
 52 繁体中文
-53 Eastern Europe
+53 东欧语言
 54 简体中文
-55 Greek
-56 Korean
-57 Russian
+55 希腊语
+56 韩语
+57 俄语
 58 日语
-59 Turkish
-60 Vietnamese
-61 Arabic
-62 Hebrew
-63 Thai
-64 default charset
+59 土耳其语
+60 越南语
+61 阿拉伯语
+62 希伯来语
+63 泰国语
+64 缺省字符集
 
 // bitmap codes
 // IDB_PINDOWN		100
@@ -196,79 +196,79 @@ Compressed:   No
 // IDB_STOP_GREEN   258
 
 // LEd - main groups
-100 LEd project group
-101 LEd project
+100 LEd 项目组
+101 LEd 项目
 
 // toolbar strings
 110 菜单
 120 标准
 130 工具
-140 Toolkit
+140 工具箱
 150 帮助
 160 编辑
 170 剪贴板
 
 // group strings
-200 Popup menu
+200 弹出菜单
 201 Commands not assigned to groups/nor popup menu commands.
-210 File commands
-211 Commands for files and documents.
-220 Edit commands
-221 Edit and Clipboard commands.
-230 Tools commands
+210 文件命令
+211 文件和文档命令.
+220 编辑命令
+221 编辑和剪贴板命令.
+230 工具命令
 231 Tools Configuration Commands.
-240 Other
-241 Other commands.
-250 User commands
-251 Command added by the user.
+240 其它
+241 其它命令.
+250 用户命令
+251 用户添加的命令.
 
 // popup menu
-500 &Save
+500 保存(&S)
 501 /m138/m /bSave   />[Shortcut:File.Save]/b/n/<Save selected file.
-502 &Close 
+502 关闭(&C)
 503 /bClose   />[Shortcut:File.Close]/b/n/<Close selected file.
-504 Save Project
+504 保存项目
 505 /m138/m /bSave Project   />[Shortcut:File.SaveProject]/b/n/<Save selected project.
-506 &Close Project
+506 关闭项目(&C)
 507 /bClose Project   />[Shortcut:File.CloseProject]/b/n/<Close selected project.
-508 Add File
+508 添加文件
 509 /m167/m /bAdd File   />[Shortcut:File.AddToProject]/b/n/<Add existing file/nto project.
-510 Remove File
+510 删除文件
 511 /m169/m /bRemove File   />[Shortcut:File.RemoveFromProject]/b/n/<Remove selected file/nfrom project.
-512 Save Project As...
+512 项目另存为...
 513 /bSave Project As...   />[Shortcut:File.SaveProjectAs]/b/n/<Save selected project changing/nits name or location.
-514 Project Options
+514 项目选项
 515 /m135/m /bProject Options  />[Shortcut:Config.ProjectOptions]/b/n/<Chofigure selected project.
-516 Save Group
+516 保存组
 517 /m138/m /bSave Group   />[Shortcut:File.SaveGroup]/b/n/<Save project group.
-518 Save Group As...
+518 组另存为...
 519 /bSave Project As...   />[Shortcut:File.SaveGroupAs]/b/n/<Save project group changing/nits name or location.
-520 &Close Group
+520 关闭组(&C)
 521 /bClose Group   />[Shortcut:File.CloseGroup]/b/n/<Close project group.
-522 Sa&ve As...
+522 另存为...
 523 /bSave As...   />[Shortcut:File.SaveAs]/b/nSave selected document changing/nits name or location.
-524 Arrange Bookmarks
+524 排列书签
 525 /m173/m /bArrange bookmarks   />[Shortcut:LEd.ArrangeTabs]/b/n/<Sort alphabetically editor bookmarks.
-526 Mark As Main
+526 标记为主文件
 527 /bMark As Main   />[Shortcut:File.MarkAsMain]/b/n/<Mark selected file as main/nproject file.
 
-530 Active filters
+530 活动过滤器
 
-532 Close all tabs
+532 关闭所有页面
 533 /bClose all tabs   />[Shortcut:LEd.CloseAllTabs]/b/nClose all tabs.
-534 Save project as template...
+534 将项目保存为模板...
 535 /m163/m /bSave project as template...   />[Shortcut:File.SaveProjectAsTemplate]/b/n/<Save selected project as/nnew template
 
-540 Add to clipboard
+540 添加到剪贴板
 541 /bAdd to clipboard  />[Shortcut:Edit.PermanentClipboard.AddToFirstFree]/b/n/<Add selected object or text/nto the first empty permanent clipboard./n/b/m119/m/>[Ctrl+Alt+'X']/b to add to the /bX/bth clipboard.
-542 Clear clipboard
+542 清空剪贴板
 543 /bClear permanent clipboard   />[Shortcut:Edit.PermanentClipboard.Clear]/b/n/<Empty the permanent clipboard.
-544 Remove undo list
+544 清空撤销列表
 545 /bRemove undo list   />[Shortcut:Edit.Undo.Clear]/b/n/<Removes the undo list contents.
 
-550 Achive project
+550 归档项目
 551 /m233/m /bArchive project  />[Shortcut:File.ArchiveProject]/b/n/<Make an archive of the project/nusing ZIP compression.
-552 Restore from archive
+552 从归档恢复
 553 /m233/m /bRestore from archive   />[Shortcut:File.RestoreProjectFromArchive]/b/n/<Restores file from project archive.
 
 560 /m244/m /bTable of contents tree   />[Shortcut:View.Contents.ShowTree]/b/n/<Show table of contents.
@@ -280,44 +280,44 @@ Compressed:   No
 
 570 Source links
 571 /m252/m /bSource links   />[Shortcut:LEd.DVI.SourceLinks]/b/n/<Show list of source links/nstored in the DVI file.
-572 Show PS
+572 显示 PS
 573 /m207/m /bShow PS   />[Shortcut:LaTeX.Exec.ExternalPreviewer.PS]/b/n/<Open external PostScript viewer.
-574 Show PDF
+574 显示 PDF
 575 /m208/m /bShow PDF   />[Shortcut:LaTeX.Exec.ExternalPreviewer.PDF]/b/n/<Open external PDF viewer.
-576 Show DVI
+576 显示 DVI
 577 /m251/m /bShow DVI   />[Shortcut:LaTeX.Exec.ExternalPreviewer.DVI]/b/n/<Open external DVI viewer.
 
-580 DVI description
+580 DVI 描述
 581 /m253/m /bDVI description   />[Shortcut:LEd.DVI.Info]/b/n/<Show description of the DVI file/nstored in the file.
-582 Font list
+582 字体列表
 583 /m254/m /bFont list   />[Shortcut:LEd.DVI.Fonts]/b/n/<Show the list of fonts/nused in the DVI file.
 
 // popup menu
-596 Open
+596 打开
 597 /m243/m /bOpen selected file   />[Shortcut:LEd.DblClick]/b/n/<File open:
 598 Move to page no.
 599 /m242/m /bMove to page no.   />[Shortcut:LEd.DVI.GoTo.Page]/b/n/<Move to page no.
-600 First page
+600 首页
 601 /m193/m /bFirst page   />[Shortcut:LEd.DVI.GoTo.FirstPage]/b/n/<Go to the first page.
-602 Previous page
+602 上一页
 603 /m158/m /bPreviuos page   />[Shortcut:LEd.DVI.GoTo.PrevPage]/b/n/<Go to the previous page.
-604 Next page
+604 下一页
 605 /m161/m /bNext page   />[Shortcut:LEd.DVI.GoTo.NextPage]/b/n/<Go to the next page.
-606 Last page
+606 末页
 607 /m194/m /bLast page   />[Shortcut:LEd.DVI.GoTo.LastPage]/b/n/<Go to the last page.
-608 Zoom in
+608 放大
 609 /m187/m /bZoom in   />[Shortcut:LEd.DVI.ZoomIn]/b/n/<Zoom in the page.
-610 Zoom out
+610 缩小
 611 /m188/m /bZoom out   />[Shortcut:LEd.DVI.ZoomOut]/b/n/<Zoom out the page.
-612 Redraw page
+612 重绘页面
 613 /m195/m /bRedraw page   />[Shortcut:LEd.DVI.Repaint]/b/n/<Redraw the page.
-614 Magnifying glass
+614 放大镜
 615 /m198/m /bMagnifying glass   />[Shortcut:LEd.DVI.MagnifyingGlass.ShowHide]/b/n/<Show and hide magnifying glass.
 616 Bring
 617 /m222/m /bBring the preview window   /b/n/<Automatically bring the preview/n window after compilation.
 618 Tracing
 619 /m223/m /bEditor tracing   /b/n/<Trace references from editor and/ntable of contents.
-620 Close
+620 关闭
 621 /m109/m /bClose   />[Shortcut:File.Close]/b/n/<Close preview window./nBring editor.
 
 630 Drafting triangle
@@ -328,9 +328,9 @@ Compressed:   No
 652 Labels
 653 /m264/m /bLabels   />[Shortcut:LEd.Show.Labels]/b/n/<Show a list of defined/nlabels.
 
-900 Connection to the server cannot be established
-901 No new messeges at the server
-902 Connecting to the server
+900 无法连接到服务器
+901 服务器上没有新消息
+902 正在连接服务器
 
 910 /b/c9/cNotice!/c/c/b Since 0.3 beta version, /bLEd/b can automatically receive/n
 	<messages on updates and other infortant things/n
@@ -339,7 +339,7 @@ Compressed:   No
 	<You can enable this feature in /bOptions/b dialog in /bProgram/b section.
 
 // Shell popupmenu 
-999 Open
+999 打开
 
 // Strings Menu
 1000 文件(&F)
@@ -349,57 +349,57 @@ Compressed:   No
 	1021 /m129/m /b&Open   />[Shortcut:File.Open]/b/n/<Open an existing document.
 	1030 保存(&S)
 	1031 /m138/m /b&Save   />[Shortcut:File.Save]/b/n/<Save an active document.
-	1040 Sa&ve As...
+	1040 另存为...
 	1041 /bS&ave As...   />[Shortcut:File.SaveAs]/b/nSave an active document changing/nits name or location.
 	1050 保存所有(&A)
 	1051 /m139/m /bSave &All   />[Shortcut:File.SaveAll]/b/nSave all documents.
 	1060 关闭
 	1061 /bClose   />[Shortcut:File.Close]/b/nClose an active document.
-	1062 Close all
+	1062 全部关闭
 	1063 /bClose all  />[Shortcut:File.CloseAll]/b/nClose all documents.
-	1070 &Print 
+	1070 打印(&P)
 	1071 /m133/m /b&Print   />[Shortcut:File.Print]/b/n/<Print selected object or text block.
 	1200 Las&t open
 	1201 < none >
 	1202 /bOpen   />[Shortcut:File.OpenLast]/b/n/<Open recently used file.
-	1090 &Exit
+	1090 退出(&E)
 	1091 /b&Exit   />[Shortcut:File.Exit]/b/n/<Close LEd.
-2000 &Edit
-	2010 &Undo
+2000 编辑(&E)
+	2010 撤销(&U)
 	2011 /m145/m /b&Undo   />[Shortcut:Edit.Undo]/b/n/<Undo most recent edit actions.
-	2020 &Redo
+	2020 重做(&R)
 	2021 /m136/m /b&Redo   />[Shortcut:Edit.Redo]/b/n/<Reverse the effect of recent undo actions.
-	2030 &Cut
+	2030 剪切(&X)
 	2031 /m113/m /b&Cut   />[Shortcut:Edit.Cut]/b/n/<Cut selected object or text block.
-	2040 &Copy
+	2040 复制(&C)
 	2041 /m112/m /b&Copy   />[Shortcut:Edit.Copy]/b/n/<Copy selected object or text block/nto clipboard.
-	2050 P&aste
+	2050 粘贴(&V)
 	2051 /m131/m /bP&aste   />[Shortcut:Edit.Paste]/b/n/<Paste an object or text block/nfrom clipboard.
-	2060 &Delete
+	2060 删除(&D)
 	2061 /b&Delete   />[Shortcut:Edit.Delete]/b/n/<Delete selected object or text block/nto clipboard.
 	2070 Select all
 	2071 /bSelect All   />[Shortcut:Edit.SelectAll]/b/n/<Select all objects and whole text/nin a current view.
-	2080 &Find...
+	2080 查找(&F)...
 	2081 /m140/m /b&Find...   />[Shortcut:Edit.Find]/b/n/<Search in a current view.
-	2090 &Search Again
+	2090 再次查找(&S)
 	2091 /m141/m /b&Search Again   />[Shortcut:Edit.FindNext]/b/n/<Repeat most recent search.
-	2100 Re&place...
+	2100 替换(&P)...
 	2101 /bRe&place...   />[Shortcut:Edit.Replace]/b/n/<Search and replace texts.
 	2200 First uppercase
 	2201 /m211/m /bFirst uppercased   />[Shortcut:Edit.CapCase]/b/n/<Change capitalisation: first letter uppercased, the remaining lowercased.
-	2202 All lowercased
+	2202 全部小写
 	2203 /m212/m /bAll lowercased   />[Shortcut:Edit.LowerCase]/b/n/<Change capitalisation: all letters lowercased.
-	2204 Change capitalisation
+	2204 改变大小写
 	2205 /m213/m /bChange capitalisation   />[Shortcut:Edit.ChangeCase]/b/n/<Change capitalisation: lowercased to uppercased, uppercased to lowercased.
-	2206 All uppercased
+	2206 全部大写
 	2207 /m214/m /bAll uppercased   />[Shortcut:Edit.UpperCase]/b/n/<Change capitalisation: all uppercased.
 	2210 Shift to the left
 	2211 /m215/m /bShift to the left   />[Shortcut:Edit.MoveLeft]/b/n/<Remove the first letter in every line\nof the selected area.
 	2212 Shift to the right
 	2213 /m216/m /bShift to the right   />[Shortcut:Edit.MoveRight]/b/n/<Add a space character in every line\nof the selected area.
-	2214 Comment
+	2214 注释
 	2215 /m217/m /bComment   />[Shortcut:Edit.Comment]/b/n/<Comment the selected area.
-	2216 Uncomment
+	2216 取消注释
 	2217 /m218/m /bUncomment   />[Shortcut:Edit.UnComment]/b/n/<Uncomment the selected area.
 	2218 Permanent clipboard
 	2219 /bPermanent clipboard/b/n/<Drag the contents from the editor window/nto save it for the future use.
@@ -409,27 +409,27 @@ Compressed:   No
 	2223 /m238/m /bMark parenthesizes   />[Shortcut:Edit.SelectParenthesis]/b/n/<Mark text between parenthesizes.
 	2224 Mark environments
 	2225 /m239/m /bmark environments   />[Shortcut:Edit.SelectEnvironments]/b/n/<mark text in LaTeX environments.
-3000 &View
-	3010 &Toolbars
-	3020 &Menu bar
+3000 察看(&V)
+	3010 工具栏(&T)
+	3020 菜单栏(&M)
 	3021 /b/>[Shortcut:View.ShowMenuBar]/b to hide or show /bmain menu bar/b.
-	3030 &Standard
+	3030 标准(&S0
 	3031 Show and hide /b/>[Shortcut:View.ShowStandardBar]/b/n/b&Standard/b toolbar.
-	3040 &Tools
+	3040 工具(&T)
 	3041 Show and hide /b/>[Shortcut:View.ShowToolsBar]/b/n/b&Tools/b toolbar.
-	3050 Tool&kit
+	3050 工具箱(&K)
 	3051 Show and hide /b/>[Shortcut:View.ShowBoxBar]/b/n/bTool&kit/b toolbar.
-	3052 &Edit
+	3052 编辑(&E)
 	3053 Show and hide /b/>[Shortcut:View.ShowEditBar]/b/n/b&Edit/b toolbar.
-	3054 C&lipboard
+	3054 剪贴板(&L)
 	3055 Show and hide /b/>[Shortcut:View.ShowClipboardBar]/b/n/bC&lipboard/b toolbar.
-	3060 &Help
+	3060 帮助(&H)
 	3061 Show and hide /b/>[Shortcut:View.ShowHelpBar]/b/n/b&Help/b toolbar.
-	3070 &Adjust...
+	3070 调整(&A)...
 	3071 /m143/m /b&Adjust...   />[Shortcut:View.CustomizeToolbars]/b/n/<Adjust toolbars' contents./nYou can add or remove commands and create/nnew command sets and toolbars.
 	3110 P&roject Tree
 	3111 /bShow and hide />[Shortcut:View.ShowProjectTree]/b/n/bproject tree/b containing/nopen projects and files.
-	3120 Pre&view
+	3120 预览(&V)
 	3121 Show and hide /bpreview panel/b   />[Shortcut:View.ShowPreview].
 	3122 &New preview
 	3123 /b&New preview   />[Shortcut:View.ShowNewDlgPreview]/b/n/<Create new preview window/n(max. 10)
@@ -441,7 +441,7 @@ Compressed:   No
 	3141 Show and hide /btable of contents window/b   />[Shortcut:View.ShowContents]/b/n.
 	3150 &Command line
 	3151 Show and hide /bcommand line window/b   />[Shortcut:View.ShowCommandLine]/b.
-4000 &Tools
+4000 工具(&T)
 	4010 &Spellcheck
 	4011 /m142/m /b&Spellcheck   />[Shortcut:Tool.SpellCheck]/b/n/<Spellcheck in a current view.
 	4020 &Autocorrection
@@ -460,34 +460,34 @@ Compressed:   No
 	4041 /m229/m /bWrap &paragraph   />[Shortcut:Edit.WrapParagraph]/b/n/<Wrapping of current paragraph.
 	4042 Wap &all
 	4043 /m230/m /bWrap &all   />[Shortcut:Edit.WrapAll]/b/n/<Wrap all lines in the document.
-5000 &Configuration
-	5010 &Options
+5000 配置(&C)
+	5010 选项(&O)
 	5011 /m134/m /b&Options   />[Shortcut:Config.LEdOptions]/b/n/<LEd environment configuration.  
-	5020 &Project Options
+	5020 项目选项(&P)
 	5021 /m135/m /b&Project options  />[Shortcut:Config.ProjectOptions]/b/n/<Default project configuration. 
-	5030 &Dictionaries
+	5030 字典(&D)
 	5031 /b&Dictionaries   />[Shortcut:Config.Dictionaries]/b/n/<Maintain spellchecking dictionaries.
-	5040 &Languages
+	5040 语言(&L)
 	5041 /b&Languages   />[Shortcut:Config.Languages]/b/n/<Maintain of language versions.
 	5050 &Filters
 	5051 /b&Filters   />[Shortcut:Config.Filters]/b/n/<Maintain of input//output filters.
-	5060 &Add-ons
+	5060 插件(&A)
 	5061 /b&Add-ons   />[Shortcut:Config.AddOns]/b/n/<Add-ons management.
-6000 &Window
+6000 窗口(&W)
 	6010 &Arrange
 	6011 /b&Arrange   />[Shortcut:Window.Arrange]/b/n/<Arrange windows.
-7000 &Help
-	7010 &LaTeX Editor Help
+7000 帮助(&H)
+	7010 &LaTeX Editor 帮助
 	7011 /m121/m /b&LaTeX Editor help   />[Shortcut:Help.Book]/b/n/<Show help index.
-	7020 &Online Help
+	7020 在线帮助(&O)
 	7021 /m149/m /b&Online help   />[Shortcut:Help.HomePage]/b/n/</c12/c/uhttp:////www.LaTeXEditor.org//
-	7022 &Messages
+	7022 消息(&M)
 	7023 /m224/m /b&Messages   />[Shortcut:Help.Announcements]/b/n/<List of received messages.
-	7024 &Forum
+	7024 论坛(&F)
 	7025 /m261/m /b&Forum   />[Shortcut:Help.ForumPage]/b/n/<Visit user forum.
-	7026 &Donations
+	7026 赞助(&D)
 	7027 /m262/m /b&Donations   />[Shortcut:Help.DonatePage]/b/n/<Support LEd and/nmake a donation.
-	7030 &About...
+	7030 关于(&A)...
 	7031 /b&About   />[Shortcut:Help.About]/b LEd and its authors.
 
 9992 line wrapping
@@ -508,67 +508,67 @@ Compressed:   No
 10007 Redo
 10008 of
 
-10009 projects:
-10010 New group
-10011 New project group
+10009 项目:
+10010 新组
+10011 新项目组
 10012 /bOpen files not belonging to projects
 10013 There are open files not belonging/nto open projects in this directory.
 10014 others
 10015 There are other files belonging/nto the project in this directory.
-10020 no messages...
+10020 没有消息...
 10021
-10022 DVI Viewer Messages
-10023 DVI Viewer Error Messages
+10022 DVI 浏览器消息
+10023 DVI 浏览器错误消息
 10024 Missing components warnings 
 10025 Missing font and EPS files warnings
-10030 About...
+10030 关于...
 10031 /t/t/bL/baTeX/bEd/bitor/n/m148/m/n/c12/c/u/t/thttp:////www.LaTeXEditor.org//
-10032 Help
+10032 帮助
 10033 In the current version help is unavailable./nPlease check FAQ at LEd's homepage:/n/c12/c/u/yhttp:////www.LaTeXEditor.org//faq.htm/y
-10034 No help file!
+10034 没有帮助文件!
 
 // Project Tree Entries
-10051 Projects and project groups
-10052 All files
-10053 Dictionaries
-10054 Text files
-10055 Templates
-10056 Archives
-10057 User command
-10058 Save archive
+10051 项目和项目组
+10052 所有文件
+10053 字典
+10054 文本文件
+10055 模板
+10056 归档
+10057 用户命令
+10058 保存归档
 
 // Dialogs
-10059 Messages
-10060 New Document
-10061 Open File
-10062 Save File
-10063 Add File
-10064 Save Project
-10065 Save Group
+10059 消息
+10060 新文档
+10061 打开文件
+10062 保存文件
+10063 添加文件
+10064 保存项目
+10065 保存组
 10066 Options, Configuration
-10067 Project Options
-10068 Adjust
-10069 Save template
+10067 项目选项
+10068 调整
+10069 保存模板
 
 // Files related
-10070 files:
-10071 /bError in opening file:/b/n
-10072 file name:
-10073 location:
-10074 project name:
-10075 saved
-10076 unsaved
+10070 文件:
+10071 /b打开文件出错:/b/n
+10072 文件名称:
+10073 位置:
+10074 项目名称:
+10075 已保存
+10076 未保存
 10077 rows:
 10078 Row
 10079 Col
 10080 next...
 10081 previous...
-10082 Files
-10083 Projects
-10084 Templates
+10082 文件
+10083 项目
+10084 模板
 10085 file may not be edited
-10086 Warning...
-10087 File was not saved!
+10086 警告...
+10087 文件没有保存!
 10088 Do you want to save changes now?
 10089 new, unsaved
 10090 closed
