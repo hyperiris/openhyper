@@ -1,0 +1,1432 @@
+AFCSTRINGTABLE
+LanguageID:   2052
+Default:      No
+LanguageVer:  0.01
+LanguageName: Simplified Chinese
+Author:       HyperIris
+Info:         
+Compressed:   No
+// AFC strings, read only
+00001  Yes
+00002  No
+00003  确定
+00004  取消
+00005  帮助
+00006  忽略
+00007  重试
+00008  Stop
+00009  Start
+00010  Go
+00011  Error
+00012  信息
+00013  Are you sure?
+00014  退出
+00015  全部
+00016  Abort
+00017  应用
+00018  Next
+00019  Back
+
+50 ANSI
+51 Baltic
+52 繁体中文
+53 Eastern Europe
+54 简体中文
+55 Greek
+56 Korean
+57 Russian
+58 日语
+59 Turkish
+60 Vietnamese
+61 Arabic
+62 Hebrew
+63 Thai
+64 default charset
+
+// bitmap codes
+// IDB_PINDOWN		100
+// IDB_PINUP		101
+// IDB_ARROW_RIGHT	106
+// IDB_ATTACHEMENT	107
+// IDB_BOLD		108
+// IDB_CANCEL		109
+// IDB_CHECK_MARK	110
+// IDB_CLEAN		111
+// IDB_COPY		112
+// IDB_CUT 		113
+// IDB_DOCUMENT_ERROR 	114
+// IDB_DOT 		115
+// IDB_DRAW 		116
+// IDB_FAX 		117
+// IDB_FILE 		118
+// IDB_FLASH 		119
+// IDB_HELP 		120
+// IDB_HELP_BOOK 	121
+// IDB_HINT 		122
+// IDB_HOME 		123
+// IDB_ITALIC 		124
+// IDB_LOCK 		125
+// IDB_MAIL_FOLDER 	126
+// IDB_NEW 		127
+// IDB_OK 		128
+// IDB_OPEN 		129
+// IDB_PAINT_BRUSH 	130
+// IDB_PASTE 		131
+// IDB_PREVIEW 		132
+// IDB_PRINT 		133
+// IDB_PROPERTIES 	134
+// IDB_PROPERTY 	135
+// IDB_REDO 		136
+// IDB_REPEAT 		137
+// IDB_SAVE 		138
+// IDB_SAVE_ALL 	139
+// IDB_SEARCH 		140
+// IDB_SEARCH_NEXT 	141
+// IDB_SPELL 		142
+// IDB_TOOLS 		143
+// IDB_UNDERLINE 	144
+// IDB_UNDO 		145
+// IDB_PROJECT_GROUP 	147
+// IDB_LOGO_SMALL 	148
+// IDB_ONLINE 		149
+// IDB_FOLDER_OPENED 	150
+// IDB_FOLDER_CLOSED 	151
+// IDB_BOOK_OPENED 	152
+// IDB_BOOK_CLOSED 	153
+// IDB_ARROWU 		158
+// IDB_ARROWL		159
+// IDB_ARROWR 		160
+// IDB_ARROWD 		161
+// IDB_STOP 		162
+// IDB_FLAG 		163
+// IDB_PROJECT 		164
+// IDB_REFRESH 		165
+// IDB_DOCUMEN_CHECKED 	166
+// IDB_PLUS 		167
+// IDB_MOVE 		168
+// IDB_MINUS 		169
+// IDB_FILE_READING 	170
+// IDB_FILE_WRITING 	171
+// IDB_CABLE 		172
+// IDB_SORT 		173
+// IDB_RAINBOW 		174
+// IDB_UPPERDOT 	175
+// IDB_DIC0 		176
+// IDB_DIC1 		177
+// IDB_DIC2 		178
+// IDB_DIC3 		179
+// IDB_DIC4 		180
+// IDB_DIC5 		181
+// IDB_DIC6 		182
+// IDB_DIC7 		183
+// IDB_DIC8 		184
+// IDB_DIC9 		185
+// IDB_MAINFILE 	186
+// IDB_ZOOMIN 		187
+// IDB_ZOOMOUT 		188
+// IDB_PAGEFIRST 	189
+// IDB_PAGELAST 	190
+// IDB_PAGENEXT 	191
+// IDB_PAGEPREV 	192
+// IDB_ARROWUU 		193
+// IDB_ARROWDD 		194
+// IDB_REPAINT 		195
+// IDB_ARROW_UP 	196
+// IDB_ARROW_DOWN 	197
+// IDB_ZOOM 		198
+// IDB_RELOAD 		199
+// IDB_NO 		200
+// IDB_DROP 		201
+// IDB_IMPORT 		202
+// IDB_EXPORT 		203
+// IDB_SMALLRAINBOW 	204
+// IDB_PALETTE 		205
+// IDB_THESAURUS 	206
+// IDB_GS 		207
+// IDB_ACROBAT 		208
+// IDB_SPELLING 	209
+// IDB_USETHES 		210
+// IDB_TEXTCAP 		211
+// IDB_TEXTDOWN 	212
+// IDB_TEXTSWITCH 	213
+// IDB_TEXTUP 		214
+// IDB_MOVELEFT 	215
+// IDB_MOVERIGHT 	216
+// IDB_COMMENT 		217
+// IDB_UNCOMMENT 	218
+// IDB_KEYBOARD 	219
+// IDB_DOTGREEN 	220
+// IDB_CLOSE 		221
+// IDB_AUTOSHOW 	222
+// IDB_AUTOVIEW 	223
+// IDB_COMM 		224
+// IDB_NOCOMM 		225
+// IDB_NOCO 		226
+// IDB_WRAP 		227
+// IDB_WRAPPING 	228
+// IDB_WRAPPARA 	229
+// IDB_WRAPALL 		230
+// IDB_TRUETYPE 	231
+// IDB_SUBDIRS 		232
+// IDB_ARCHIVE 		233
+// IDB_ADDRIGHT 	234
+// IDB_ADDLEFT 		235
+// IDB_NEWCOMMAND 	236
+// IDB_DOTCOMMAND 	237
+// IDB_SELECTPARS 	238
+// IDB_SELECTENVS 	239
+// IDB_MAG0 		240
+// IDB_MAG1 		241
+// IDB_TOPAGE 		242
+// IDB_OPENCARET 	243
+// IDB_ECONTENTS 	244
+// IDB_EENUMERATION 245
+// IDB_EEQUATION 	246
+// IDB_EOTHER 		247
+// IDB_EPICTURE 	248
+// IDB_ETABLE 		249
+// IDB_MAG2 		250
+// IDB_DVI          251
+// IDB_SRC_LIST     252
+// IDB_DVI_INFO     253
+// IDB_DVI_FONT     254
+// IDB_CARET        255
+// IDB_ENTER        256
+// IDB_STOP_BLUE    257
+// IDB_STOP_GREEN   258
+
+// LEd - main groups
+100 LEd project group
+101 LEd project
+
+// toolbar strings
+110 菜单
+120 标准
+130 工具
+140 Toolkit
+150 帮助
+160 编辑
+170 剪贴板
+
+// group strings
+200 Popup menu
+201 Commands not assigned to groups/nor popup menu commands.
+210 File commands
+211 Commands for files and documents.
+220 Edit commands
+221 Edit and Clipboard commands.
+230 Tools commands
+231 Tools Configuration Commands.
+240 Other
+241 Other commands.
+250 User commands
+251 Command added by the user.
+
+// popup menu
+500 &Save
+501 /m138/m /bSave   />[Shortcut:File.Save]/b/n/<Save selected file.
+502 &Close 
+503 /bClose   />[Shortcut:File.Close]/b/n/<Close selected file.
+504 Save Project
+505 /m138/m /bSave Project   />[Shortcut:File.SaveProject]/b/n/<Save selected project.
+506 &Close Project
+507 /bClose Project   />[Shortcut:File.CloseProject]/b/n/<Close selected project.
+508 Add File
+509 /m167/m /bAdd File   />[Shortcut:File.AddToProject]/b/n/<Add existing file/nto project.
+510 Remove File
+511 /m169/m /bRemove File   />[Shortcut:File.RemoveFromProject]/b/n/<Remove selected file/nfrom project.
+512 Save Project As...
+513 /bSave Project As...   />[Shortcut:File.SaveProjectAs]/b/n/<Save selected project changing/nits name or location.
+514 Project Options
+515 /m135/m /bProject Options  />[Shortcut:Config.ProjectOptions]/b/n/<Chofigure selected project.
+516 Save Group
+517 /m138/m /bSave Group   />[Shortcut:File.SaveGroup]/b/n/<Save project group.
+518 Save Group As...
+519 /bSave Project As...   />[Shortcut:File.SaveGroupAs]/b/n/<Save project group changing/nits name or location.
+520 &Close Group
+521 /bClose Group   />[Shortcut:File.CloseGroup]/b/n/<Close project group.
+522 Sa&ve As...
+523 /bSave As...   />[Shortcut:File.SaveAs]/b/nSave selected document changing/nits name or location.
+524 Arrange Bookmarks
+525 /m173/m /bArrange bookmarks   />[Shortcut:LEd.ArrangeTabs]/b/n/<Sort alphabetically editor bookmarks.
+526 Mark As Main
+527 /bMark As Main   />[Shortcut:File.MarkAsMain]/b/n/<Mark selected file as main/nproject file.
+
+530 Active filters
+
+532 Close all tabs
+533 /bClose all tabs   />[Shortcut:LEd.CloseAllTabs]/b/nClose all tabs.
+534 Save project as template...
+535 /m163/m /bSave project as template...   />[Shortcut:File.SaveProjectAsTemplate]/b/n/<Save selected project as/nnew template
+
+540 Add to clipboard
+541 /bAdd to clipboard  />[Shortcut:Edit.PermanentClipboard.AddToFirstFree]/b/n/<Add selected object or text/nto the first empty permanent clipboard./n/b/m119/m/>[Ctrl+Alt+'X']/b to add to the /bX/bth clipboard.
+542 Clear clipboard
+543 /bClear permanent clipboard   />[Shortcut:Edit.PermanentClipboard.Clear]/b/n/<Empty the permanent clipboard.
+544 Remove undo list
+545 /bRemove undo list   />[Shortcut:Edit.Undo.Clear]/b/n/<Removes the undo list contents.
+
+550 Achive project
+551 /m233/m /bArchive project  />[Shortcut:File.ArchiveProject]/b/n/<Make an archive of the project/nusing ZIP compression.
+552 Restore from archive
+553 /m233/m /bRestore from archive   />[Shortcut:File.RestoreProjectFromArchive]/b/n/<Restores file from project archive.
+
+560 /m244/m /bTable of contents tree   />[Shortcut:View.Contents.ShowTree]/b/n/<Show table of contents.
+561 /m246/m /bMathematics   />[Shortcut:View.Contents.ShowEquations]/b/n/<Show mathematics/n/b\begin{eqnarray}...\end{eqnarray}/n\begin{equation}...\end{equation}.
+562 /m245/m /bEnumerations   />[Shortcut:View.Contents.ShowEnumerations]/b/n/<Show enumerations/n/b\begin{enumerate}...\end{enumerate}/n\begin{itemize}...\end{itemize}.
+563 /m247/m /bShow all environments   />[Shortcut:View.Contents.ShowAllEnvironments]/b/n/<Show all environments/n/b\begin{ }...\end{ }.
+564 /m248/m /bFigures   />[Shortcut:View.Contents.ShowPictures]/b/n/<Show figures/n/b\begin{figure}...\end{figure}/n\begin{picture}...\end{picture}.
+565 /m249/m /bTables   />[Shortcut:View.Contents.ShowTables]/b/n/<Show tables/n/b\begin{table}...\end{table}.
+
+570 Source links
+571 /m252/m /bSource links   />[Shortcut:LEd.DVI.SourceLinks]/b/n/<Show list of source links/nstored in the DVI file.
+572 Show PS
+573 /m207/m /bShow PS   />[Shortcut:LaTeX.Exec.ExternalPreviewer.PS]/b/n/<Open external PostScript viewer.
+574 Show PDF
+575 /m208/m /bShow PDF   />[Shortcut:LaTeX.Exec.ExternalPreviewer.PDF]/b/n/<Open external PDF viewer.
+576 Show DVI
+577 /m251/m /bShow DVI   />[Shortcut:LaTeX.Exec.ExternalPreviewer.DVI]/b/n/<Open external DVI viewer.
+
+580 DVI description
+581 /m253/m /bDVI description   />[Shortcut:LEd.DVI.Info]/b/n/<Show description of the DVI file/nstored in the file.
+582 Font list
+583 /m254/m /bFont list   />[Shortcut:LEd.DVI.Fonts]/b/n/<Show the list of fonts/nused in the DVI file.
+
+// popup menu
+596 Open
+597 /m243/m /bOpen selected file   />[Shortcut:LEd.DblClick]/b/n/<File open:
+598 Move to page no.
+599 /m242/m /bMove to page no.   />[Shortcut:LEd.DVI.GoTo.Page]/b/n/<Move to page no.
+600 First page
+601 /m193/m /bFirst page   />[Shortcut:LEd.DVI.GoTo.FirstPage]/b/n/<Go to the first page.
+602 Previous page
+603 /m158/m /bPreviuos page   />[Shortcut:LEd.DVI.GoTo.PrevPage]/b/n/<Go to the previous page.
+604 Next page
+605 /m161/m /bNext page   />[Shortcut:LEd.DVI.GoTo.NextPage]/b/n/<Go to the next page.
+606 Last page
+607 /m194/m /bLast page   />[Shortcut:LEd.DVI.GoTo.LastPage]/b/n/<Go to the last page.
+608 Zoom in
+609 /m187/m /bZoom in   />[Shortcut:LEd.DVI.ZoomIn]/b/n/<Zoom in the page.
+610 Zoom out
+611 /m188/m /bZoom out   />[Shortcut:LEd.DVI.ZoomOut]/b/n/<Zoom out the page.
+612 Redraw page
+613 /m195/m /bRedraw page   />[Shortcut:LEd.DVI.Repaint]/b/n/<Redraw the page.
+614 Magnifying glass
+615 /m198/m /bMagnifying glass   />[Shortcut:LEd.DVI.MagnifyingGlass.ShowHide]/b/n/<Show and hide magnifying glass.
+616 Bring
+617 /m222/m /bBring the preview window   /b/n/<Automatically bring the preview/n window after compilation.
+618 Tracing
+619 /m223/m /bEditor tracing   /b/n/<Trace references from editor and/ntable of contents.
+620 Close
+621 /m109/m /bClose   />[Shortcut:File.Close]/b/n/<Close preview window./nBring editor.
+
+630 Drafting triangle
+631 /m260/m /bDrafting triangle />[Shortcut:LEd.DVI.DriftingTriangle.ShowHide]/b/n/<Show and hide drafting triangle.
+
+650 Bibliography labels
+651 /m263/m /bBibliography labels   />[Shortcut:LEd.Show.Bibitems]/b/n/<Show a list of defined/nbibliography labels.
+652 Labels
+653 /m264/m /bLabels   />[Shortcut:LEd.Show.Labels]/b/n/<Show a list of defined/nlabels.
+
+900 Connection to the server cannot be established
+901 No new messeges at the server
+902 Connecting to the server
+
+910 /b/c9/cNotice!/c/c/b Since 0.3 beta version, /bLEd/b can automatically receive/n
+	<messages on updates and other infortant things/n
+	<from /b/c12/c/u/yhttp:////www.LaTeXEditor.org///y/u/c/c/b./n
+	<Actually message receiving is disabled!/n
+	<You can enable this feature in /bOptions/b dialog in /bProgram/b section.
+
+// Shell popupmenu 
+999 Open
+
+// Strings Menu
+1000 文件(&F)
+	1010 新建(&N)...
+	1011 /m127/m /b&New   />[Shortcut:File.New]/b/n/<Create a new document.
+	1020 打开(&O)...
+	1021 /m129/m /b&Open   />[Shortcut:File.Open]/b/n/<Open an existing document.
+	1030 保存(&S)
+	1031 /m138/m /b&Save   />[Shortcut:File.Save]/b/n/<Save an active document.
+	1040 Sa&ve As...
+	1041 /bS&ave As...   />[Shortcut:File.SaveAs]/b/nSave an active document changing/nits name or location.
+	1050 保存所有(&A)
+	1051 /m139/m /bSave &All   />[Shortcut:File.SaveAll]/b/nSave all documents.
+	1060 关闭
+	1061 /bClose   />[Shortcut:File.Close]/b/nClose an active document.
+	1062 Close all
+	1063 /bClose all  />[Shortcut:File.CloseAll]/b/nClose all documents.
+	1070 &Print 
+	1071 /m133/m /b&Print   />[Shortcut:File.Print]/b/n/<Print selected object or text block.
+	1200 Las&t open
+	1201 < none >
+	1202 /bOpen   />[Shortcut:File.OpenLast]/b/n/<Open recently used file.
+	1090 &Exit
+	1091 /b&Exit   />[Shortcut:File.Exit]/b/n/<Close LEd.
+2000 &Edit
+	2010 &Undo
+	2011 /m145/m /b&Undo   />[Shortcut:Edit.Undo]/b/n/<Undo most recent edit actions.
+	2020 &Redo
+	2021 /m136/m /b&Redo   />[Shortcut:Edit.Redo]/b/n/<Reverse the effect of recent undo actions.
+	2030 &Cut
+	2031 /m113/m /b&Cut   />[Shortcut:Edit.Cut]/b/n/<Cut selected object or text block.
+	2040 &Copy
+	2041 /m112/m /b&Copy   />[Shortcut:Edit.Copy]/b/n/<Copy selected object or text block/nto clipboard.
+	2050 P&aste
+	2051 /m131/m /bP&aste   />[Shortcut:Edit.Paste]/b/n/<Paste an object or text block/nfrom clipboard.
+	2060 &Delete
+	2061 /b&Delete   />[Shortcut:Edit.Delete]/b/n/<Delete selected object or text block/nto clipboard.
+	2070 Select all
+	2071 /bSelect All   />[Shortcut:Edit.SelectAll]/b/n/<Select all objects and whole text/nin a current view.
+	2080 &Find...
+	2081 /m140/m /b&Find...   />[Shortcut:Edit.Find]/b/n/<Search in a current view.
+	2090 &Search Again
+	2091 /m141/m /b&Search Again   />[Shortcut:Edit.FindNext]/b/n/<Repeat most recent search.
+	2100 Re&place...
+	2101 /bRe&place...   />[Shortcut:Edit.Replace]/b/n/<Search and replace texts.
+	2200 First uppercase
+	2201 /m211/m /bFirst uppercased   />[Shortcut:Edit.CapCase]/b/n/<Change capitalisation: first letter uppercased, the remaining lowercased.
+	2202 All lowercased
+	2203 /m212/m /bAll lowercased   />[Shortcut:Edit.LowerCase]/b/n/<Change capitalisation: all letters lowercased.
+	2204 Change capitalisation
+	2205 /m213/m /bChange capitalisation   />[Shortcut:Edit.ChangeCase]/b/n/<Change capitalisation: lowercased to uppercased, uppercased to lowercased.
+	2206 All uppercased
+	2207 /m214/m /bAll uppercased   />[Shortcut:Edit.UpperCase]/b/n/<Change capitalisation: all uppercased.
+	2210 Shift to the left
+	2211 /m215/m /bShift to the left   />[Shortcut:Edit.MoveLeft]/b/n/<Remove the first letter in every line\nof the selected area.
+	2212 Shift to the right
+	2213 /m216/m /bShift to the right   />[Shortcut:Edit.MoveRight]/b/n/<Add a space character in every line\nof the selected area.
+	2214 Comment
+	2215 /m217/m /bComment   />[Shortcut:Edit.Comment]/b/n/<Comment the selected area.
+	2216 Uncomment
+	2217 /m218/m /bUncomment   />[Shortcut:Edit.UnComment]/b/n/<Uncomment the selected area.
+	2218 Permanent clipboard
+	2219 /bPermanent clipboard/b/n/<Drag the contents from the editor window/nto save it for the future use.
+	2220 Add text
+	2221 /m234/m /bAdd text   />[Shortcut:Edit.AddTextToRight]/b/n/<Add text to the beginning of each line/nof the selected area.
+	2222 Mark parenthesizes
+	2223 /m238/m /bMark parenthesizes   />[Shortcut:Edit.SelectParenthesis]/b/n/<Mark text between parenthesizes.
+	2224 Mark environments
+	2225 /m239/m /bmark environments   />[Shortcut:Edit.SelectEnvironments]/b/n/<mark text in LaTeX environments.
+3000 &View
+	3010 &Toolbars
+	3020 &Menu bar
+	3021 /b/>[Shortcut:View.ShowMenuBar]/b to hide or show /bmain menu bar/b.
+	3030 &Standard
+	3031 Show and hide /b/>[Shortcut:View.ShowStandardBar]/b/n/b&Standard/b toolbar.
+	3040 &Tools
+	3041 Show and hide /b/>[Shortcut:View.ShowToolsBar]/b/n/b&Tools/b toolbar.
+	3050 Tool&kit
+	3051 Show and hide /b/>[Shortcut:View.ShowBoxBar]/b/n/bTool&kit/b toolbar.
+	3052 &Edit
+	3053 Show and hide /b/>[Shortcut:View.ShowEditBar]/b/n/b&Edit/b toolbar.
+	3054 C&lipboard
+	3055 Show and hide /b/>[Shortcut:View.ShowClipboardBar]/b/n/bC&lipboard/b toolbar.
+	3060 &Help
+	3061 Show and hide /b/>[Shortcut:View.ShowHelpBar]/b/n/b&Help/b toolbar.
+	3070 &Adjust...
+	3071 /m143/m /b&Adjust...   />[Shortcut:View.CustomizeToolbars]/b/n/<Adjust toolbars' contents./nYou can add or remove commands and create/nnew command sets and toolbars.
+	3110 P&roject Tree
+	3111 /bShow and hide />[Shortcut:View.ShowProjectTree]/b/n/bproject tree/b containing/nopen projects and files.
+	3120 Pre&view
+	3121 Show and hide /bpreview panel/b   />[Shortcut:View.ShowPreview].
+	3122 &New preview
+	3123 /b&New preview   />[Shortcut:View.ShowNewDlgPreview]/b/n/<Create new preview window/n(max. 10)
+	3124 &Bring preview
+	3125 /b&Bring preview   />[Shortcut:View.ShowDlgPreview]/b/n/<Bring next preview./n(create a new one if no preview exists)
+	3130 &Messages
+	3131 Show and hide  />[Shortcut:View.ShowOutput]/b/n/bmessages window/b containing/noutput informations of external applications/nand LEd messages.
+	3140 &Table of contents
+	3141 Show and hide /btable of contents window/b   />[Shortcut:View.ShowContents]/b/n.
+	3150 &Command line
+	3151 Show and hide /bcommand line window/b   />[Shortcut:View.ShowCommandLine]/b.
+4000 &Tools
+	4010 &Spellcheck
+	4011 /m142/m /b&Spellcheck   />[Shortcut:Tool.SpellCheck]/b/n/<Spellcheck in a current view.
+	4020 &Autocorrection
+	4021 /b&Autocorrection   />[Shortcut:Tool.AutoCheck]/b/n/<Perform autocorrection in a current view.
+	4030 S&tatistics
+	4031 /bS&tatistics   />[Shortcut:Tool.Info]/b/n/<Informations ...
+	4032 Stop &compilation
+	4033 /m162/m /bStop &compilation   />[Shortcut:Tool.StopCommand]/b/n/<Stop compilation.
+	4034 S&pellchecking
+	4035 /m209/m /bS&pellchecking   />[Shortcut:Config.ShowSpellingErrors]/b/n/<Enable//disable underlining/nof spelling errors.
+	4036 &Thesaurus
+	4037 /m210/m /b&Thesaurus   />[Shortcut:Config.ShowThesaurus]/b/n/<Enable//disable marking/nwords from thesaurus.
+	4038 &Line wrapping
+	4039 /m228/m /b&Line wrapping   />[Shortcut:Config.AutoWrapping]/b/n/<Enable//disable line wrapping.
+	4040 Wrap &paragraph
+	4041 /m229/m /bWrap &paragraph   />[Shortcut:Edit.WrapParagraph]/b/n/<Wrapping of current paragraph.
+	4042 Wap &all
+	4043 /m230/m /bWrap &all   />[Shortcut:Edit.WrapAll]/b/n/<Wrap all lines in the document.
+5000 &Configuration
+	5010 &Options
+	5011 /m134/m /b&Options   />[Shortcut:Config.LEdOptions]/b/n/<LEd environment configuration.  
+	5020 &Project Options
+	5021 /m135/m /b&Project options  />[Shortcut:Config.ProjectOptions]/b/n/<Default project configuration. 
+	5030 &Dictionaries
+	5031 /b&Dictionaries   />[Shortcut:Config.Dictionaries]/b/n/<Maintain spellchecking dictionaries.
+	5040 &Languages
+	5041 /b&Languages   />[Shortcut:Config.Languages]/b/n/<Maintain of language versions.
+	5050 &Filters
+	5051 /b&Filters   />[Shortcut:Config.Filters]/b/n/<Maintain of input//output filters.
+	5060 &Add-ons
+	5061 /b&Add-ons   />[Shortcut:Config.AddOns]/b/n/<Add-ons management.
+6000 &Window
+	6010 &Arrange
+	6011 /b&Arrange   />[Shortcut:Window.Arrange]/b/n/<Arrange windows.
+7000 &Help
+	7010 &LaTeX Editor Help
+	7011 /m121/m /b&LaTeX Editor help   />[Shortcut:Help.Book]/b/n/<Show help index.
+	7020 &Online Help
+	7021 /m149/m /b&Online help   />[Shortcut:Help.HomePage]/b/n/</c12/c/uhttp:////www.LaTeXEditor.org//
+	7022 &Messages
+	7023 /m224/m /b&Messages   />[Shortcut:Help.Announcements]/b/n/<List of received messages.
+	7024 &Forum
+	7025 /m261/m /b&Forum   />[Shortcut:Help.ForumPage]/b/n/<Visit user forum.
+	7026 &Donations
+	7027 /m262/m /b&Donations   />[Shortcut:Help.DonatePage]/b/n/<Support LEd and/nmake a donation.
+	7030 &About...
+	7031 /b&About   />[Shortcut:Help.About]/b LEd and its authors.
+
+9992 line wrapping
+9993 block movement
+9994 shift to the right
+9995 shift to the left
+9996 make a tabulation to the right
+9997 make a tabulation to the left
+9998 comment
+9999 uncomment
+10000 change of letters capitalisation
+10001 <new line>
+10002 deletion
+10003 pasting
+10004 typing
+10005 replacement
+10006 Undo
+10007 Redo
+10008 of
+
+10009 projects:
+10010 New group
+10011 New project group
+10012 /bOpen files not belonging to projects
+10013 There are open files not belonging/nto open projects in this directory.
+10014 others
+10015 There are other files belonging/nto the project in this directory.
+10020 no messages...
+10021
+10022 DVI Viewer Messages
+10023 DVI Viewer Error Messages
+10024 Missing components warnings 
+10025 Missing font and EPS files warnings
+10030 About...
+10031 /t/t/bL/baTeX/bEd/bitor/n/m148/m/n/c12/c/u/t/thttp:////www.LaTeXEditor.org//
+10032 Help
+10033 In the current version help is unavailable./nPlease check FAQ at LEd's homepage:/n/c12/c/u/yhttp:////www.LaTeXEditor.org//faq.htm/y
+10034 No help file!
+
+// Project Tree Entries
+10051 Projects and project groups
+10052 All files
+10053 Dictionaries
+10054 Text files
+10055 Templates
+10056 Archives
+10057 User command
+10058 Save archive
+
+// Dialogs
+10059 Messages
+10060 New Document
+10061 Open File
+10062 Save File
+10063 Add File
+10064 Save Project
+10065 Save Group
+10066 Options, Configuration
+10067 Project Options
+10068 Adjust
+10069 Save template
+
+// Files related
+10070 files:
+10071 /bError in opening file:/b/n
+10072 file name:
+10073 location:
+10074 project name:
+10075 saved
+10076 unsaved
+10077 rows:
+10078 Row
+10079 Col
+10080 next...
+10081 previous...
+10082 Files
+10083 Projects
+10084 Templates
+10085 file may not be edited
+10086 Warning...
+10087 File was not saved!
+10088 Do you want to save changes now?
+10089 new, unsaved
+10090 closed
+
+10091 Default highlighting scheme
+10092 Project was not saved!
+10093 Group was not saved!	
+10094 Default substitution scheme
+
+10095 found in dictionaries:
+10096 ;/ndoes not exists in dictionaries:
+10097 Word
+10098 in incorrect./nSearched in dictionaries:
+10099 does not belong to spellchecking./nThe word is too short or contains disallowed characters.
+10100 Spellchecking in comments is active!
+10101 Moonless night
+
+10110 /bBookmark no. 
+10111 /n/bClick to go to row no. /b
+10112 /n/bRow no. /b
+10113 &Add bookmark
+10114 /m159/m /b&Add bookmark   />[Shortcut:Navigator.Bookmark.Add]/b/n/<Add first unused bookmark/nin mouse cursor place.
+      </nYou can define /b10/b bookmarks (numbered /b0-9/b)/nfor each file./n To add a bookmark no. /bX />/m119/m/>[Ctrl+Shift+'X']
+10115 &Bookmarks
+10116 row
+10117 File:
+10118 Row:
+10120 (no suggestions)
+10121 Show all suggestions...
+10122 There are more suggestions/nin dictionaries.
+10123 Ignore
+10124 Ignoruj wrong word.  /b/>[Shortcut:Tool.Dictionary.Ignore]/b/nWord will be ignored in all files from the project.
+10125 Insert
+10126 Insert word to user's dictionary.
+10127 Dictionaries
+10128 Synonyms
+
+10130 file reading in progress...
+10131 file saving in progress...
+10135 /bError in writing file:/b/n
+10136 There is a file of given name!
+10137 Do you want to continue?
+10138 The file was changed/nwith an application different from LEd!
+10139 Do you want to reload file?
+10140 in project:
+10141 in projects:
+10142 reload file changed by some other application
+10143
+
+10146 Un ignore
+10147 Stop ignore the word   /b/>[Shortcut:Tool.Dictionary.Ignore.Cancel]
+10148 Remove
+10149 Remove word from user's dictionary   /b/>[Shortcut:Tool.Dictionary.Delete]
+10150 ignored or in user's dictionary
+
+10160 Read-only file
+10161 Ignore the read-only flag and overwrite?
+
+// New Dialog
+10200 add to project:
+10201 New
+10202 New project
+10203 New
+10204 There is a file of given name!
+10205 Creating the file of given name will cause/nthe actual contents of the existing file!/n/nDo you want to continue?
+10206 The directory of given name exists and is not empty!
+10207 /nDo you want to continue and remove the directory contents?
+
+// SaveFiles Dialog
+10240 The following files are unsaved! Do you want to save them?
+10241 Save selected
+10242 Save selected file and remove it from the list.
+10243 Save all
+10244 
+10245 Do not save
+10246 
+
+// Reload Dialog
+10251 The following files were changed/nwith an application different from LEd!/nDo you want to relod these files?
+10252 Yes, all
+10253 Yes, selected
+
+// Associations Dialog
+10261 The following file types are not associated with LEd!/nDo you want to assiciate them?
+10262 do not show this window
+
+// Abort Printing Dialog
+10270 Printing
+
+// Print Dialog
+10280 Print
+10281 printer:
+10282 Select printer which you want to use.
+10283 settings...
+10285 print heading and page numbers
+10286 print row numbers
+10287 print syntax highlighting
+10288 print spellchecking errors underlining
+10289 use colors
+10290 print selected block only
+10291 print colorings
+
+10295 File: 
+10296 Page
+10297 from
+10298 Printed: 
+
+
+// LEd Options Ddialog
+10300 Spellchecking
+10301
+10302 Dictionaries
+10303
+10304 Language settings
+10305
+10306 Thesauri
+10307
+10308 Thesauri
+10309 
+10310 Application
+10311
+10312 Directories
+10313
+10314 Associated file types
+10315
+10316 Editor
+10317
+10318 Filters
+10319
+10320 Group definitions
+10321
+10322 DVI Viewer
+10323
+10324 Syntax highlight
+10325
+10326 Parenthesis highlight
+10327
+10328 Archive
+10329
+
+10330 check whether some new messages are available at LEd's home page
+10331 LEd can automatically check whether some new messages are at/n/u/c12/c/uhttp:////www.LaTeXEditor.org//
+10332 command completion
+10333 
+10334 open recently opened files at startup
+10335 
+10336 show row numbers at the margin
+10337
+10338 save files before compilation
+10339
+10340 make backup copies of edited files
+10341
+10342 number of copies:
+10343
+10344 show /bdefinition/b section in hints
+10345 show /bdescription/b section in hints
+10346 show /bparameters/b section in hints
+10347 show /bsamples/b section in hints
+10348 show /bremarks/b section in hints
+10349 Defines if section is visible in/neditor hints.
+ 
+10350 < no main dictionary >
+10351
+10352 automatically save modified files
+10353
+10354 save in:
+10355
+10356 min
+10357 autosave in progress...
+
+10358 number of synonyms in menu:
+10359
+10360 corrections from main dictionary:
+10361 Number of corrections from/nmain dictionary./n/bMark!/b/nToo many corrections slows down spellchecker.
+10362 corrections from additional dictionary:
+10363 Number of corrections from/nadditional dictionaries./n/bMark!/b/nToo many corrections slows down spellchecker.
+10364 number of corrections in menu:
+10365 Number of corrections in/npopup menu.
+10366 spellcheck comments
+10367 The position should be checked/nto perform spellchecking comments.
+
+10368 /b/c9/cError! /b/c/cAn integer number should be entered.
+10369 /b/c9/cError! /b/c/cAn entered number should be from range
+
+10370 main dictionary:
+10371
+10372 all available dictionaries:
+10373 Specify default additional dictionaries.
+10374 Main dictionary
+10375 Default scheme
+
+10376 available substitution schemes:
+10377 specify substitution schemes for languages.
+10378 spellchecking sensitivity:
+10379 specify sensitivity of the spellchecker.
+
+10380 underlining spellchecking errors:
+10381
+10382 no spellchecking errors underlining
+10383
+10384 underline relating on the main dictionary
+10385
+10386 underline relating on all dictionaries
+10387
+10388 underline relating on all dictionaries,/nusing an additional color
+10389
+
+10390 main underlining color:
+10391 
+10392 additional underlining color:
+10393 
+10395 bracket coloring 
+10396
+10397 color list:
+10398
+
+10400 batch files:
+10401
+10402 definitions:
+10403
+10404 dictionaries:
+10405
+10406 languages:
+10407
+10408 projects:
+10409
+10410 templates:
+10411
+10412 resources:
+10413
+10414 thesauri:
+10415 
+10416 language:
+10417
+10418 <default>
+10419
+10420 hints alphablending:
+10421
+10422 alphablendings
+
+10430 (id) filter
+10431 filter /b(id)/bentificator and name
+10432 file masks
+10433 file masks, for which the filter is active/ne.g., /bc:\*.txt;*.tex
+10434 mark word from the thesaurus in the editor
+10435
+10436 mark color:
+10437
+10438 enable build-in DVI viewer
+10439
+
+10440 hints
+10441 turn on//turn off hints
+10442 highlights
+10443 turn on//turn off keyword highlights
+10444 commands
+10445 turn on//turn off commands
+10448 TeX distribution:
+10449
+10450 TeX executables:
+10451
+10452 GSDLL32.DLL directory:
+10453
+10454 PostScript fonts:
+10455
+10456 temporary files:
+10457
+10458 resolution:
+10459 default base resolution of DVI files in preview
+10460 paper size:
+10461
+10462 DVI file name:
+10463
+10464 <project name>.dvi
+10465 <main file>.dvi 
+10466 mm
+10467 inch
+10468 other
+10469 DVI:
+10470 font searching library:
+10471
+10472 kpathsea.dll; tl80kpse.dll; tl90kpse.dll; MiKTeX-core-2.dll; MiKTeX-core-3.dll; MiKTeX206-core.dll; MiKTeX207-core.dll; MiKTeX208-core.dll; kpathsea357.dll;
+10473 font making script:
+10474
+10475 mktexpk.exe; makepk.exe
+10477 rotate
+
+10478 show page contents when it is scrolled
+10479
+10480 show EPS figures
+10481
+10482 Default zoom
+10483
+10484 Page
+10485 of
+10486 Zoom
+10487 fallback font:
+10488 Font used, when there is no possibility to produce font specified in a DVI file
+10489 mode:
+10490 Mode specifying printer type
+10491 cmr10
+10492 ljfour; sunl; nextscrn; toshiba; cx; nexthi; linoone  
+10493 magnifying glass size:
+10494 
+10495 magnifying glass color:
+10496 
+10497 based on
+10498 magnifying glass shape:
+10499 /m240/m square;/m241/m rectangle;/m250/m circle
+
+// Find Dialog
+10500 Find
+10502 find:
+10503 Enter text to find.
+10504 uppercase sensitivity
+10505 color found text:
+10506 list of colored texts:
+10507 Remove coloring
+10508 Remove colored text from searching list.
+10509 use regular expressions
+10510 Use regular expressions
+
+// Replace Dialog
+10530 Replace
+10532 replace:
+10533 Enter text to replace the found text.
+10534 Replace all
+10536 ask before a replacement
+10538 replacements only in selected block
+10544 Find and Replace
+10545 Do you want to replace selected text?
+10546 The text is not found!
+10547 Searching finished.
+
+10550 line wrapping
+10551
+10552 code folding
+10553
+10554 font:
+10555
+10556 highlighting of matched parenthesizes
+10557
+10558 show change markers
+10559
+
+10560 show TeX source specials
+10561
+10562 highlight current line
+10563
+
+10570 Hints
+10571
+
+// Project Options Dialog
+10600 default for new projects
+
+10640 make archive automatically
+10641
+10642 always after closing
+10643 after closing, but not more frequenlty than a week
+10644 after closing, but not more frequenlty than a month
+10645 make archive in:
+10646
+10647 archive name:
+10648
+10649 archive components:
+
+10650 /m178/m
+10651 Active component
+10652 /m232/m
+10653 Preserve directories
+10654 component
+10655
+10656 <new component>
+10657 /m120/m Place for new component.
+10658 Archive
+10659 compression method:
+10660
+10661 /bZIP/b - fastest;/bZIP/b - normal;/bZIP/b - best;/bBZIP/b - fastest;/bBZIP/b - normal;/bBZIP/b - best
+
+10680 Add-ons management
+10681 List of add-ons available at /u/c12/c/uhttp:////www.LaTeXEditor.org///e:
+10682 Download
+10683 Connecting to server and downloading selected add-ons.
+10684 downloading of add-ons list...
+
+10690 Add-ons downloading
+10691 Preparing for download...
+10692 Add-ons downloading finished.
+10693 file
+10694 downloaded
+10695 of
+10696 /c9/c/bError!/n/eSome packages are not downloaded.
+
+10700 ident:
+10701 internal command identifier.
+10702 name:
+10703 Name(description) of the command.
+10704 hint:
+10705 Command hint/nin NT format.
+10706 hotkey:
+10707 Hotkey.
+10708 bitmap:
+10709 Bitmap identifier in /b*.crf/b resources.
+10710 /bBatch file
+10711 Command executes a batch file.
+10712 /bText
+10713 Command puts text in the edited file.
+10714 /bMacro
+10715 Command executes a macro/n(will be available in version 0.5)
+10716 Nowadays, macros are not supported./nThey should be added in version 0.5.
+10717 batch file:
+10718 
+10719 parameters:
+10720 /zList of special parameters:/g(2,1)(_,_)N0S0E0W0/g
+</b<PROGRAMDIR>/n<PROJECT>/n<PROJECTDIR>/n<PROJECTNAME>/n<PROJECTNAMEEXT>/n<MAINFILE>/n<MAINFILEDIR>/n<MAINFILENAME>/n<MAINFILENAMEEXT>/n<FILE>/n<FILEDIR>/n<FILENAME>/n<FILENAMEEXT>/,
+<- LEd directory/n
+<- full path of the project, e.g., C:\Papers\Newest.lpr/n
+<- project directory, e.g., C:\Papers/n
+<- project name, e.g., Newest/n
+<- project name with extension, e.g., Newest.lpr/n
+<- full path to the main project file, e.g., C:\Papers\Main.tex/n
+<- directory name of the main project file, e.g., C:\Papers/n
+<- main file name, e.g., Main/n
+<- main file name with extension, e.g., Main.tex/n
+<- full path to the selected file/n
+<- directory of the selected file/n
+<- selected file name/n
+<- selected file name with extension
+10721 new command
+10722 /m236/m /bnew command   />/m119/m/>[]/b/n/<New command.
+
+10740 Source links list
+10741 page
+10742
+10743 file
+10744
+10745 line no.
+10746
+
+10750 Font list
+10751 name
+10752
+10753 path
+10754 
+
+10760 Toolbars
+10761
+10762 Tool paletes
+10763
+10764 Commands
+10765
+10766 Settings
+10767
+10768 new toolbar
+10769 remove toolbar
+10770 restore defaults
+10771 show hints for menu commands
+10772
+10773 show hints for toolbar commands
+10774
+10775 separator
+10776
+10777 New toolbar
+10778 Name:
+10779 show tool paletes pointed by mouse
+10780
+10781 new command
+10782 remove command
+10783 change command
+10784 show suggestions from spellchecking dictionaries
+10785
+10786 show suggestions from thesauri
+10787
+10788 show hints for commands in editor
+10789
+10790 Enter text for insertion
+10791 Text:
+10792 Move to page no.
+10793 Page no.:
+
+// Corrections Dialog
+10800 Corrections
+10801 actualise
+10804 no corrections
+
+// Spellchecking dialog
+10820 Spellchecking
+10822 Next
+10823 Go to next error.
+10824 Make a correction
+10825 Replace with a selected word.
+10826 Ignore
+10827 Ignoruj wrong word./nThe word will be ignored in all files from the project.
+10828 Insert
+10829 Insert word to user's dictionary.
+10830 change to:
+10832 < no corrections >
+10834 End of spellchecking.
+
+10840 File Filters
+10842 List od Installed filters (identificators /bid/b of file filters must be different!)
+10844 Id
+10845 File /bId/bentificator
+10846 Name
+10847 Filter Name
+10848 File
+10849 Name of Filter File *.fl
+10850 Codes
+10851 save character codes
+10852 file
+10853 string of file,/nto replace
+10854 :codes
+10855 string of codes of file
+10856 Editor
+10857 string of editor,/nto replace string /nfrom file
+10858 :codes
+10859 string of editor
+
+10860 Add Filter
+10861 /m167/m /bAdd filter  /b/n/<Create new *.fl file
+10862 Remove Filter
+10863 /m169/m /bRemove filter   /b/n/<Remove selected file filter/na backup file *.~fl is created
+10864 Save FIlter
+10865 /m138/m /bSave Filter   /b/n/<Save changes to the file
+
+10866 Add Rule
+10867 /m167/m /bAdd Rule  /b/n/<Add new replacement rule
+10868 Remove Rule
+10869 /m169/m /bRemove Rule   /b/n/<Remove selected replacement rule
+
+10880 <new filter>
+10881 new.fl
+10882 /m120/m Location of new filter./nClick to add.
+10883 /m120/m Location of new rule./nClick to add.
+
+10900 highlighting scheme:
+10901
+10902 save scheme
+10903 remove scheme
+10904 highlighting categories:
+10905
+10906 font:
+10907 bold
+10908 italic
+10909 underline
+10910 color:
+
+10920 save undo list
+10921
+10922 for all open files
+10923 only for files belonging to the projects
+
+10924 <new color>
+10925 /m120/m Place for a new color./nClick to add.
+
+10926 Add a color
+10927 /m167/m /bAdds a color   />/m119/m/>[Ctrl+Ins]
+10928 Remove a color
+10929 /m169/m /bRemoves a color   />/m119/m/>[Ctrl+Del]
+10930 Move up
+10931 /m158/m /bMoces up   />/m119/m/>[Ctrl+Up]
+10932 Move down
+10933 /m161/m /bMoves down   />/m119/m/>[Ctrl+Down]
+
+10940 Add
+10941 /m167/m /bAdd   />/m119/m/>[Ctrl+Ins]
+10942 Remove
+10943 /m169/m /bRemove   />/m119/m/>[Ctrl+Del]
+10944 Sort
+10945 /m173/m /bSort
+
+11000 START 
+11001 STOP
+11002 (compilation stoped)
+
+11020 Statistics
+11021 Current project:
+11022 files:
+11023 size:
+11024 rows:
+11025 chars:
+11026 Current file:
+
+11030 defined in
+11031 row
+11032 unknown TeX//LaTeX command
+
+11040 Dictionary maintenance
+11041 language:
+11042 language and dialect.
+11043 category:
+11044 Dictionary category.
+11045 size:
+11046 Dictionary size.
+11047 name:
+11048 Dictionary name.
+11049 version:
+11050 Dictionary version number.
+11051 info:
+11052 Additional information.
+11053 Make new empty dictionary.
+11054 Import wordlist.
+11055 Export wordlist.
+
+11056 Import wordlist
+11057 Export wordlist
+11058 Save dictionary
+
+11059 Preparing for wordlist import...
+11060 Wordlist import: 
+11061 Dictionary update...
+11062 Preparing for wordlist export...
+11063 Wordlist export: 
+11064 Wordlist export finished.
+
+11065 Language unspecified!
+11066 category unspecified!
+
+11067 /b0/b - Main
+11068 /b1/b - Mathematics, Computer Science
+11069 /b2/b - Physics, Chemistry
+11070 /b3/b - Biology, Medicine
+11071 /b4/b - Geology
+
+// User commands
+11100 User commands
+11101
+11102 save the category
+11103 change the category's name
+11104 remove the category
+11105 categories highlighting:
+11106 User categories' highlighting./nCommands from the same category/nare highlighted in the same way.
+11107 user's commands and hints list:
+11108
+11109 category's range:
+11110 Specify when the category should be used,/nuse file mask, e.g., /b/n/t*.tex;*.sty 
+11111 command
+11112 
+11113 hint
+11114
+11115 <new>
+11116 /m120/m A place for a new command./nClick to add.
+
+//Code completion
+11120 Code completion
+11121
+11122 completion list for selected commands:
+11123
+11124 completed word
+11125
+11126 completion
+11127 use:/n/t/b//n/b for new row,/n/t/b//|/b for cursor position,/n/t/b/////b for //
+11128 <new>
+11129 /m120/m A place for a new completion./nClick to add.
+11130 delay (ms):
+11131 Delay of command list appearance.
+11132 Show command list without delay.
+
+11150 line endings:
+11151 Specify line endings mode in files.
+11152 automatic
+11153 Check line endings mode used in the file.
+11154 Windows//DOS (CR+LF)
+11155
+11156 UNIX//Linux (LF)
+11157
+11158 Mac (CR)
+11159
+11160 tab size:
+11161
+
+11200 Shortcuts
+11201
+11202 find shortcut:
+11203
+11204 scheme: 
+11205
+11206 Default shortcut scheme
+11207 command
+11208 
+11209 shortcut
+11210
+11211 (not found)
+11212 (none)
+11213 - ok
+11214 - this shortcut is already used
+11215 - incorrect shortcut
+
+// Messages
+12001 The file cannot be opened!
+12002 Unknown binary file!/nDo you want to open it?
+
+// DVI Errors:
+12100 /c1/c/bError!/b/nThere is no open project.
+12101
+12102 /c1/c/bError!/b/nThe DVI file does not exist.
+12103
+12104 Build-in DVI-viewer is disabled!/n/nTo enable it, choose: /n/bConfiguration//Options; Application//DVI viewer
+12105
+
+12110 /c1/c/bError!/b/nDVI Viewer - Unknown error.
+12111
+12112 /c1/c/bError!/b/nDVI Viewer - KPathSEA library error.
+12113
+12114 /c1/c/bError!/b/nDVI Viewer - No KPathSEA library.
+12115
+12116 /c1/c/bError!/b/nDVI Viewer - Current vesrsion of KPathSEA library is not supported.
+12117
+12120 /c1/c/bError!/b/nDVI Viewer - GSDLL32 libraty error.
+12121
+12122 /c1/c/bError!/b/nDVI Viewer - No GSDLL32 library.
+12123
+12124 /c1/c/bError!/b/nDVI Viewer - Current vesrion of GSDLL32 library is not supported.
+12125
+12126 /c1/c/bError!/b/nDVI Viewer - GSDLL32 library internal error.
+12127
+12128 /c1/c/bError!/b/nDVI Viewer - No EPS file to include.
+12129
+12130 /c1/c/bError!/b/nDVI Viewer - Error in .dvi file.
+12131
+12132 /c1/c/bError!/b/nDVI Viewer - Error in preambule of .dvi file.
+12133
+12134 /c1/c/bError!/b/nDVI Viewer - Unkonwn command in .dvi file.
+12135
+12136 /c1/c/bError!/b/nDVI Viewer - It is not file of DVI type.
+12137
+12138 /c1/c/bError!/b/nDVI Viewer - Unsupported version of .dvi file.
+12139
+12140 /c1/c/bError!/b/nDVI Viewer - No .dvi file.
+12141
+12150 /c1/c/bError!/b/nDVI Viewer - Error in font file.
+12151
+12152 /c1/c/bError!/b/nDVI Viewer - No font file.
+12153
+12154 /c1/c/bError!/b/nDVI Viewer - Font file cannot be opened.
+12155
+12156 /c1/c/bError!/b/nDVI Viewer - Wrong data in font file.
+12157
+12160 /c1/c/bError!/b/nDVI Viewer - Wrong parameters.
+12161
+12162 /c1/c/bError!/b/nDVI Viewer - Wrong base resolution.
+12163
+12164 /c1/c/bError!/b/nDVI Viewer - Wrong page sizes.
+12165
+12166 /c1/c/bError!/b/nDVI Viewer - No such a page.
+12167
+12168 /c1/c/bError!/b/nDVI Viewer - Wrong page coordinates.
+12169
+
+//DVIFontMaker
+12200 /c4/c/bMaking font:
+12201 /c4/c/bSearching font:
+
+
+// Language names
+10001025	Arabic (Saudi Arabia)
+10002049	Arabic (Iraq)
+10003073	Arabic (Egypt)
+10004097	Arabic (Libya)
+10005121	Arabic (Algeria)
+10006145	Arabic (Morocco)
+10007169	Arabic (Tunisia)
+10008193	Arabic (Oman)
+10009217	Arabic (Yemen)
+10010241	Arabic (Syria)
+10011265	Arabic (Jordan)
+10012289	Arabic (Lebanon)
+10013313	Arabic (Kuwait)
+10014337	Arabic (U.A.E.)
+10015361	Arabic (Bahrain)
+10016385	Arabic (Qatar)
+10001026	Bulgarian
+10001027	Catalan
+10001028	Chinese (Taiwan)
+10002052	Chinese (PRC)
+10003076	Chinese (Hong Kong SAR
+10004100	Chinese (Singapore)
+10001029	Czech
+10001030	Danish
+10001031	German (Standard)
+10002055	German (Swiss)
+10003079	German (Austrian)
+10004103	German (Luxembourg)
+10005127	German (Liechtenstein)
+10001032	Greek
+10001033	English (United States)
+10002057	English (United Kingdom)
+10003081	English (Australian)
+10004105	English (Canadian)
+10005129	English (New Zealand)
+10006153	English (Ireland)
+10007177	English (South Africa)
+10008201	English (Jamaica)
+10009225	English (Caribbean)
+10010249	English (Belize)
+10011273	English (Trinidad)
+10001034	Spanish (Traditional Sort)
+10002058	Spanish (Mexican)
+10003082	Spanish (Modern Sort)
+10004106	Spanish (Guatemala)
+10005130	Spanish (Costa Rica)
+10006154	Spanish (Panama)
+10007178	Spanish (Dominican Republic)
+10008202	Spanish (Venezuela)
+10009226	Spanish (Colombia)
+10010250	Spanish (Peru)
+10011274	Spanish (Argentina)
+10012298	Spanish (Ecuador)
+10013322	Spanish (Chile)
+10014346	Spanish (Uruguay)
+10015370	Spanish (Paraguay)
+10016394	Spanish (Bolivia)
+10017418	Spanish (El Salvador)
+10018442	Spanish (Honduras)
+10019466	Spanish (Nicaragua)
+10020490	Spanish (Puerto Rico)
+10001035	Finnish
+10001036	French (Standard)
+10002060	French (Belgian)
+10003084	French (Canadian)
+10004108	French (Swiss)
+10005132	French (Luxembourg)
+10001037	Hebrew
+10001038	Hungarian
+10001039	Icelandic
+10001040	Italian (Standard)
+10002064	Italian (Swiss)
+10001041	Japanese
+10001042	Korean
+10002066	Korean (Johab)
+10001043	Dutch (Standard)
+10002067	Dutch (Belgian)
+10001044	Norwegian (Bokmal)
+10002068	Norwegian (Nynorsk)
+10001045	Polish
+10001046	Portuguese (Brazil)
+10002070	Portuguese (Portugal)
+10001048	Romanian
+10001049	Russian
+10001050	Croatian
+10002074	Serbian (Latin)
+10003098	Serbian (Cyrillic)
+10001051	Slovak
+10001052	Albanian
+10001053	Swedish
+10002077	Swedish (Finland)
+10001054	Thai
+10001055	Turkish
+10001057	Indonesian
+10001058	Ukrainian
+10001059	Belarusian
+10001060	Slovenian
+10001061	Estonian
+10001062	Latvian
+10001063	Lithuanian
+10001065	Farsi
+10001066	Vietnamese
+10001069	Basque
+10001078	Afrikaans
+10001080	Faeroese
