@@ -1,0 +1,29 @@
+JunkRemove
+(may be call it JumpFix is better, but I'm lazy to rename it, some code from "IDA_ExtraPass_PlugIn" by Sirmabus)
+
+An IDA Pro 6.1 plug-in.
+By HyperIris   ( fsstudio at 263.net)
+V0.1
+
+Some times, when we disasm packed code or some type of exe shell, the junk code will makes IDA crazy.
+IDA can't handle junk code correctly, the padding bytes after jmp are totally garbage, but IDA thinks they are opcode.
+
+This plugin will fix these jumps in some degree.
+
+See the screen shots.
+1.jpg is the initial IDA analysis result.
+2.jpg is after jump fix.
+
+
+chinese:
+
+当我们用IDA处理某些加壳的文件，IDA会错误的对花指令进行反汇编，尤其是跳转指令后面跟随的那些垃圾字节，
+IDA会把它们当作正常的机器指令进行处理。
+
+这个插件会根据跳转的目的地址修正这些被花指令扰乱的反汇编结果。
+
+算法很简单，以后可能会再加一些功能，不过目前就这么多了，一上午写的。
+
+有两张图
+1.jpg 是IDA刚完成自动分析时的样子，可以看到有两处跳转被花指令扰乱了。
+2.jpg 是用插件修正后的跳转，这样我们就可以用CodeDoctor这样的插件进一步把花指令去掉。
