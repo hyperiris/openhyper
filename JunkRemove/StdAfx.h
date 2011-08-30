@@ -22,7 +22,6 @@
 #include <diskio.hpp>
 #include <funcs.hpp>
 #include <search.hpp>
-#include <kernwin.hpp>
 
 #include "Utility.h"
 
