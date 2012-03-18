@@ -12,6 +12,9 @@ WiiView: is a Wii ISO GUI viewer with direct file extract.
 
 led: is LaTeX Editor Simplified Chinese language file
 
+JunkRemove: is a Junk Code remove plug-in for IDA Pro
+
+duplicate: search duplicate files on HDD and save log
 --------------------------------------------------------------------
 
 OpenHyper 说明
@@ -24,3 +27,7 @@ gekkoPS: Gekko CPU Paired Single 扩展指令集插件, 用于 IDA Pro 5.2.
 WiiView: 是一个 Wii ISO 图形界面浏览器, 可以直接提取文件.
 
 led: 是 LaTeX Editor 的简体中文本地化文件.
+
+JunkRemove: IDA Pro 去花指令插件
+
+duplicate: 查找硬盘中的重复文件并且记录下来
