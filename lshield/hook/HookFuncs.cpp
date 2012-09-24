@@ -12,10 +12,6 @@
 #include "../Globals.h"
 #include "HookFuncs.h"
 
-#include <vector>
-
-using namespace std;
-
 typedef BOOL (_stdcall *OldCreateProcessW)(
 	LPCWSTR lpApplicationName,
 	LPWSTR lpCommandLine,
