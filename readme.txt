@@ -15,6 +15,8 @@ led: is LaTeX Editor Simplified Chinese language file
 JunkRemove: is a Junk Code remove plug-in for IDA Pro
 
 duplicate: search duplicate files on HDD and save log
+
+lsheild: source of lshield without apihook
 --------------------------------------------------------------------
 
 OpenHyper 说明
@@ -31,3 +33,5 @@ led: 是 LaTeX Editor 的简体中文本地化文件.
 JunkRemove: IDA Pro 去花指令插件
 
 duplicate: 查找硬盘中的重复文件并且记录下来
+
+lshield: LShield 的部分源代码，不包括APihook
