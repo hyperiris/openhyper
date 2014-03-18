@@ -1,4 +1,5 @@
 //unit GR32_System;
+#pragma once
 #include <atlstr.h>
 
 class TPerfTimer
