@@ -1,8 +1,9 @@
+//unit GR32_System;
 #include <stdafx.h>
 #include <intrin.h> 
 
 #include "GR32_System.h"
-//unit GR32_System;
+
 
 TPerfTimer GlobalPerfTimer;
 
@@ -13,45 +14,45 @@ TCPUFeatures CPUFeaturesData = ciNULL;
 
 CString TPerfTimer::ReadNanoseconds()
 {
-  QueryPerformanceCounter(&FPerformanceCountStop);
-  QueryPerformanceFrequency(&FFrequency);
-  //Assert(FFrequency > 0);
+	QueryPerformanceCounter(&FPerformanceCountStop);
+	QueryPerformanceFrequency(&FFrequency);
+	//Assert(FFrequency > 0);
 
-  //Result := IntToStr(Round(1000000 * (FPerformanceCountStop - FPerformanceCountStart) / FFrequency));
-  return L"";
+	//Result := IntToStr(Round(1000000 * (FPerformanceCountStop - FPerformanceCountStart) / FFrequency));
+	return L"";
 }
 
 CString TPerfTimer::ReadMilliseconds()
 {
-  QueryPerformanceCounter(&FPerformanceCountStop);
-  QueryPerformanceFrequency(&FFrequency);
-  //Assert(FFrequency > 0);
+	QueryPerformanceCounter(&FPerformanceCountStop);
+	QueryPerformanceFrequency(&FFrequency);
+	//Assert(FFrequency > 0);
 
-  //Result := FloatToStrF(1000 * (FPerformanceCountStop - FPerformanceCountStart) / FFrequency, ffFixed, 15, 3);
-  return L"";
+	//Result := FloatToStrF(1000 * (FPerformanceCountStop - FPerformanceCountStart) / FFrequency, ffFixed, 15, 3);
+	return L"";
 }
 
 CString TPerfTimer::ReadSeconds()
 {
-  QueryPerformanceCounter(&FPerformanceCountStop);
-  QueryPerformanceFrequency(&FFrequency);
-  //Result := FloatToStrF((FPerformanceCountStop - FPerformanceCountStart) / FFrequency, ffFixed, 15, 3);
-  return L"";
+	QueryPerformanceCounter(&FPerformanceCountStop);
+	QueryPerformanceFrequency(&FFrequency);
+	//Result := FloatToStrF((FPerformanceCountStop - FPerformanceCountStart) / FFrequency, ffFixed, 15, 3);
+	return L"";
 }
 
 INT64 TPerfTimer::ReadValue()
 {
-  QueryPerformanceCounter(&FPerformanceCountStop);
-  QueryPerformanceFrequency(&FFrequency);
-  //Assert(FFrequency > 0);
+	QueryPerformanceCounter(&FPerformanceCountStop);
+	QueryPerformanceFrequency(&FFrequency);
+	//Assert(FFrequency > 0);
 
-  //Result := Round(1000000 * (FPerformanceCountStop - FPerformanceCountStart) / FFrequency);
-  return 0;
+	//Result := Round(1000000 * (FPerformanceCountStop - FPerformanceCountStart) / FFrequency);
+	return 0;
 }
 
 void TPerfTimer::Start()
 {
-  QueryPerformanceCounter(&FPerformanceCountStart);
+	QueryPerformanceCounter(&FPerformanceCountStart);
 }
 
 DWORD GetProcessorCount()
@@ -77,7 +78,8 @@ BOOL CPUID_Available()
 		XOR       ECX,EAX
 		JZ        __label01
 		MOV       bRet, 1
-__label01:     PUSH      EAX
+__label01:
+		PUSH      EAX
 		POPFD
 	}
 	return bRet;
