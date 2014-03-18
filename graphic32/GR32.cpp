@@ -1,34 +1,26 @@
 //unit GR32;
+#include "stdafx.h"
+
+#include "GR32_Blend.h"
+#include "GR32_Filters.h"
+#include "GR32_LowLevel.h"
+#include "GR32_Math.h"
+#include "GR32_Resamplers.h"
+#include "GR32_Containers.h"
+#include "GR32_Backends.h"
+#include "GR32_Backends_Generic.h"
+#include "GR32_Backends_VCL.h"
+#include "GR32_DrawingEx.h"
+
 
 var
   StockBitmap: TBitmap;
 
 implementation
 
-uses
-  Math, GR32_Blend, GR32_Filters, GR32_LowLevel, GR32_Math,
-  GR32_Resamplers, GR32_Containers, GR32_Backends, GR32_Backends_Generic,
-{$IFDEF FPC}
-  Clipbrd,
-  {$IFDEF LCLWin32}
-    GR32_Backends_LCL_Win,
-  {$ENDIF}
-  {$IF defined(LCLGtk) or defined(LCLGtk2)}
-    GR32_Backends_LCL_Gtk,
-  {$IFEND}
-  {$IFDEF LCLCarbon}
-    GR32_Backends_LCL_Carbon,
-  {$ENDIF}
-  {$IFDEF LCLCustomDrawn}
-    GR32_Backends_LCL_CustomDrawn,
-  {$ENDIF}
-{$ELSE}
-  Clipbrd, GR32_Backends_VCL,
-{$ENDIF}
-  GR32_DrawingEx;
 
 type
-  { We can not use the Win32 defined record here since we are cross-platform. }
+//{ We can not use the Win32 defined record here since we are cross-platform. }
   TBmpHeader = packed record
     bfType: Word;
     bfSize: LongInt;

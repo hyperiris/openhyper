@@ -14,6 +14,7 @@ type
   TColor32Array = array [0..0] of TColor32;
   TArrayOfColor32 = array of TColor32;
 
+
   TColor32Component = (ccBlue, ccGreen, ccRed, ccAlpha);
   TColor32Components = set of TColor32Component;
 
