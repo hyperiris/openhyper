@@ -1,20 +1,7 @@
 //unit GR32_OrdinalMaps;
 #pragma once
 
-interface
-
-{$I GR32.inc}
-
-uses
-{$IFDEF FPC}
-  Controls, Graphics,
-  {$IFDEF Windows}
-    Windows,
-  {$ENDIF}
-{$ELSE}
-  Windows, Controls, Graphics,
-{$ENDIF}
-  Classes, SysUtils, GR32;
+#include "GR32.h"
 
 type
   TConversionType = (ctRed, ctGreen, ctBlue, ctAlpha, ctUniformRGB,

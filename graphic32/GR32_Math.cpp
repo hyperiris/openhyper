@@ -1,9 +1,7 @@
 //unit GR32_Math;
+#include "stdafx.h"
 
-implementation
-
-uses
-  Math;
+#include "GR32_Math.h"
 
 {$IFDEF PUREPASCAL}
 const
@@ -14,7 +12,7 @@ const
 
 function FixedFloor(A: TFixed): Integer;
 {$IFDEF PUREPASCAL}
-begin
+{
   Result := A div FIXEDONE;
 {$ELSE}
 asm
@@ -26,11 +24,11 @@ asm
         SAR     EAX, 16
 {$ENDIF}
 {$ENDIF}
-end;
+}
 
 function FixedCeil(A: TFixed): Integer;
 {$IFDEF PUREPASCAL}
-begin
+{
   Result := (A + $FFFF) div FIXEDONE;
 {$ELSE}
 asm
@@ -44,11 +42,11 @@ asm
         SAR     EAX, 16
 {$ENDIF}
 {$ENDIF}
-end;
+}
 
 function FixedRound(A: TFixed): Integer;
 {$IFDEF PUREPASCAL}
-begin
+{
   Result := (A + $7FFF) div FIXEDONE;
 {$ELSE}
 asm
@@ -62,11 +60,11 @@ asm
         SAR     EAX, 16
 {$ENDIF}
 {$ENDIF}
-end;
+}
 
 function FixedMul(A, B: TFixed): TFixed;
 {$IFDEF PUREPASCAL}
-begin
+{
   Result := Round(A * FixedToFloat * B);
 {$ELSE}
 asm
@@ -80,11 +78,11 @@ asm
         SHRD    EAX, EDX, 16
 {$ENDIF}
 {$ENDIF}
-end;
+}
 
 function FixedDiv(A, B: TFixed): TFixed;
 {$IFDEF PUREPASCAL}
-begin
+{
   Result := Round(A / B * FixedOne);
 {$ELSE}
 asm
@@ -104,13 +102,13 @@ asm
         IDIV    ECX
 {$ENDIF}
 {$ENDIF}
-end;
+}
 
 function OneOver(Value: TFixed): TFixed;
 {$IFDEF PUREPASCAL}
 const
   Dividend: Single = 4294967296; // FixedOne * FixedOne
-begin
+{
   Result := Round(Dividend / Value);
 {$ELSE}
 asm
@@ -126,11 +124,11 @@ asm
         IDIV    ECX
 {$ENDIF}
 {$ENDIF}
-end;
+}
 
 function FixedSqr(Value: TFixed): TFixed;
 {$IFDEF PUREPASCAL}
-begin
+{
   Result := Round(Value * FixedToFloat * Value);
 {$ELSE}
 asm
@@ -144,11 +142,11 @@ asm
         SHRD    EAX, EDX, 16
 {$ENDIF}
 {$ENDIF}
-end;
+}
 
 function FixedSqrtLP(Value: TFixed): TFixed;
 {$IFDEF PUREPASCAL}
-begin
+{
   Result := Round(Sqrt(Value * FixedOneS));
 {$ELSE}
 asm
@@ -204,11 +202,11 @@ asm
         POP     RBX
 {$ENDIF}
 {$ENDIF}
-end;
+}
 
 function FixedSqrtHP(Value: TFixed): TFixed;
 {$IFDEF PUREPASCAL}
-begin
+{
   Result := Round(Sqrt(Value * FixedOneS));
 {$ELSE}
 asm
@@ -300,7 +298,7 @@ asm
         POP     RBX
 {$ENDIF}
 {$ENDIF}
-end;
+}
 
 function FixedCombine(W, X, Y: TFixed): TFixed;
 // EAX <- W, EDX <- X, ECX <- Y
@@ -308,7 +306,7 @@ function FixedCombine(W, X, Y: TFixed): TFixed;
 // Result Z = W * X + (1 - W) * Y = Y + (X - Y) * W
 // Fixed Point Version: Result Z = Y + (X - Y) * W / 65536
 {$IFDEF PUREPASCAL}
-begin
+{
   Result := Round(Y + (X - Y) * FixedToFloat * W);
 {$ELSE}
 asm
@@ -326,7 +324,7 @@ asm
         ADD     EAX, R8D
 {$ENDIF}
 {$ENDIF}
-end;
+}
 
 { Trigonometry }
 
@@ -334,7 +332,7 @@ procedure SinCos(const Theta: TFloat; out Sin, Cos: TFloat);
 {$IFDEF NATIVE_SINCOS}
 var
   S, C: Extended;
-begin
+{
   Math.SinCos(Theta, S, C);
   Sin := S;
   Cos := C;
@@ -358,13 +356,13 @@ asm
         FSTP    [Cos] // sine
 {$ENDIF}
 {$ENDIF}
-end;
+}
 
 procedure SinCos(const Theta, Radius: TFloat; out Sin, Cos: TFloat);
 {$IFDEF NATIVE_SINCOS}
 var
   S, C: Extended;
-begin
+{
   Math.SinCos(Theta, S, C);
   Sin := S * Radius;
   Cos := C * Radius;
@@ -389,11 +387,11 @@ asm
         FSTP    [Sin]
 {$ENDIF}
 {$ENDIF}
-end;
+}
 
 function Hypot(const X, Y: TFloat): TFloat;
 {$IFDEF PUREPASCAL}
-begin
+{
   Result := Sqrt(Sqr(X) + Sqr(Y));
 {$ELSE}
 asm
@@ -413,11 +411,11 @@ asm
         SQRTSS  XMM0, XMM0
 {$ENDIF}
 {$ENDIF}
-end;
+}
 
 function Hypot(const X, Y: Integer): Integer;
 //{$IFDEF PUREPASCAL}
-begin
+{
   Result := Round(Math.Hypot(X, Y));
 (*
 {$ELSE}
@@ -437,7 +435,7 @@ asm
 {$ENDIF}
 {$ENDIF}
 *)
-end;
+}
 
 function FastSqrt(const Value: TFloat): TFloat;
 // see http://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Approximations_that_depend_on_IEEE_representation
@@ -445,7 +443,7 @@ function FastSqrt(const Value: TFloat): TFloat;
 var
   I: Integer absolute Value;
   J: Integer absolute Result;
-begin
+{
   J := (I - $3F800000) div 2 + $3F800000;
 {$ELSE}
 asm
@@ -461,7 +459,7 @@ asm
         SQRTSS  XMM0, XMM0
 {$ENDIF}
 {$ENDIF}
-end;
+}
 
 function FastSqrtBab1(const Value: TFloat): TFloat;
 // see http://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Approximations_that_depend_on_IEEE_representation
@@ -472,7 +470,7 @@ const
 var
   I: Integer absolute Value;
   J: Integer absolute Result;
-begin
+{
   J := (I - $3F800000) div 2 + $3F800000;
   Result := CHalf * (Result + Value / Result);
 {$ELSE}
@@ -492,7 +490,7 @@ asm
         SQRTSS  XMM0, XMM0
 {$ENDIF}
 {$ENDIF}
-end;
+}
 
 function FastSqrtBab2(const Value: TFloat): TFloat;
 // see http://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Approximations_that_depend_on_IEEE_representation
@@ -502,7 +500,7 @@ const
   CQuarter : TFloat = 0.25;
 var
   J: Integer absolute Result;
-begin
+{
  Result := Value;
  J := ((J - (1 shl 23)) shr 1) + (1 shl 29);
  Result := Result + Value / Result;
@@ -534,22 +532,22 @@ asm
         MULSS   XMM0, XMM1
 {$ENDIF}
 {$ENDIF}
-end;
+}
 
 function FastInvSqrt(const Value: Single): Single;
 var
   IntCst : Cardinal absolute result;
-begin
+{
   Result := Value;
   IntCst := ($BE6EB50C - IntCst) shr 1;
   Result := 0.5 * Result * (3 - Value * Sqr(Result));
-end;
+}
 
 { Misc. }
 
 function MulDiv(Multiplicand, Multiplier, Divisor: Integer): Integer;
 {$IFDEF PUREPASCAL}
-begin
+{
   Result := Int64(Multiplicand) * Int64(Multiplier) div Divisor;
 {$ELSE}
 asm
@@ -639,18 +637,18 @@ asm
 @Exit:
 {$ENDIF}
 {$ENDIF}
-end;
+}
 
 function IsPowerOf2(Value: Integer): Boolean;
 //returns true when X = 1,2,4,8,16 etc.
-begin
+{
   Result := Value and (Value - 1) = 0;
-end;
+}
 
 function PrevPowerOf2(Value: Integer): Integer;
 //returns X rounded down to the power of two
 {$IFDEF PUREPASCAL}
-begin
+{
   Result := 1;
   while Value shr 1 > 0 do
     Result := Result shl 1;
@@ -668,12 +666,12 @@ asm
         SHL     EAX, CL
 {$ENDIF}
 {$ENDIF}
-end;
+}
 
 function NextPowerOf2(Value: Integer): Integer;
 //returns X rounded up to the power of two, i.e. 5 -> 8, 7 -> 8, 15 -> 16
 {$IFDEF PUREPASCAL}
-begin
+{
   Result := 2;
   while Value shr 1 > 0 do 
     Result := Result shl 1;
@@ -701,13 +699,13 @@ asm
         MOV     EAX, 1
 {$ENDIF}
 {$ENDIF}
-end;
+}
 
 function Average(A, B: Integer): Integer;
 //fast average without overflow, useful e.g. for fixed point math
 //(A + B)/2 = (A and B) + (A xor B)/2
 {$IFDEF PUREPASCAL}
-begin
+{
   Result := (A and B) + (A xor B) div 2;
 {$ELSE}
 asm
@@ -727,11 +725,11 @@ asm
         ADD     EAX, EDX
 {$ENDIF}
 {$ENDIF}
-end;
+}
 
 function Sign(Value: Integer): Integer;
 {$IFDEF PUREPASCAL}
-begin
+{
   //Assumes 32 bit integer
   Result := (- Value) shr 31 - (Value shr 31);
 {$ELSE}
@@ -744,14 +742,14 @@ asm
         ADC     EDX, EDX
         MOV     EAX, EDX
 {$ENDIF}
-end;
+}
 
 function FloatMod(x, y: Double): Double;
-begin
+{
   if (y = 0) then
     Result := X
   else
     Result := x - y * Floor(x / y);
-end;
+}
 
 end.

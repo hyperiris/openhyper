@@ -87,9 +87,6 @@
     <ClInclude Include="..\GR32_Polygons.h">
       <Filter>Graphic32</Filter>
     </ClInclude>
-    <ClInclude Include="..\GR32_RangeBars.h">
-      <Filter>Graphic32</Filter>
-    </ClInclude>
     <ClInclude Include="..\GR32_Rasterizers.h">
       <Filter>Graphic32</Filter>
     </ClInclude>
@@ -165,9 +162,6 @@
       <Filter>Graphic32</Filter>
     </ClCompile>
     <ClCompile Include="..\GR32_Polygons.cpp">
-      <Filter>Graphic32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\GR32_RangeBar.cpp">
       <Filter>Graphic32</Filter>
     </ClCompile>
     <ClCompile Include="..\GR32_Rasterizers.cpp">

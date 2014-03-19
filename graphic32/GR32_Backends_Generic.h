@@ -1,22 +1,8 @@
 //unit GR32_Backends_Generic;
 #pragma once
 
-interface
-
-{$I GR32.inc}
-
-uses
-{$IFDEF FPC}
-  {$IFDEF Windows}
-  Windows,
-  {$ENDIF}
-{$ELSE}
-  Windows,
-{$ENDIF}
-{$IFDEF USE_GUIDS_IN_MMF}
-  ActiveX,
-{$ENDIF}
-  SysUtils, Classes, GR32, GR32_Backends;
+#include "GR32.h"
+#include "GR32_Backends.h"
 
 type
   { TMemoryBackend }

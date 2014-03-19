@@ -1,13 +1,8 @@
 //unit GR32_Backends_Generic;
 #include "stdafx.h"
-
 #include "GR32_Backends_Generic.h"
 
-
-implementation
-
-uses
-  GR32_LowLevel;
+#include "GR32_LowLevel.h"
 
 {$IFDEF Windows}
 

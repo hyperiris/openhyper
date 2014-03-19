@@ -614,6 +614,3 @@ end;
 initialization
   StockFont := GetStockObject(SYSTEM_FONT);
 
-finalization
-
-end.

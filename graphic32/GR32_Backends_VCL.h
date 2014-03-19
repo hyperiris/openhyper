@@ -1,13 +1,11 @@
 //unit GR32_Backends_VCL;
 #pragma once
 
-interface
-
-{$I GR32.inc}
-
-uses
-  SysUtils, Classes, Windows, Graphics, GR32, GR32_Backends, GR32_Containers,
-  GR32_Image, GR32_Backends_Generic;
+#include "GR32.h"
+#include "GR32_Backends.h"
+#include "GR32_Containers.h"
+#include "GR32_Image.h"
+#include "GR32_Backends_Generic.h"
 
 type
   { TGDIBackend }

@@ -1,35 +1,12 @@
 //unit GR32_MicroTiles;
 #pragma once
 
-interface
-
-{$I GR32.inc}
-{-$DEFINE CODESITE}
-{-$DEFINE CODESITE_HIGH}
-{-$DEFINE PROFILINGDRYRUN}
-{-$DEFINE MICROTILES_DEBUGDRAW}
-  {-$DEFINE MICROTILES_DEBUGDRAW_RANDOM_COLORS}
-  {-$DEFINE MICROTILES_DEBUGDRAW_UNOPTIMIZED}
-{-$DEFINE MICROTILES_NO_ADAPTION}
-  {-$DEFINE MICROTILES_NO_ADAPTION_FORCE_WHOLETILES}
-
-uses
-{$IFDEF FPC}
-  Types,
-  {$IFDEF Windows}
-    Windows,
-  {$ENDIF}
-{$ELSE}
-  Windows,
-{$ENDIF}
-{$IFDEF CODESITE}
-  CSIntf, CSAux,
-{$ENDIF}
-{$IFDEF COMPILER2005_UP}
-  Types,
-{$ENDIF}
-  SysUtils, Classes,
-  GR32, GR32_System, GR32_Containers, GR32_Layers, GR32_RepaintOpt, GR32_Bindings;
+#include "GR32.h"
+#include "GR32_System.h"
+#include "GR32_Containers.h"
+#include "GR32_Layers.h"
+#include "GR32_RepaintOpt.h"
+#include "GR32_Bindings.h"
 
 const
   MICROTILE_SHIFT = 5;
@@ -71,19 +48,19 @@ function MicroTileHeight(const Tile: TMicroTile): Integer; {$IFDEF USEINLINING} 
 function MicroTileWidth(const Tile: TMicroTile): Integer; {$IFDEF USEINLINING} inline; {$ENDIF}
 
 var
-  MicroTileUnion: procedure(var DstTile: TMicroTile; const SrcTile: TMicroTile);
+  MicroTileUnion: void(var DstTile: TMicroTile; const SrcTile: TMicroTile);
 
 // MicroTiles auxiliary routines
 function MakeEmptyMicroTiles: TMicroTiles; {$IFDEF USEINLINING} inline; {$ENDIF}
-procedure MicroTilesCreate(var MicroTiles: TMicroTiles); {$IFDEF USEINLINING} inline; {$ENDIF}
-procedure MicroTilesDestroy(var MicroTiles: TMicroTiles); {$IFDEF USEINLINING} inline; {$ENDIF}
-procedure MicroTilesSetSize(var MicroTiles: TMicroTiles; const DstRect: TRect);
-procedure MicroTilesClear(var MicroTiles: TMicroTiles; const Value: TMicroTile = MICROTILE_EMPTY); {$IFDEF USEINLINING} inline; {$ENDIF}
-procedure MicroTilesClearUsed(var MicroTiles: TMicroTiles; const Value: TMicroTile = MICROTILE_EMPTY);
-procedure MicroTilesCopy(var DstTiles: TMicroTiles; SrcTiles: TMicroTiles);
-procedure MicroTilesAddLine(var MicroTiles: TMicroTiles; X1, Y1, X2, Y2: Integer; LineWidth: Integer; RoundToWholeTiles: Boolean = False);
-procedure MicroTilesAddRect(var MicroTiles: TMicroTiles; Rect: TRect; RoundToWholeTiles: Boolean = False);
-procedure MicroTilesUnion(var DstTiles: TMicroTiles; const SrcTiles: TMicroTiles; RoundToWholeTiles: Boolean = False);
+void MicroTilesCreate(var MicroTiles: TMicroTiles); {$IFDEF USEINLINING} inline; {$ENDIF}
+void MicroTilesDestroy(var MicroTiles: TMicroTiles); {$IFDEF USEINLINING} inline; {$ENDIF}
+void MicroTilesSetSize(var MicroTiles: TMicroTiles; const DstRect: TRect);
+void MicroTilesClear(var MicroTiles: TMicroTiles; const Value: TMicroTile = MICROTILE_EMPTY); {$IFDEF USEINLINING} inline; {$ENDIF}
+void MicroTilesClearUsed(var MicroTiles: TMicroTiles; const Value: TMicroTile = MICROTILE_EMPTY);
+void MicroTilesCopy(var DstTiles: TMicroTiles; SrcTiles: TMicroTiles);
+void MicroTilesAddLine(var MicroTiles: TMicroTiles; X1, Y1, X2, Y2: Integer; LineWidth: Integer; RoundToWholeTiles: Boolean = False);
+void MicroTilesAddRect(var MicroTiles: TMicroTiles; Rect: TRect; RoundToWholeTiles: Boolean = False);
+void MicroTilesUnion(var DstTiles: TMicroTiles; const SrcTiles: TMicroTiles; RoundToWholeTiles: Boolean = False);
 function MicroTilesCalcRects(const MicroTiles: TMicroTiles; DstRects: TRectList; CountOnly: Boolean = False; RoundToWholeTiles: Boolean = False): Integer; overload;
 function MicroTilesCalcRects(const MicroTiles: TMicroTiles; DstRects: TRectList; const Clip: TRect; CountOnly: Boolean = False; RoundToWholeTiles: Boolean = False): Integer; overload;
 function MicroTilesCountEmptyTiles(const MicroTiles: TMicroTiles): Integer;
@@ -94,7 +71,7 @@ type
   TMicroTilesMap = class(TPointerMap)
   private
     function GetData(Item: Pointer): PMicroTiles;
-    procedure SetData(Item: Pointer; const Data: PMicroTiles);
+    void SetData(Item: Pointer; const Data: PMicroTiles);
   protected
     function Delete(BucketIndex: Integer; ItemIndex: Integer): Pointer; override;
   public
@@ -149,42 +126,42 @@ type
     FDebugInvalidRects: TRectList;
 {$ENDIF}
 
-    procedure DrawLayerToMicroTiles(var DstTiles: TMicroTiles; Layer: TCustomLayer);
-    procedure DrawMeasuringHandler(Sender: TObject; const Area: TRect; const Info: Cardinal);
+    void DrawLayerToMicroTiles(var DstTiles: TMicroTiles; Layer: TCustomLayer);
+    void DrawMeasuringHandler(Sender: TObject; const Area: TRect; const Info: Cardinal);
 
-    procedure ValidateWorkingTiles;
-    procedure UpdateOldInvalidTiles;
-    procedure SetAdaptiveMode(const Value: Boolean);
-    procedure ResetAdaptiveMode;
-    procedure BeginAdaption;
-    procedure EndAdaption;
+    void ValidateWorkingTiles;
+    void UpdateOldInvalidTiles;
+    void SetAdaptiveMode(const Value: Boolean);
+    void ResetAdaptiveMode;
+    void BeginAdaption;
+    void EndAdaption;
 
-    procedure AddArea(var Tiles: TMicroTiles; const Area: TRect; const Info: Cardinal);
+    void AddArea(var Tiles: TMicroTiles; const Area: TRect; const Info: Cardinal);
   protected
-    procedure SetEnabled(const Value: Boolean); override;
+    void SetEnabled(const Value: Boolean); override;
 
     // LayerCollection handler
-    procedure LayerCollectionNotifyHandler(Sender: TLayerCollection;
+    void LayerCollectionNotifyHandler(Sender: TLayerCollection;
       Action: TLayerListNotification; Layer: TCustomLayer; Index: Integer); override;
   public
     constructor Create(Buffer: TBitmap32; InvalidRects: TRectList); override;
     destructor Destroy; override;
 
-    procedure RegisterLayerCollection(Layers: TLayerCollection); override;
-    procedure UnregisterLayerCollection(Layers: TLayerCollection); override;
+    void RegisterLayerCollection(Layers: TLayerCollection); override;
+    void UnregisterLayerCollection(Layers: TLayerCollection); override;
 
-    procedure Reset; override;
+    void Reset; override;
 
     function  UpdatesAvailable: Boolean; override;
-    procedure PerformOptimization; override;
+    void PerformOptimization; override;
 
-    procedure BeginPaintBuffer; override;
-    procedure EndPaintBuffer; override;
+    void BeginPaintBuffer; override;
+    void EndPaintBuffer; override;
 
     // handlers
-    procedure AreaUpdateHandler(Sender: TObject; const Area: TRect; const Info: Cardinal); override;
-    procedure LayerUpdateHandler(Sender: TObject; Layer: TCustomLayer); override;
-    procedure BufferResizedHandler(const NewWidth, NewHeight: Integer); override;
+    void AreaUpdateHandler(Sender: TObject; const Area: TRect; const Info: Cardinal); override;
+    void LayerUpdateHandler(Sender: TObject; Layer: TCustomLayer); override;
+    void BufferResizedHandler(const NewWidth, NewHeight: Integer); override;
 
     // custom settings:
     property AdaptiveMode: Boolean read FAdaptiveMode write SetAdaptiveMode;
@@ -193,16 +170,16 @@ type
 {$IFDEF CODESITE}
   TDebugMicroTilesRepaintOptimizer = class(TMicroTilesRepaintOptimizer)
   public
-    procedure Reset; override;
+    void Reset; override;
     function  UpdatesAvailable: Boolean; override;
-    procedure PerformOptimization; override;
+    void PerformOptimization; override;
 
-    procedure BeginPaintBuffer; override;
-    procedure EndPaintBuffer; override;
+    void BeginPaintBuffer; override;
+    void EndPaintBuffer; override;
 
-    procedure AreaUpdateHandler(Sender: TObject; const Area: TRect; const Info: Cardinal); override;
-    procedure LayerUpdateHandler(Sender: TObject; Layer: TCustomLayer); override;
-    procedure BufferResizedHandler(const NewWidth, NewHeight: Integer); override;
+    void AreaUpdateHandler(Sender: TObject; const Area: TRect; const Info: Cardinal); override;
+    void LayerUpdateHandler(Sender: TObject; Layer: TCustomLayer); override;
+    void BufferResizedHandler(const NewWidth, NewHeight: Integer); override;
   end;
 {$ENDIF}
 

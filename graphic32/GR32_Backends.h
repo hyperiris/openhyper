@@ -2,8 +2,8 @@
 #pragma once
 
 #include "GR32.h"
-//#include "GR32_Containers.h"
-//#include "GR32_Image.h"
+#include "GR32_Containers.h"
+#include "GR32_Image.h"
 
 
 type

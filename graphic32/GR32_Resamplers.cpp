@@ -1,610 +1,10 @@
-unit GR32_Resamplers;
+//unit GR32_Resamplers;
 
-(* ***** BEGIN LICENSE BLOCK *****
- * Version: MPL 1.1 or LGPL 2.1 with linking exception
- *
- * The contents of this file are subject to the Mozilla Public License Version
- * 1.1 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS" basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- * for the specific language governing rights and limitations under the
- * License.
- *
- * Alternatively, the contents of this file may be used under the terms of the
- * Free Pascal modified version of the GNU Lesser General Public License
- * Version 2.1 (the "FPC modified LGPL License"), in which case the provisions
- * of this license are applicable instead of those above.
- * Please see the file LICENSE.txt for additional information concerning this
- * license.
- *
- * The Original Code is Graphics32
- *
- * The Initial Developers of the Original Code is
- * Mattias Andersson <mattias@centaurix.com>
- * (parts of this unit were taken from GR32_Transforms.pas by Alex A. Denisov)
- *
- * Portions created by the Initial Developer are Copyright (C) 2000-2009
- * the Initial Developer. All Rights Reserved.
- *
- * Contributor(s):
- * Michael Hansen <dyster_tid@hotmail.com>
- *
- * ***** END LICENSE BLOCK ***** *)
+#include "GR32_Resamplers.h"
 
-interface
-
-{$I GR32.inc}
-
-{$IFNDEF FPC}
-{-$IFDEF USE_3DNOW}
-{$ENDIF}
-
-uses
-{$IFDEF FPC}
-  LCLIntf,
-{$ELSE}
-  Windows, Types,
-{$ENDIF}
-  Classes, SysUtils, GR32, GR32_Transforms, GR32_Containers,
-  GR32_OrdinalMaps, GR32_Blend, GR32_System, GR32_Bindings;
-
-procedure BlockTransfer(
-  Dst: TCustomBitmap32; DstX: Integer; DstY: Integer; DstClip: TRect;
-  Src: TCustomBitmap32; SrcRect: TRect;
-  CombineOp: TDrawMode; CombineCallBack: TPixelCombineEvent = nil);
-
-procedure BlockTransferX(
-  Dst: TCustomBitmap32; DstX, DstY: TFixed; 
-  Src: TCustomBitmap32; SrcRect: TRect;
-  CombineOp: TDrawMode; CombineCallBack: TPixelCombineEvent = nil);
-
-procedure StretchTransfer(
-  Dst: TCustomBitmap32; DstRect: TRect; DstClip: TRect;
-  Src: TCustomBitmap32; SrcRect: TRect;
-  Resampler: TCustomResampler;
-  CombineOp: TDrawMode; CombineCallBack: TPixelCombineEvent = nil);
-
-procedure BlendTransfer(
-  Dst: TCustomBitmap32; DstX, DstY: Integer; DstClip: TRect;
-  SrcF: TCustomBitmap32; SrcRectF: TRect;
-  SrcB: TCustomBitmap32; SrcRectB: TRect;
-  BlendCallback: TBlendReg); overload;
-
-procedure BlendTransfer(
-  Dst: TCustomBitmap32; DstX, DstY: Integer; DstClip: TRect;
-  SrcF: TCustomBitmap32; SrcRectF: TRect;
-  SrcB: TCustomBitmap32; SrcRectB: TRect;
-  BlendCallback: TBlendRegEx; MasterAlpha: Integer); overload;
-
-const
-  MAX_KERNEL_WIDTH = 16;
-
-type
-  PKernelEntry = ^TKernelEntry;
-  TKernelEntry = array [-MAX_KERNEL_WIDTH..MAX_KERNEL_WIDTH] of Integer;
-
-  TArrayOfKernelEntry = array of TArrayOfInteger;
-  PKernelEntryArray = ^TKernelEntryArray;
-  TKernelEntryArray = array [0..0] of TArrayOfInteger;
-
-  TFilterMethod = function(Value: TFloat): TFloat of object;
-
-  EBitmapException = class(Exception);
-  ESrcInvalidException = class(Exception);
-  ENestedException = class(Exception);
-
-  TGetSampleInt = function(X, Y: Integer): TColor32 of object;
-  TGetSampleFloat = function(X, Y: TFloat): TColor32 of object;
-  TGetSampleFixed = function(X, Y: TFixed): TColor32 of object;
-
-  { TCustomKernel }
-  TCustomKernel = class(TPersistent)
-  protected
-    FObserver: TNotifiablePersistent;
-  protected
-    procedure AssignTo(Dst: TPersistent); override;
-    function RangeCheck: Boolean; virtual;
-  public
-    constructor Create; virtual;
-    procedure Changed;
-    function Filter(Value: TFloat): TFloat; virtual; abstract;
-    function GetWidth: TFloat; virtual; abstract;
-    property Observer: TNotifiablePersistent read FObserver;
-  end;
-  TCustomKernelClass = class of TCustomKernel;
-
-  { TBoxKernel }
-  TBoxKernel = class(TCustomKernel)
-  public
-    function Filter(Value: TFloat): TFloat; override;
-    function GetWidth: TFloat; override;
-  end;
-
-  { TLinearKernel }
-  TLinearKernel = class(TCustomKernel)
-  public
-    function Filter(Value: TFloat): TFloat; override;
-    function GetWidth: TFloat; override;
-  end;
-
-  { TCosineKernel }
-  TCosineKernel = class(TCustomKernel)
-  public
-    function Filter(Value: TFloat): TFloat; override;
-    function GetWidth: TFloat; override;
-  end;
-
-  { TSplineKernel }
-  TSplineKernel = class(TCustomKernel)
-  protected
-    function RangeCheck: Boolean; override;
-  public
-    function Filter(Value: TFloat): TFloat; override;
-    function GetWidth: TFloat; override;
-  end;
-
-  { TMitchellKernel }
-  TMitchellKernel = class(TCustomKernel)
-  protected
-    function RangeCheck: Boolean; override;
-  public
-    function Filter(Value: TFloat): TFloat; override;
-    function GetWidth: TFloat; override;
-  end;
-
-  { TCubicKernel }
-  TCubicKernel = class(TCustomKernel)
-  private
-    FCoeff: TFloat;
-    procedure SetCoeff(const Value: TFloat);
-  protected
-    function RangeCheck: Boolean; override;
-  public
-    constructor Create; override;
-    function Filter(Value: TFloat): TFloat; override;
-    function GetWidth: TFloat; override;
-  published
-    property Coeff: TFloat read FCoeff write SetCoeff;
-  end;
-
-  { THermiteKernel }
-  THermiteKernel = class(TCustomKernel)
-  private
-    FBias: TFloat;
-    FTension: TFloat;
-    procedure SetBias(const Value: TFloat);
-    procedure SetTension(const Value: TFloat);
-  protected
-    function RangeCheck: Boolean; override;
-  public
-    constructor Create; override;
-    function Filter(Value: TFloat): TFloat; override;
-    function GetWidth: TFloat; override;
-  published
-    property Bias: TFloat read FBias write SetBias;
-    property Tension: TFloat read FTension write SetTension;
-  end;
-
-  { TWindowedSincKernel }
-  TWindowedSincKernel = class(TCustomKernel)
-  private
-    FWidth : TFloat;
-    FWidthReciprocal : TFloat;
-  protected
-    function RangeCheck: Boolean; override;
-    function Window(Value: TFloat): TFloat; virtual; abstract;
-  public
-    constructor Create; override;
-    function Filter(Value: TFloat): TFloat; override;
-    procedure SetWidth(Value: TFloat);
-    function GetWidth: TFloat; override;
-    property WidthReciprocal : TFloat read FWidthReciprocal;
-  published
-    property Width: TFloat read FWidth write SetWidth;
-  end;
-
-  { TAlbrecht-Kernel }
-  TAlbrechtKernel = class(TWindowedSincKernel)
-  private
-    FTerms: Integer;
-    FCoefPointer : Array [0..11] of Double;
-    procedure SetTerms(Value : Integer);
-  protected
-    function Window(Value: TFloat): TFloat; override;
-  public
-    constructor Create; override;
-  published
-    property Terms: Integer read FTerms write SetTerms;
-  end;
-
-  { TLanczosKernel }
-  TLanczosKernel = class(TWindowedSincKernel)
-  protected
-    function Window(Value: TFloat): TFloat; override;
-  public
-  end;
-
-  { TGaussianKernel }
-  TGaussianKernel = class(TWindowedSincKernel)
-  private
-    FSigma: TFloat;
-    FSigmaReciprocalLn2: TFloat;
-    procedure SetSigma(const Value: TFloat);
-  protected
-    function Window(Value: TFloat): TFloat; override;
-  public
-    constructor Create; override;
-  published
-    property Sigma: TFloat read FSigma write SetSigma;
-  end;
-
-  { TBlackmanKernel }
-  TBlackmanKernel = class(TWindowedSincKernel)
-  protected
-    function Window(Value: TFloat): TFloat; override;
-  end;
-
-  { THannKernel }
-  THannKernel = class(TWindowedSincKernel)
-  protected
-    function Window(Value: TFloat): TFloat; override;
-  end;
-
-  { THammingKernel }
-  THammingKernel = class(TWindowedSincKernel)
-  protected
-    function Window(Value: TFloat): TFloat; override;
-  end;
-
-  { TSinshKernel }
-  TSinshKernel = class(TCustomKernel)
-  private
-    FWidth: TFloat;
-    FCoeff: TFloat;
-    procedure SetCoeff(const Value: TFloat);
-  protected
-    function  RangeCheck: Boolean; override;
-  public
-    constructor Create; override;
-    procedure SetWidth(Value: TFloat);
-    function  GetWidth: TFloat; override;
-    function  Filter(Value: TFloat): TFloat; override;
-  published
-    property Coeff: TFloat read FCoeff write SetCoeff;
-    property Width: TFloat read GetWidth write SetWidth;
-  end;
-
-
-  { TNearestResampler }
-  TNearestResampler = class(TCustomResampler)
-  private
-    FGetSampleInt: TGetSampleInt;
-  protected
-    function GetPixelTransparentEdge(X, Y: Integer): TColor32;
-    function GetWidth: TFloat; override;
-    procedure Resample(
-      Dst: TCustomBitmap32; DstRect: TRect; DstClip: TRect;
-      Src: TCustomBitmap32; SrcRect: TRect;
-      CombineOp: TDrawMode; CombineCallBack: TPixelCombineEvent); override;
-  public
-    function GetSampleInt(X, Y: Integer): TColor32; override;
-    function GetSampleFixed(X, Y: TFixed): TColor32; override;
-    function GetSampleFloat(X, Y: TFloat): TColor32; override;
-    procedure PrepareSampling; override;
-  end;
-
-  { TLinearResampler }
-  TLinearResampler = class(TCustomResampler)
-  private
-    FLinearKernel: TLinearKernel;
-    FGetSampleFixed: TGetSampleFixed;
-  protected
-    function GetWidth: TFloat; override;
-    function GetPixelTransparentEdge(X, Y: TFixed): TColor32;
-    procedure Resample(
-      Dst: TCustomBitmap32; DstRect: TRect; DstClip: TRect;
-      Src: TCustomBitmap32; SrcRect: TRect;
-      CombineOp: TDrawMode; CombineCallBack: TPixelCombineEvent); override;
-  public
-    constructor Create; override;
-    destructor Destroy; override;
-    function GetSampleFixed(X, Y: TFixed): TColor32; override;
-    function GetSampleFloat(X, Y: TFloat): TColor32; override;
-    procedure PrepareSampling; override;
-  end;
-
-  { TDraftResampler }
-  TDraftResampler = class(TLinearResampler)
-  protected
-    procedure Resample(
-      Dst: TCustomBitmap32; DstRect: TRect; DstClip: TRect;
-      Src: TCustomBitmap32; SrcRect: TRect;
-      CombineOp: TDrawMode; CombineCallBack: TPixelCombineEvent); override;
-  end;
-
-  { TKernelResampler }
-  { This resampler class will perform resampling by using an arbitrary
-    reconstruction kernel. By using the kmTableNearest and kmTableLinear
-    kernel modes, kernel values are precomputed in a look-up table. This
-    allows GetSample to execute faster for complex kernels. }
-
-  TKernelMode = (kmDynamic, kmTableNearest, kmTableLinear);
-
-  TKernelResampler = class(TCustomResampler)
-  private
-    FKernel: TCustomKernel;
-    FKernelMode: TKernelMode;
-    FWeightTable: TIntegerMap;
-    FTableSize: Integer;
-    FOuterColor: TColor32;
-    procedure SetKernel(const Value: TCustomKernel);
-    function GetKernelClassName: string;
-    procedure SetKernelClassName(Value: string);
-    procedure SetKernelMode(const Value: TKernelMode);
-    procedure SetTableSize(Value: Integer);
-  protected
-    function GetWidth: TFloat; override;
-  public
-    constructor Create; override;
-    destructor Destroy; override;
-    function GetSampleFloat(X, Y: TFloat): TColor32; override;
-    procedure Resample(
-      Dst: TCustomBitmap32; DstRect: TRect; DstClip: TRect;
-      Src: TCustomBitmap32; SrcRect: TRect;
-      CombineOp: TDrawMode; CombineCallBack: TPixelCombineEvent); override;
-    procedure PrepareSampling; override;
-    procedure FinalizeSampling; override;
-  published
-    property KernelClassName: string read GetKernelClassName write SetKernelClassName;
-    property Kernel: TCustomKernel read FKernel write SetKernel;
-    property KernelMode: TKernelMode read FKernelMode write SetKernelMode;
-    property TableSize: Integer read FTableSize write SetTableSize;
-  end;
-
-  { TNestedSampler }
-  TNestedSampler = class(TCustomSampler)
-  private
-    FSampler: TCustomSampler;
-    FGetSampleInt: TGetSampleInt;
-    FGetSampleFixed: TGetSampleFixed;
-    FGetSampleFloat: TGetSampleFloat;
-    procedure SetSampler(const Value: TCustomSampler);
-  protected
-    procedure AssignTo(Dst: TPersistent); override;
-  public
-    constructor Create(ASampler: TCustomSampler); reintroduce; virtual; 
-    procedure PrepareSampling; override;
-    procedure FinalizeSampling; override;
-    function HasBounds: Boolean; override;
-    function GetSampleBounds: TFloatRect; override;
-  published
-    property Sampler: TCustomSampler read FSampler write SetSampler;
-  end;
-
-  { TTransformer }
-  TReverseTransformInt = procedure(DstX, DstY: Integer; out SrcX, SrcY: Integer) of object;
-  TReverseTransformFixed = procedure(DstX, DstY: TFixed; out SrcX, SrcY: TFixed) of object;
-  TReverseTransformFloat = procedure(DstX, DstY: TFloat; out SrcX, SrcY: TFloat) of object;
-
-  TTransformer = class(TNestedSampler)
-  private
-    FTransformation: TTransformation;
-    FTransformationReverseTransformInt: TReverseTransformInt;
-    FTransformationReverseTransformFixed: TReverseTransformFixed;
-    FTransformationReverseTransformFloat: TReverseTransformFloat;
-    procedure SetTransformation(const Value: TTransformation);
-  public
-    constructor Create(ASampler: TCustomSampler; ATransformation: TTransformation); reintroduce;
-    procedure PrepareSampling; override;
-    function GetSampleInt(X, Y: Integer): TColor32; override;
-    function GetSampleFixed(X, Y: TFixed): TColor32; override;
-    function GetSampleFloat(X, Y: TFloat): TColor32; override;
-    function HasBounds: Boolean; override;
-    function GetSampleBounds: TFloatRect; override;
-  published
-    property Transformation: TTransformation read FTransformation write SetTransformation;
-  end;
-
-  { TSuperSampler }
-  TSamplingRange = 1..MaxInt;
-
-  TSuperSampler = class(TNestedSampler)
-  private
-    FSamplingY: TSamplingRange;
-    FSamplingX: TSamplingRange;
-    FDistanceX: TFixed;
-    FDistanceY: TFixed;
-    FOffsetX: TFixed;
-    FOffsetY: TFixed;
-    FScale: TFixed;
-    procedure SetSamplingX(const Value: TSamplingRange);
-    procedure SetSamplingY(const Value: TSamplingRange);
-  public
-    constructor Create(Sampler: TCustomSampler); override;
-    function GetSampleFixed(X, Y: TFixed): TColor32; override;
-  published
-    property SamplingX: TSamplingRange read FSamplingX write SetSamplingX;
-    property SamplingY: TSamplingRange read FSamplingY write SetSamplingY;
-  end;
-
-  { TAdaptiveSuperSampler }
-  TRecurseProc = function(X, Y, W: TFixed; const C1, C2: TColor32): TColor32 of object;
-
-  TAdaptiveSuperSampler = class(TNestedSampler)
-  private
-    FMinOffset: TFixed;
-    FLevel: Integer;
-    FTolerance: Integer;
-    procedure SetLevel(const Value: Integer);
-    function DoRecurse(X, Y, Offset: TFixed; const A, B, C, D, E: TColor32): TColor32;
-    function QuadrantColor(const C1, C2: TColor32; X, Y, Offset: TFixed;
-      Proc: TRecurseProc): TColor32;
-    function RecurseAC(X, Y, Offset: TFixed; const A, C: TColor32): TColor32;
-    function RecurseBD(X, Y, Offset: TFixed; const B, D: TColor32): TColor32;
-  protected
-    function CompareColors(C1, C2: TColor32): Boolean; virtual;
-  public
-    constructor Create(Sampler: TCustomSampler); override;
-    function GetSampleFixed(X, Y: TFixed): TColor32; override;
-  published
-    property Level: Integer read FLevel write SetLevel;
-    property Tolerance: Integer read FTolerance write FTolerance;
-  end;
-
-  { TPatternSampler }
-  TFloatSamplePattern = array of array of TArrayOfFloatPoint;
-  TFixedSamplePattern = array of array of TArrayOfFixedPoint;
-
-  TPatternSampler = class(TNestedSampler)
-  private
-    FPattern: TFixedSamplePattern;
-    procedure SetPattern(const Value: TFixedSamplePattern);
-  protected
-    WrapProcVert: TWrapProc;
-  public
-    destructor Destroy; override;
-    function GetSampleFixed(X, Y: TFixed): TColor32; override;
-    property Pattern: TFixedSamplePattern read FPattern write SetPattern;
-  end;
-
-  { Auxiliary record used in accumulation routines }
-  PBufferEntry = ^TBufferEntry;
-  TBufferEntry = record
-    B, G, R, A: Integer;
-  end;
-
-  { TKernelSampler }
-  TKernelSampler = class(TNestedSampler)
-  private
-    FKernel: TIntegerMap;
-    FStartEntry: TBufferEntry;
-    FCenterX: Integer;
-    FCenterY: Integer;
-  protected
-    procedure UpdateBuffer(var Buffer: TBufferEntry; Color: TColor32;
-      Weight: Integer); virtual; abstract;
-    function ConvertBuffer(var Buffer: TBufferEntry): TColor32; virtual;
-  public
-    constructor Create(ASampler: TCustomSampler); override;
-    destructor Destroy; override;
-    function GetSampleInt(X, Y: Integer): TColor32; override;
-    function GetSampleFixed(X, Y: TFixed): TColor32; override;
-  published
-    property Kernel: TIntegerMap read FKernel write FKernel;
-    property CenterX: Integer read FCenterX write FCenterX;
-    property CenterY: Integer read FCenterY write FCenterY;
-  end;
-
-  { TConvolver }
-  TConvolver = class(TKernelSampler)
-  protected
-    procedure UpdateBuffer(var Buffer: TBufferEntry; Color: TColor32;
-      Weight: Integer); override;
-  end;
-
-  { TSelectiveConvolver }
-  TSelectiveConvolver = class(TConvolver)
-  private
-    FRefColor: TColor32;
-    FDelta: Integer;
-    FWeightSum: TBufferEntry;
-  protected
-    procedure UpdateBuffer(var Buffer: TBufferEntry; Color: TColor32;
-      Weight: Integer); override;
-    function ConvertBuffer(var Buffer: TBufferEntry): TColor32; override;
-  public
-    constructor Create(ASampler: TCustomSampler); override;
-    function GetSampleInt(X, Y: Integer): TColor32; override;
-    function GetSampleFixed(X, Y: TFixed): TColor32; override;
-  published
-    property Delta: Integer read FDelta write FDelta;
-  end;
-
-  { TMorphologicalSampler }
-  TMorphologicalSampler = class(TKernelSampler)
-  protected
-    function ConvertBuffer(var Buffer: TBufferEntry): TColor32; override;
-  end;
-
-  { TDilater }
-  TDilater = class(TMorphologicalSampler)
-  protected
-    procedure UpdateBuffer(var Buffer: TBufferEntry; Color: TColor32;
-      Weight: Integer); override;
-  end;
-
-  { TEroder }
-  TEroder = class(TMorphologicalSampler)
-  protected
-    procedure UpdateBuffer(var Buffer: TBufferEntry; Color: TColor32;
-      Weight: Integer); override;
-  public
-    constructor Create(ASampler: TCustomSampler); override;
-  end;
-
-  { TExpander }
-  TExpander = class(TKernelSampler)
-  protected
-    procedure UpdateBuffer(var Buffer: TBufferEntry; Color: TColor32;
-      Weight: Integer); override;
-  end;
-
-  { TContracter }
-  TContracter = class(TExpander)
-  private
-    FMaxWeight: TColor32;
-  protected
-    procedure UpdateBuffer(var Buffer: TBufferEntry; Color: TColor32;
-      Weight: Integer); override;
-  public
-    procedure PrepareSampling; override;
-    function GetSampleInt(X, Y: Integer): TColor32; override;
-    function GetSampleFixed(X, Y: TFixed): TColor32; override;
-  end;
-
-function CreateJitteredPattern(TileWidth, TileHeight, SamplesX, SamplesY: Integer): TFixedSamplePattern;
-
-{ Convolution and morphological routines }
-procedure Convolve(Src, Dst: TCustomBitmap32; Kernel: TIntegerMap; CenterX, CenterY: Integer);
-procedure Dilate(Src, Dst: TCustomBitmap32; Kernel: TIntegerMap; CenterX, CenterY: Integer);
-procedure Erode(Src, Dst: TCustomBitmap32; Kernel: TIntegerMap; CenterX, CenterY: Integer);
-procedure Expand(Src, Dst: TCustomBitmap32; Kernel: TIntegerMap; CenterX, CenterY: Integer);
-procedure Contract(Src, Dst: TCustomBitmap32; Kernel: TIntegerMap; CenterX, CenterY: Integer);
-
-{ Auxiliary routines for accumulating colors in a buffer }
-procedure IncBuffer(var Buffer: TBufferEntry; Color: TColor32); {$IFDEF USEINLINING} inline; {$ENDIF}
-procedure MultiplyBuffer(var Buffer: TBufferEntry; W: Integer); {$IFDEF USEINLINING} inline; {$ENDIF}
-function BufferToColor32(Buffer: TBufferEntry; Shift: Integer): TColor32; {$IFDEF USEINLINING} inline; {$ENDIF}
-procedure ShrBuffer(var Buffer: TBufferEntry; Shift: Integer); {$IFDEF USEINLINING} inline; {$ENDIF}
-
-{ Registration routines }
-procedure RegisterResampler(ResamplerClass: TCustomResamplerClass);
-procedure RegisterKernel(KernelClass: TCustomKernelClass);
-
-var
-  KernelList: TClassList;
-  ResamplerList: TClassList;
-
-const
-  EMPTY_ENTRY: TBufferEntry = (B: 0; G: 0; R: 0; A: 0);
-
-var
-  BlockAverage: function(Dlx, Dly: Cardinal; RowSrc: PColor32; OffSrc: Cardinal): TColor32;
-  Interpolator: function(WX_256, WY_256: Cardinal; C11, C21: PColor32): TColor32;
-
-resourcestring
-  SDstNil = 'Destination bitmap is nil';
-  SSrcNil = 'Source bitmap is nil';
-  SSrcInvalid = 'Source rectangle is invalid';
-  SSamplerNil = 'Nested sampler is nil';
-
-implementation
-
-uses
-  GR32_LowLevel, GR32_Rasterizers, GR32_Math, Math;
+#include "GR32_LowLevel.h"
+#include "GR32_Rasterizers.h"
+#include "GR32_Math.h"
 
 resourcestring
   RCStrInvalidSrcRect = 'Invalid SrcRect';
@@ -654,7 +54,7 @@ type
   TPointRec = record
     Pos: Integer;
     Weight: Cardinal;
-  end;
+  }
 
   TCluster = array of TPointRec;
   TMappingTable = array of TCluster;
@@ -664,12 +64,12 @@ type
   TKernelSamplerClass = class of TKernelSampler;
 
 { Auxiliary rasterization routine for kernel-based samplers }
-procedure RasterizeKernelSampler(Src, Dst: TCustomBitmap32; Kernel: TIntegerMap;
+void RasterizeKernelSampler(Src, Dst: TCustomBitmap32; Kernel: TIntegerMap;
   CenterX, CenterY: Integer; SamplerClass: TKernelSamplerClass);
 var
   Sampler: TKernelSampler;
   Rasterizer: TRasterizer;
-begin
+{
   Rasterizer := DefaultRasterizerClass.Create;
   try
     Dst.SetSizeFrom(Src);
@@ -680,84 +80,84 @@ begin
       Rasterizer.Rasterize(Dst);
     finally
       Sampler.Free;
-    end;
+    }
   finally
     Rasterizer.Free;
-  end;
-end;
+  }
+}
 
-procedure Convolve(Src, Dst: TCustomBitmap32; Kernel: TIntegerMap; CenterX, CenterY: Integer);
-begin
+void Convolve(Src, Dst: TCustomBitmap32; Kernel: TIntegerMap; CenterX, CenterY: Integer);
+{
   RasterizeKernelSampler(Src, Dst, Kernel, CenterX, CenterY, TConvolver);
-end;
+}
 
-procedure Dilate(Src, Dst: TCustomBitmap32; Kernel: TIntegerMap; CenterX, CenterY: Integer);
-begin
+void Dilate(Src, Dst: TCustomBitmap32; Kernel: TIntegerMap; CenterX, CenterY: Integer);
+{
   RasterizeKernelSampler(Src, Dst, Kernel, CenterX, CenterY, TDilater);
-end;
+}
 
-procedure Erode(Src, Dst: TCustomBitmap32; Kernel: TIntegerMap; CenterX, CenterY: Integer);
-begin
+void Erode(Src, Dst: TCustomBitmap32; Kernel: TIntegerMap; CenterX, CenterY: Integer);
+{
   RasterizeKernelSampler(Src, Dst, Kernel, CenterX, CenterY, TEroder);
-end;
+}
 
-procedure Expand(Src, Dst: TCustomBitmap32; Kernel: TIntegerMap; CenterX, CenterY: Integer);
-begin
+void Expand(Src, Dst: TCustomBitmap32; Kernel: TIntegerMap; CenterX, CenterY: Integer);
+{
   RasterizeKernelSampler(Src, Dst, Kernel, CenterX, CenterY, TExpander);
-end;
+}
 
-procedure Contract(Src, Dst: TCustomBitmap32; Kernel: TIntegerMap; CenterX, CenterY: Integer);
-begin
+void Contract(Src, Dst: TCustomBitmap32; Kernel: TIntegerMap; CenterX, CenterY: Integer);
+{
   RasterizeKernelSampler(Src, Dst, Kernel, CenterX, CenterY, TContracter);
-end;
+}
 
 { Auxiliary routines }
 
-procedure IncBuffer(var Buffer: TBufferEntry; Color: TColor32);
-begin
+void IncBuffer(var Buffer: TBufferEntry; Color: TColor32);
+{
   with TColor32Entry(Color) do
-  begin
+  {
     Inc(Buffer.B, B);
     Inc(Buffer.G, G);
     Inc(Buffer.R, R);
     Inc(Buffer.A, A);
-  end;
-end;
+  }
+}
 
-procedure MultiplyBuffer(var Buffer: TBufferEntry; W: Integer);
-begin
+void MultiplyBuffer(var Buffer: TBufferEntry; W: Integer);
+{
   Buffer.B := Buffer.B * W;
   Buffer.G := Buffer.G * W;
   Buffer.R := Buffer.R * W;
   Buffer.A := Buffer.A * W;
-end;
+}
 
-procedure ShrBuffer(var Buffer: TBufferEntry; Shift: Integer);
-begin
+void ShrBuffer(var Buffer: TBufferEntry; Shift: Integer);
+{
   Buffer.B := Buffer.B shr Shift;
   Buffer.G := Buffer.G shr Shift;
   Buffer.R := Buffer.R shr Shift;
   Buffer.A := Buffer.A shr Shift;
-end;
+}
 
 function BufferToColor32(Buffer: TBufferEntry; Shift: Integer): TColor32;
-begin
+{
   with TColor32Entry(Result) do
-  begin
+  {
     B := Buffer.B shr Shift;
     G := Buffer.G shr Shift;
     R := Buffer.R shr Shift;
     A := Buffer.A shr Shift;
-  end;
-end;
+  }
+}
 
-procedure CheckBitmaps(Dst, Src: TCustomBitmap32); {$IFDEF USEINLINING}inline;{$ENDIF}
-begin
+void CheckBitmaps(Dst, Src: TCustomBitmap32); {$IFDEF USEINLINING}inline;{$ENDIF}
+{
   if not Assigned(Dst) then raise EBitmapException.Create(SDstNil);
   if not Assigned(Src) then raise EBitmapException.Create(SSrcNil);
-end;
+}
 
-procedure BlendBlock(
+void BlendBlock(
   Dst: TCustomBitmap32; DstRect: TRect;
   Src: TCustomBitmap32; SrcX, SrcY: Integer;
   CombineOp: TDrawMode; CombineCallBack: TPixelCombineEvent);
@@ -768,7 +168,7 @@ var
   W, I, DstY: Integer;
   BlendLine: TBlendLine;
   BlendLineEx: TBlendLineEx;
-begin
+{
   { Internal routine }
   W := DstRect.Right - DstRect.Left;
   SrcP := Src.PixelPtr[SrcX, SrcY];
@@ -776,78 +176,78 @@ begin
 
   case CombineOp of
     dmOpaque:
-      begin
+      {
         for DstY := DstRect.Top to DstRect.Bottom - 1 do
-        begin
+        {
           //Move(SrcP^, DstP^, W shl 2); // for FastCode
           MoveLongWord(SrcP^, DstP^, W);
           Inc(SrcP, Src.Width);
           Inc(DstP, Dst.Width);
-        end;
-      end;
+        }
+      }
     dmBlend:
       if Src.MasterAlpha >= 255 then
-      begin
+      {
         BlendLine := BLEND_LINE[Src.CombineMode]^;
         for DstY := DstRect.Top to DstRect.Bottom - 1 do
-        begin
+        {
           BlendLine(SrcP, DstP, W);
           Inc(SrcP, Src.Width);
           Inc(DstP, Dst.Width);
         end
       end
       else
-      begin
+      {
         BlendLineEx := BLEND_LINE_EX[Src.CombineMode]^;
         for DstY := DstRect.Top to DstRect.Bottom - 1 do
-        begin
+        {
           BlendLineEx(SrcP, DstP, W, Src.MasterAlpha);
           Inc(SrcP, Src.Width);
           Inc(DstP, Dst.Width);
         end
-      end;
+      }
     dmTransparent:
-      begin
+      {
         MC := Src.OuterColor;
         for DstY := DstRect.Top to DstRect.Bottom - 1 do
-        begin
+        {
           SP := SrcP;
           DP := DstP;
           { TODO: Write an optimized routine for fast masked transfers. }
           for I := 0 to W - 1 do
-          begin
+          {
             if MC <> SP^ then DP^ := SP^;
             Inc(SP); Inc(DP);
-          end;
+          }
           Inc(SrcP, Src.Width);
           Inc(DstP, Dst.Width);
-        end;
-      end;
+        }
+      }
     else //  dmCustom:
-      begin
+      {
         for DstY := DstRect.Top to DstRect.Bottom - 1 do
-        begin
+        {
           SP := SrcP;
           DP := DstP;
           for I := 0 to W - 1 do
-          begin
+          {
             CombineCallBack(SP^, DP^, Src.MasterAlpha);
             Inc(SP); Inc(DP);
-          end;
+          }
           Inc(SrcP, Src.Width);
           Inc(DstP, Dst.Width);
-        end;
-      end;
-    end;
-end;
+        }
+      }
+    }
+}
 
-procedure BlockTransfer(
+void BlockTransfer(
   Dst: TCustomBitmap32; DstX: Integer; DstY: Integer; DstClip: TRect;
   Src: TCustomBitmap32; SrcRect: TRect;
   CombineOp: TDrawMode; CombineCallBack: TPixelCombineEvent);
 var
   SrcX, SrcY: Integer;
-begin
+{
   CheckBitmaps(Dst, Src);
   if Dst.Empty or Src.Empty or ((CombineOp = dmBlend) and (Src.MasterAlpha = 0)) then Exit;
 
@@ -866,7 +266,7 @@ begin
   GR32.OffsetRect(SrcRect, SrcX - DstX, SrcY - DstY);
 
   if not Dst.MeasuringMode then
-  begin
+  {
     try
       if (CombineOp = dmCustom) and not Assigned(CombineCallBack) then
         CombineOp := dmOpaque;
@@ -874,14 +274,14 @@ begin
       BlendBlock(Dst, DstClip, Src, SrcRect.Left, SrcRect.Top, CombineOp, CombineCallBack);
     finally
       EMMS;
-    end;
-  end;
+    }
+  }
 
   Dst.Changed(DstClip);
-end;
+}
 
 {$WARNINGS OFF}
-procedure BlockTransferX(
+void BlockTransferX(
   Dst: TCustomBitmap32; DstX, DstY: TFixed;
   Src: TCustomBitmap32; SrcRect: TRect;
   CombineOp: TDrawMode; CombineCallBack: TPixelCombineEvent = nil);
@@ -900,7 +300,7 @@ var
 
   BlendLineEx: TBlendLineEx;
   BlendMemEx: TBlendMemEx;
-begin
+{
   CheckBitmaps(Dst, Src);
   if Dst.Empty or Src.Empty or ((CombineOp = dmBlend) and (Src.MasterAlpha = 0)) then Exit;
 
@@ -944,7 +344,7 @@ begin
   if DstY < 0 then DstY := 0;
 
   if not Dst.MeasuringMode then
-  begin
+  {
     SetLength(Buffer[0], SrcRectW + 1);
     SetLength(Buffer[1], SrcRectW + 1);
 
@@ -959,7 +359,7 @@ begin
       Buf2 := @Buffer[1][0];
 
       if SrcRect.Top > 0 then
-      begin
+      {
         MoveLongWord(SrcP[0], Buf1[0], SrcRectW);
         CombineLine(@Buf1[1], @Buf1[0], SrcRectW, FracX);
 
@@ -976,7 +376,7 @@ begin
           C4 := CombineReg(SrcP[SrcRectW - 1], SrcP[SrcRectW], FracX)
         else
           C4 := SrcP[SrcRectW - 1];
-      end;
+      }
 
       Inc(PColor32(SrcP), SrcW);
       MoveLongWord(SrcP^, Buf2^, SrcRectW);
@@ -997,15 +397,15 @@ begin
         C3 := SrcP[SrcRectW - 1];
 
       if SrcRect.Top > 0 then
-      begin
+      {
         BlendMemEx(CombineReg(C1, C2, FracY), DstP^, LW * TW * MA shr 16);
         CombineLine(@Buf2[0], @Buf1[0], SrcRectW, FracY xor $FF);
       end
       else
-      begin
+      {
         BlendMemEx(C1, DstP^, LW * TW * MA shr 16);
         MoveLongWord(Buf2^, Buf1^, SrcRectW);
-      end;
+      }
 
       Inc(DstP, 1);
       BlendLineEx(@Buf1[0], DstP, SrcRectW - 1, TW * MA shr 8);
@@ -1021,7 +421,7 @@ begin
 
       Index := 1;
       for I := SrcRect.Top to SrcRect.Bottom - 2 do
-      begin
+      {
         Buf1 := @Buffer[Index][0];
         Buf2 := @Buffer[Index xor 1][0];
         Inc(PColor32(SrcP), SrcW);
@@ -1062,7 +462,7 @@ begin
         C3 := C4;
 
         Index := Index xor 1;
-      end;
+      }
 
       Buf1 := @Buffer[Index][0];
       Buf2 := @Buffer[Index xor 1][0];
@@ -1070,7 +470,7 @@ begin
       Inc(PColor32(SrcP), SrcW);
 
       if SrcRect.Bottom < Src.Height then
-      begin
+      {
         MoveLongWord(SrcP[0], Buf2^, SrcRectW);
         CombineLine(@Buf2[1], @Buf2[0], SrcRectW, FracY xor $FF);
         CombineLine(@Buf2[0], @Buf1[0], SrcRectW, FracY xor $FF);
@@ -1092,7 +492,7 @@ begin
       Inc(DstP, SrcRectW - 1);
 
       if SrcRect.Bottom < Src.Height then
-      begin
+      {
         if SrcRect.Right < SrcW then
           C4 := CombineReg(SrcP[SrcRectW - 1], SrcP[SrcRectW], FracX)
         else
@@ -1106,14 +506,14 @@ begin
       EMMS;
       Buffer[0] := nil;
       Buffer[1] := nil;
-    end;
-  end;
+    }
+  }
 
   Dst.Changed(MakeRect(DstX, DstY, DstX + SrcRectW + 1, DstY + SrcRectH + 1));
-end;
+}
 {$WARNINGS ON}
 
-procedure BlendTransfer(
+void BlendTransfer(
   Dst: TCustomBitmap32; DstX, DstY: Integer; DstClip: TRect;
   SrcF: TCustomBitmap32; SrcRectF: TRect;
   SrcB: TCustomBitmap32; SrcRectB: TRect;
@@ -1121,7 +521,7 @@ procedure BlendTransfer(
 var
   I, J, SrcFX, SrcFY, SrcBX, SrcBY: Integer;
   PSrcF, PSrcB, PDst: PColor32Array;
-begin
+{
   if not Assigned(Dst) then raise EBitmapException.Create(SDstNil);
   if not Assigned(SrcF) then raise EBitmapException.Create(SSrcNil);
   if not Assigned(SrcB) then raise EBitmapException.Create(SSrcNil);
@@ -1129,7 +529,7 @@ begin
   if Dst.Empty or SrcF.Empty or SrcB.Empty or not Assigned(BlendCallback) then Exit;
 
   if not Dst.MeasuringMode then
-  begin
+  {
     SrcFX := SrcRectF.Left - DstX;
     SrcFY := SrcRectF.Top - DstY;
     SrcBX := SrcRectB.Left - DstX;
@@ -1148,21 +548,21 @@ begin
     if not GR32.IsRectEmpty(DstClip) then
     try
       for I := DstClip.Top to DstClip.Bottom - 1 do
-      begin
+      {
         PSrcF := PColor32Array(SrcF.PixelPtr[SrcFX, SrcFY + I]);
         PSrcB := PColor32Array(SrcB.PixelPtr[SrcBX, SrcBY + I]);
         PDst := Dst.ScanLine[I];
         for J := DstClip.Left to DstClip.Right - 1 do
           PDst[J] := BlendCallback(PSrcF[J], PSrcB[J]);
-      end;
+      }
     finally
       EMMS;
-    end;
-  end;
+    }
+  }
   Dst.Changed(DstClip);
-end;
+}
 
-procedure BlendTransfer(
+void BlendTransfer(
   Dst: TCustomBitmap32; DstX, DstY: Integer; DstClip: TRect;
   SrcF: TCustomBitmap32; SrcRectF: TRect;
   SrcB: TCustomBitmap32; SrcRectB: TRect;
@@ -1170,7 +570,7 @@ procedure BlendTransfer(
 var
   I, J, SrcFX, SrcFY, SrcBX, SrcBY: Integer;
   PSrcF, PSrcB, PDst: PColor32Array;
-begin
+{
   if not Assigned(Dst) then raise EBitmapException.Create(SDstNil);
   if not Assigned(SrcF) then raise EBitmapException.Create(SSrcNil);
   if not Assigned(SrcB) then raise EBitmapException.Create(SSrcNil);
@@ -1178,7 +578,7 @@ begin
   if Dst.Empty or SrcF.Empty or SrcB.Empty or not Assigned(BlendCallback) then Exit;
 
   if not Dst.MeasuringMode then
-  begin
+  {
     SrcFX := SrcRectF.Left - DstX;
     SrcFY := SrcRectF.Top - DstY;
     SrcBX := SrcRectB.Left - DstX;
@@ -1197,21 +597,21 @@ begin
     if not GR32.IsRectEmpty(DstClip) then
     try
       for I := DstClip.Top to DstClip.Bottom - 1 do
-      begin
+      {
         PSrcF := PColor32Array(SrcF.PixelPtr[SrcFX, SrcFY + I]);
         PSrcB := PColor32Array(SrcB.PixelPtr[SrcBX, SrcBY + I]);
         PDst := Dst.ScanLine[I];
         for J := DstClip.Left to DstClip.Right - 1 do
           PDst[J] := BlendCallback(PSrcF[J], PSrcB[J], MasterAlpha);
-      end;
+      }
     finally
       EMMS;
-    end;
-  end;
+    }
+  }
   Dst.Changed(DstClip);
-end;
+}
 
-procedure StretchNearest(
+void StretchNearest(
   Dst: TCustomBitmap32; DstRect, DstClip: TRect;
   Src: TCustomBitmap32; SrcRect: TRect;
   CombineOp: TDrawMode; CombineCallBack: TPixelCombineEvent);
@@ -1227,7 +627,7 @@ var
   BlendLine: TBlendLine;
   BlendLineEx: TBlendLineEx;
   DstLinePtr, MapPtr: PColor32;
-begin
+{
   GR32.IntersectRect(DstClip, DstClip, MakeRect(0, 0, Dst.Width, Dst.Height));
   GR32.IntersectRect(DstClip, DstClip, DstRect);
   if GR32.IsRectEmpty(DstClip) then Exit;
@@ -1245,29 +645,29 @@ begin
   DstClipH := DstClip.Bottom - DstClip.Top;
   try
     if (SrcW = DstW) and (SrcH = DstH) then
-    begin
+    {
       { Copy without resampling }
       BlendBlock(Dst, DstClip, Src, SrcRect.Left + DstClip.Left - DstRect.Left,
         SrcRect.Top + DstClip.Top - DstRect.Top, CombineOp, CombineCallBack);
     end
     else
-    begin
+    {
       GetMem(MapHorz, DstClipW * SizeOf(Integer));
       try
         if DstW > 1 then
-        begin
+        {
           if FullEdge then
-          begin
+          {
             Scale := SrcW / DstW;
             for I := 0 to DstClipW - 1 do
               MapHorz^[I] := Trunc(SrcRect.Left + (I + DstClip.Left - DstRect.Left) * Scale);
           end
           else
-          begin
+          {
             Scale := (SrcW - 1) / (DstW - 1);
             for I := 0 to DstClipW - 1 do
               MapHorz^[I] := Round(SrcRect.Left + (I + DstClip.Left - DstRect.Left) * Scale);
-          end;
+          }
         
           Assert(MapHorz^[0] >= SrcRect.Left);
           Assert(MapHorz^[DstClipW - 1] < SrcRect.Right);
@@ -1280,12 +680,12 @@ begin
         else Scale := (SrcH - 1) / (DstH - 1);
 
         if CombineOp = dmOpaque then
-        begin
+        {
           DstLine := PColor32Array(Dst.PixelPtr[DstClip.Left, DstClip.Top]);
           OldSrcY := -1;
         
           for J := 0 to DstClipH - 1 do
-          begin
+          {
             if DstH <= 1 then
               SrcY := (SrcRect.Top + SrcRect.Bottom - 1) div 2
             else if FullEdge then
@@ -1294,44 +694,44 @@ begin
               SrcY := Round(SrcRect.Top + (J + DstClip.Top - DstRect.Top) * Scale);
             
             if SrcY <> OldSrcY then
-            begin
+            {
               SrcLine := Src.ScanLine[SrcY];
               DstLinePtr := @DstLine[0];
               MapPtr := @MapHorz^[0];
               for I := 0 to DstClipW - 1 do
-              begin
+              {
                 DstLinePtr^ := SrcLine[MapPtr^];
                 Inc(DstLinePtr);
                 Inc(MapPtr);
-              end;
+              }
               OldSrcY := SrcY;
             end
             else
               MoveLongWord(DstLine[-Dst.Width], DstLine[0], DstClipW);
             Inc(DstLine, Dst.Width);
-          end;
+          }
         end
         else
-        begin
+        {
           SetLength(Buffer, DstClipW);
           DstLine := PColor32Array(Dst.PixelPtr[DstClip.Left, DstClip.Top]);
           OldSrcY := -1;
 
           if Src.MasterAlpha >= 255 then
-          begin
+          {
             BlendLine := BLEND_LINE[Src.CombineMode]^;
             BlendLineEx := nil; // stop compiler warnings...
           end
           else
-          begin
+          {
             BlendLineEx := BLEND_LINE_EX[Src.CombineMode]^;
             BlendLine := nil; // stop compiler warnings...
-          end;
+          }
 
           for J := 0 to DstClipH - 1 do
-          begin
+          {
             if DstH > 1 then
-            begin
+            {
               EMMS;
               if FullEdge then
                 SrcY := Trunc(SrcRect.Top + (J + DstClip.Top - DstRect.Top) * Scale)
@@ -1342,18 +742,18 @@ begin
               SrcY := (SrcRect.Top + SrcRect.Bottom - 1) div 2;
             
             if SrcY <> OldSrcY then
-            begin
+            {
               SrcLine := Src.ScanLine[SrcY];
               DstLinePtr := @Buffer[0];
               MapPtr := @MapHorz^[0];
               for I := 0 to DstClipW - 1 do
-              begin
+              {
                 DstLinePtr^ := SrcLine[MapPtr^];
                 Inc(DstLinePtr);
                 Inc(MapPtr);
-              end;
+              }
               OldSrcY := SrcY;
-            end;
+            }
 
             case CombineOp of
               dmBlend:
@@ -1367,21 +767,21 @@ begin
               dmCustom:
                 for I := 0 to DstClipW - 1 do
                   CombineCallBack(Buffer[I], DstLine[I], Src.MasterAlpha);
-            end;
+            }
 
             Inc(DstLine, Dst.Width);
-          end;
-        end;
+          }
+        }
       finally
         FreeMem(MapHorz);
-      end;
-    end;
+      }
+    }
   finally
     EMMS;
-  end;
-end;
+  }
+}
 
-procedure StretchHorzStretchVertLinear(
+void StretchHorzStretchVertLinear(
   Dst: TCustomBitmap32; DstRect, DstClip: TRect;
   Src: TCustomBitmap32; SrcRect: TRect;
   CombineOp: TDrawMode; CombineCallBack: TPixelCombineEvent);
@@ -1397,7 +797,7 @@ var
   WY: Cardinal;
   C: TColor32;
   BlendMemEx: TBlendMemEx;
-begin
+{
   SrcW := SrcRect.Right - SrcRect.Left;
   SrcH := SrcRect.Bottom - SrcRect.Top;
   DstW := DstRect.Right - DstRect.Left;
@@ -1409,7 +809,7 @@ begin
   if FullEdge then Scale := SrcW / DstW
   else Scale := (SrcW - 1) / (DstW - 1);
   for I := 0 to DstClipW - 1 do
-  begin
+  {
     if FullEdge then t2 := SrcRect.Left - 0.5 + (I + DstClip.Left - DstRect.Left + 0.5) * Scale
     else t2 := SrcRect.Left + (I + DstClip.Left - DstRect.Left) * Scale;
     if t2 < 0 then t2 := 0
@@ -1418,20 +818,20 @@ begin
     MapHorz[I].Weight := 256 - Round(Frac(t2) * 256);
     //Pre-pack weights to reduce MMX Reg. setups per pixel:
     //MapHorz[I].Weight:= MapHorz[I].Weight shl 16 + MapHorz[I].Weight;
-  end;
+  }
   I := DstClipW - 1;
   while MapHorz[I].Pos = SrcRect.Right - 1 do
-  begin
+  {
     Dec(MapHorz[I].Pos);
     MapHorz[I].Weight := 0;
     Dec(I);
-  end;
+  }
 
   SetLength(MapVert, DstClipH);
   if FullEdge then Scale := SrcH / DstH
   else Scale := (SrcH - 1) / (DstH - 1);
   for I := 0 to DstClipH - 1 do
-  begin
+  {
     if FullEdge then t2 := SrcRect.Top - 0.5 + (I + DstClip.Top - DstRect.Top + 0.5) * Scale
     else t2 := SrcRect.Top + (I + DstClip.Top - DstRect.Top) * Scale;
     if t2 < 0 then t2 := 0
@@ -1440,14 +840,14 @@ begin
     MapVert[I].Weight := 256 - Round(Frac(t2) * 256);
     //Pre-pack weights to reduce MMX Reg. setups per pixel:
     //MapVert[I].Weight := MapVert[I].Weight shl 16 + MapVert[I].Weight;
-  end;
+  }
   I := DstClipH - 1;
   while MapVert[I].Pos = SrcRect.Bottom - 1 do
-  begin
+  {
     Dec(MapVert[I].Pos);
     MapVert[I].Weight := 0;
     Dec(I);
-  end;
+  }
 
   DstLine := PColor32Array(Dst.PixelPtr[DstClip.Left, DstClip.Top]);
   SrcW := Src.Width;
@@ -1455,7 +855,7 @@ begin
   case CombineOp of
     dmOpaque:
       for J := 0 to DstClipH - 1 do
-      begin
+      {
         SrcLine := Src.ScanLine[MapVert[J].Pos];
         WY := MapVert[J].Weight;
 
@@ -1463,88 +863,88 @@ begin
         SrcPtr1 := @SrcLine[SrcIndex];
         SrcPtr2 := @SrcLine[SrcIndex + SrcW];
         for I := 0 to DstClipW - 1 do
-        begin
+        {
           if SrcIndex <> MapHorz[I].Pos then
-          begin
+          {
             SrcIndex := MapHorz[I].Pos;
             SrcPtr1 := @SrcLine[SrcIndex];
             SrcPtr2 := @SrcLine[SrcIndex + SrcW];
-          end;
+          }
           DstLine[I] := Interpolator(MapHorz[I].Weight, WY, SrcPtr1, SrcPtr2);
-        end;
+        }
         Inc(DstLine, DstW);
-      end;
+      }
     dmBlend:
-      begin
+      {
         BlendMemEx := BLEND_MEM_EX[Src.CombineMode]^;
         for J := 0 to DstClipH - 1 do
-        begin
+        {
           SrcLine := Src.ScanLine[MapVert[J].Pos];
           WY := MapVert[J].Weight;
           SrcIndex := MapHorz[0].Pos;
           SrcPtr1 := @SrcLine[SrcIndex];
           SrcPtr2 := @SrcLine[SrcIndex + SrcW];
           for I := 0 to DstClipW - 1 do
-          begin
+          {
             if SrcIndex <> MapHorz[I].Pos then
-            begin
+            {
               SrcIndex := MapHorz[I].Pos;
               SrcPtr1 := @SrcLine[SrcIndex];
               SrcPtr2 := @SrcLine[SrcIndex + SrcW];
-            end;
+            }
             C := Interpolator(MapHorz[I].Weight, WY, SrcPtr1, SrcPtr2);
             BlendMemEx(C, DstLine[I], Src.MasterAlpha)
-          end;
+          }
           Inc(DstLine, Dst.Width);
         end
-      end;
+      }
     dmTransparent:
-      begin
+      {
         for J := 0 to DstClipH - 1 do
-        begin
+        {
           SrcLine := Src.ScanLine[MapVert[J].Pos];
           WY := MapVert[J].Weight;
           SrcIndex := MapHorz[0].Pos;
           SrcPtr1 := @SrcLine[SrcIndex];
           SrcPtr2 := @SrcLine[SrcIndex + SrcW];
           for I := 0 to DstClipW - 1 do
-          begin
+          {
             if SrcIndex <> MapHorz[I].Pos then
-            begin
+            {
               SrcIndex := MapHorz[I].Pos;
               SrcPtr1 := @SrcLine[SrcIndex];
               SrcPtr2 := @SrcLine[SrcIndex + SrcW];
-            end;
+            }
             C := Interpolator(MapHorz[I].Weight, WY, SrcPtr1, SrcPtr2);
             if C <> Src.OuterColor then DstLine[I] := C;
-          end;
+          }
           Inc(DstLine, Dst.Width);
         end
-      end;
+      }
   else // cmCustom
     for J := 0 to DstClipH - 1 do
-    begin
+    {
       SrcLine := Src.ScanLine[MapVert[J].Pos];
       WY := MapVert[J].Weight;
       SrcIndex := MapHorz[0].Pos;    
       SrcPtr1 := @SrcLine[SrcIndex];    
       SrcPtr2 := @SrcLine[SrcIndex + SrcW];    
       for I := 0 to DstClipW - 1 do    
-      begin    
+      {    
         if SrcIndex <> MapHorz[I].Pos then    
-        begin    
+        {    
           SrcIndex := MapHorz[I].Pos;    
           SrcPtr1 := @SrcLine[SrcIndex];    
           SrcPtr2 := @SrcLine[SrcIndex + SrcW];    
-        end;    
+        }    
         C := Interpolator(MapHorz[I].Weight, WY, SrcPtr1, SrcPtr2);
         CombineCallBack(C, DstLine[I], Src.MasterAlpha);
-      end;
+      }
       Inc(DstLine, Dst.Width);
-    end;
-  end;
+    }
+  }
   EMMS;
-end;
+}
 
 function BuildMappingTable(
   DstLo, DstHi: Integer;
@@ -1561,26 +961,26 @@ var
   Left, Right: Integer;
   I, J, K: Integer;
   Weight: Integer;
-begin
+{
   SrcW := SrcHi - SrcLo;
   DstW := DstHi - DstLo;
   ClipW := ClipHi - ClipLo;
   if SrcW = 0 then
-  begin
+  {
     Result := nil;
     Exit;
   end
   else if SrcW = 1 then
-  begin
+  {
     SetLength(Result, ClipW);
     for I := 0 to ClipW - 1 do
-    begin
+    {
       SetLength(Result[I], 1);
       Result[I][0].Pos := SrcLo;
       Result[I][0].Weight := 256;
-    end;
+    }
     Exit;
-  end;
+  }
   SetLength(Result, ClipW);
   if ClipW = 0 then Exit;
 
@@ -1592,19 +992,19 @@ begin
   K := 0;
 
   if Scale = 0 then
-  begin
+  {
     Assert(Length(Result) = 1);
     SetLength(Result[0], 1);
     Result[0][0].Pos := (SrcLo + SrcHi) div 2;
     Result[0][0].Weight := 256;
   end
   else if Scale < 1 then
-  begin
+  {
     OldScale := Scale;
     Scale := 1 / Scale;
     FilterWidth := FilterWidth * Scale;
     for I := 0 to ClipW - 1 do
-    begin
+    {
       if FullEdge then
         Center := SrcLo - 0.5 + (I - DstLo + ClipLo + 0.5) * Scale
       else
@@ -1613,32 +1013,32 @@ begin
       Right := Ceil(Center + FilterWidth);
       Count := -256;
       for J := Left to Right do
-      begin
+      {
         Weight := Round(256 * Filter((Center - J) * OldScale) * OldScale);
         if Weight <> 0 then
-        begin
+        {
           Inc(Count, Weight);
           K := Length(Result[I]);
           SetLength(Result[I], K + 1);
           Result[I][K].Pos := Constrain(J, SrcLo, SrcHi - 1);
           Result[I][K].Weight := Weight;
-        end;
-      end;
+        }
+      }
       if Length(Result[I]) = 0 then
-      begin
+      {
         SetLength(Result[I], 1);
         Result[I][0].Pos := Floor(Center);
         Result[I][0].Weight := 256;
       end
       else if Count <> 0 then
         Dec(Result[I][K div 2].Weight, Count);
-    end;
+    }
   end
   else // scale > 1
-  begin
+  {
     Scale := 1 / Scale;
     for I := 0 to ClipW - 1 do
-    begin
+    {
       if FullEdge then
         Center := SrcLo - 0.5 + (I - DstLo + ClipLo + 0.5) * Scale
       else
@@ -1647,25 +1047,25 @@ begin
       Right := Ceil(Center + FilterWidth);
       Count := -256;
       for J := Left to Right do
-      begin
+      {
         Weight := Round(256 * Filter(Center - j));
         if Weight <> 0 then
-        begin
+        {
           Inc(Count, Weight);
           K := Length(Result[I]);
           SetLength(Result[I], k + 1);
           Result[I][K].Pos := Constrain(j, SrcLo, SrcHi - 1);
           Result[I][K].Weight := Weight;
-        end;
-      end;
+        }
+      }
       if Count <> 0 then
         Dec(Result[I][K div 2].Weight, Count);
-    end;
-  end;
-end;
+    }
+  }
+}
 
 {$WARNINGS OFF}
-procedure Resample(
+void Resample(
   Dst: TCustomBitmap32; DstRect: TRect; DstClip: TRect;
   Src: TCustomBitmap32; SrcRect: TRect;
   Kernel: TCustomKernel;
@@ -1683,7 +1083,7 @@ var
   DstLine: PColor32Array;
   RangeCheck: Boolean;
   BlendMemEx: TBlendMemEx;
-begin
+{
   if (CombineOp = dmCustom) and not Assigned(CombineCallBack) then
     CombineOp := dmOpaque;
 
@@ -1709,48 +1109,48 @@ begin
 
     { transfer pixels }
     for J := DstClip.Top to DstClip.Bottom - 1 do
-    begin
+    {
       ClusterY := MapY[J - DstClip.Top];
       for X := MapXLoPos to MapXHiPos do
-      begin
+      {
         Ca := 0; Cr := 0; Cg := 0; Cb := 0;
         for Y := 0 to Length(ClusterY) - 1 do
-        begin
+        {
           C := Src.Bits[X + ClusterY[Y].Pos * Src.Width];
           ClustYW := ClusterY[Y].Weight;
           Inc(Ca, C shr 24 * ClustYW);
           Inc(Cr, (C and $00FF0000) shr 16 * ClustYW);
           Inc(Cg, (C and $0000FF00) shr 8 * ClustYW);
           Inc(Cb, (C and $000000FF) * ClustYW);
-        end;
+        }
         with HorzBuffer[X - MapXLoPos] do
-        begin
+        {
           R := Cr;
           G := Cg;
           B := Cb;
           A := Ca;
-        end;
-      end;
+        }
+      }
 
       DstLine := Dst.ScanLine[J];
       for I := DstClip.Left to DstClip.Right - 1 do
-      begin
+      {
         ClusterX := MapX[I - DstClip.Left];
         Ca := 0; Cr := 0; Cg := 0; Cb := 0;
         for X := 0 to Length(ClusterX) - 1 do
-        begin
+        {
           Wt := ClusterX[X].Weight;
           with HorzBuffer[ClusterX[X].Pos - MapXLoPos] do
-          begin
+          {
             Inc(Ca, A * Wt);
             Inc(Cr, R * Wt);
             Inc(Cg, G * Wt);
             Inc(Cb, B * Wt);
-          end;
-        end;
+          }
+        }
 
         if RangeCheck then
-        begin
+        {
           if Ca > $FF0000 then Ca := $FF0000
           else if Ca < 0 then Ca := 0
           else Ca := Ca and $00FF0000;
@@ -1778,15 +1178,15 @@ begin
           dmBlend: BlendMemEx(C, DstLine[I], Src.MasterAlpha);
           dmTransparent: if C <> Src.OuterColor then DstLine[I] := C;
           dmCustom: CombineCallBack(C, DstLine[I], Src.MasterAlpha);
-        end;
-      end;
-    end;
+        }
+      }
+    }
   finally
     EMMS;
     MapX := nil;
     MapY := nil;
-  end;
-end;
+  }
+}
 {$WARNINGS ON}
 
 { Draft Resample Routines }
@@ -1795,25 +1195,25 @@ function BlockAverage_Pas(Dlx, Dly: Cardinal; RowSrc: PColor32; OffSrc: Cardinal
 var
  C: PColor32Entry;
  ix, iy, iA, iR, iG, iB, Area: Cardinal;
-begin
+{
   iR := 0;  iB := iR;  iG := iR;  iA := iR;
   for iy := 1 to Dly do
-  begin
+  {
     C := PColor32Entry(RowSrc);
     for ix := 1 to Dlx do
-    begin
+    {
       Inc(iB, C.B);
       Inc(iG, C.G);
       Inc(iR, C.R);
       Inc(iA, C.A);
       Inc(C);
-    end;
+    }
     {$IFDEF HAS_NATIVEINT}
     Inc(NativeUInt(RowSrc), OffSrc);
     {$ELSE}
     Inc(Cardinal(RowSrc), OffSrc);
     {$ENDIF}
-  end;
+  }
 
   Area := Dlx * Dly;
   Area := $1000000 div Area;
@@ -1821,7 +1221,7 @@ begin
             iR * Area shr  8 and $FF0000 or
             iG * Area shr 16 and $FF00 or
             iB * Area shr 24 and $FF;
-end;
+}
 
 {$IFNDEF PUREPASCAL}
 function BlockAverage_MMX(Dlx, Dly: Cardinal; RowSrc: PColor32; OffSrc: Cardinal): TColor32;
@@ -1961,7 +1361,7 @@ asm
         POP        ESI
         POP        EBX
 {$ENDIF}
-end;
+}
 
 {$IFDEF USE_3DNOW}
 function BlockAverage_3DNow(Dlx, Dly: Cardinal; RowSrc: PColor32; OffSrc: Cardinal): TColor32;
@@ -2039,7 +1439,7 @@ asm
         POP        EDI
         POP        ESI
         POP        EBX
-end;
+}
 {$ENDIF}
 
 function BlockAverage_SSE2(Dlx, Dly: Cardinal; RowSrc: PColor32; OffSrc: Cardinal): TColor32;
@@ -2175,11 +1575,11 @@ asm
         POP        ESI
         POP        EBX
 {$ENDIF}
-end;
+}
 {$ENDIF}
 
 
-procedure DraftResample(Dst: TCustomBitmap32; DstRect: TRect; DstClip: TRect;
+void DraftResample(Dst: TCustomBitmap32; DstRect: TRect; DstClip: TRect;
   Src: TCustomBitmap32; SrcRect: TRect; Kernel: TCustomKernel;
   CombineOp: TDrawMode; CombineCallBack: TPixelCombineEvent);
 var
@@ -2197,7 +1597,7 @@ var
   ScaleFactor: TFloat;
   I,J, sc, sr, cx, cy: Integer;
   BlendMemEx: TBlendMemEx;
-begin
+{
  { rangechecking and rect intersection done by caller }
 
   SrcW := SrcRect.Right  - SrcRect.Left;
@@ -2211,7 +1611,7 @@ begin
 
   BlendMemEx := BLEND_MEM_EX[Src.CombineMode]^;
 
-  if (DstW > SrcW)or(DstH > SrcH) then begin
+  if (DstW > SrcW)or(DstH > SrcH) then {
     if (SrcW < 2) or (SrcH < 2) then
       Resample(Dst, DstRect, DstClip, Src, SrcRect, Kernel, CombineOp,
         CombineCallBack)
@@ -2220,7 +1620,7 @@ begin
         CombineCallBack);
     end
   else
-    begin //Full Scaledown, ignores Fulledge - cannot be integrated into this resampling method
+    { //Full Scaledown, ignores Fulledge - cannot be integrated into this resampling method
       OffSrc := Src.Width * 4;
 
       ScaleFactor:= SrcW / DstW;
@@ -2243,7 +1643,7 @@ begin
       Inc(DstClipH);
 
       for J := 2  to DstClipH do
-      begin
+      {
         dy := c2 - c1;
         c1 := c2;
         c2 := FixedMul(J, sc);
@@ -2254,40 +1654,40 @@ begin
         case CombineOp of
           dmOpaque:
             for I := 2  to DstClipW do
-            begin
+            {
               dx := r2 - r1;  r1 := r2;
               r2 := FixedMul(I, sr);
               DstLine[DstClip.Left + I] := BlockAverage(dx, dy, xsrc, OffSrc);
               Inc(xsrc, dx);
-            end;
+            }
           dmBlend:
             for I := 2  to DstClipW do
-            begin
+            {
               dx := r2 - r1;  r1 := r2;
               r2 := FixedMul(I, sr);
               BlendMemEx(BlockAverage(dx, dy, xsrc, OffSrc),
                 DstLine[DstClip.Left + I], Src.MasterAlpha);
               Inc(xsrc, dx);
-            end;
+            }
           dmTransparent:
             for I := 2  to DstClipW do
-            begin
+            {
               dx := r2 - r1;  r1 := r2;
               r2 := FixedMul(I, sr);
               C := BlockAverage(dx, dy, xsrc, OffSrc);
               if C <> Src.OuterColor then DstLine[DstClip.Left + I] := C;
               Inc(xsrc, dx);
-            end;
+            }
           dmCustom:
             for I := 2  to DstClipW do
-            begin
+            {
               dx := r2 - r1;  r1 := r2;
               r2 := FixedMul(I, sr);
               CombineCallBack(BlockAverage(dx, dy, xsrc, OffSrc),
                 DstLine[DstClip.Left + I], Src.MasterAlpha);
               Inc(xsrc, dx);
-            end;
-        end;
+            }
+        }
 
         Inc(DstLine, Dst.Width);
         {$IFDEF HAS_NATIVEINT}
@@ -2295,24 +1695,24 @@ begin
         {$ELSE}
         Inc(Cardinal(RowSrc), OffSrc * dy);
         {$ENDIF}
-      end;
-    end;
+      }
+    }
   EMMS;
-end;
+}
 
 { Special interpolators (for sfLinear and sfDraft) }
 
 function Interpolator_Pas(WX_256, WY_256: Cardinal; C11, C21: PColor32): TColor32;
 var
   C1, C3: TColor32;
-begin
+{
   if WX_256 > $FF then WX_256:= $FF;
   if WY_256 > $FF then WY_256:= $FF;
   C1 := C11^; Inc(C11);
   C3 := C21^; Inc(C21);
   Result := CombineReg(CombineReg(C1, C11^, WX_256),
                        CombineReg(C3, C21^, WX_256), WY_256);
-end;
+}
 
 {$IFNDEF PUREPASCAL}
 function Interpolator_MMX(WX_256, WY_256: Cardinal; C11, C21: PColor32): TColor32;
@@ -2357,7 +1757,7 @@ asm
         PSRLW     MM2,8
         PACKUSWB  MM2,MM0
         MOVD      EAX,MM2
-end;
+}
 
 function Interpolator_SSE2(WX_256, WY_256: Cardinal; C11, C21: PColor32): TColor32;
 asm
@@ -2401,13 +1801,13 @@ asm
         PSRLW     XMM2,8
         PACKUSWB  XMM2,XMM0
         MOVD      EAX,XMM2
-end;
+}
 {$ENDIF}
 
 { Stretch Transfer }
 
 {$WARNINGS OFF}
-procedure StretchTransfer(
+void StretchTransfer(
   Dst: TCustomBitmap32; DstRect: TRect; DstClip: TRect;
   Src: TCustomBitmap32; SrcRect: TRect;
   Resampler: TCustomResampler;
@@ -2417,40 +1817,40 @@ var
   DstW, DstH: Integer;
   R: TRect;
   RatioX, RatioY: Single;
-begin
+{
   CheckBitmaps(Dst, Src);
 
   // transform dest rect when the src rect is out of the src bitmap's bounds
   if (SrcRect.Left < 0) or (SrcRect.Right > Src.Width) or
     (SrcRect.Top < 0) or (SrcRect.Bottom > Src.Height) then
-  begin
+  {
     RatioX := (DstRect.Right - DstRect.Left) / (SrcRect.Right - SrcRect.Left);
     RatioY := (DstRect.Bottom - DstRect.Top) / (SrcRect.Bottom - SrcRect.Top);
 
     if SrcRect.Left < 0 then
-    begin
+    {
       DstRect.Left := DstRect.Left + Ceil(-SrcRect.Left * RatioX);
       SrcRect.Left := 0;
-    end;
+    }
 
     if SrcRect.Top < 0 then
-    begin
+    {
       DstRect.Top := DstRect.Top + Ceil(-SrcRect.Top * RatioY);
       SrcRect.Top := 0;
-    end;
+    }
 
     if SrcRect.Right > Src.Width then
-    begin
+    {
       DstRect.Right := DstRect.Right - Floor((SrcRect.Right - Src.Width) * RatioX);
       SrcRect.Right := Src.Width;
-    end;
+    }
 
     if SrcRect.Bottom > Src.Height then
-    begin
+    {
       DstRect.Bottom := DstRect.Bottom - Floor((SrcRect.Bottom - Src.Height) * RatioY);
       SrcRect.Bottom := Src.Height;
-    end;
-  end;
+    }
+  }
 
   if Src.Empty or Dst.Empty or
     ((CombineOp = dmBlend) and (Src.MasterAlpha = 0)) or
@@ -2458,7 +1858,7 @@ begin
       Exit;
 
   if not Dst.MeasuringMode then
-  begin
+  {
     GR32.IntersectRect(DstClip, DstClip, Dst.BoundsRect);
     GR32.IntersectRect(DstClip, DstClip, DstRect);
     if GR32.IsRectEmpty(DstClip) then Exit;
@@ -2482,81 +1882,81 @@ begin
           Dst, DstRect, DstClip, Src, SrcRect, CombineOp, CombineCallBack);
     finally
       EMMS;
-    end;
-  end;
+    }
+  }
 
   Dst.Changed(DstRect);
-end;
+}
 {$WARNINGS ON}
 
 
 
 { TCustomKernel }
 
-procedure TCustomKernel.AssignTo(Dst: TPersistent);
-begin
+void TCustomKernel.AssignTo(Dst: TPersistent);
+{
   if Dst is TCustomKernel then
     SmartAssign(Self, Dst)
   else
     inherited;
-end;
+}
 
-procedure TCustomKernel.Changed;
-begin
+void TCustomKernel.Changed;
+{
   if Assigned(FObserver) then FObserver.Changed;
-end;
+}
 
 constructor TCustomKernel.Create;
-begin
-end;
+{
+}
 
 function TCustomKernel.RangeCheck: Boolean;
-begin
+{
   Result := False;
-end;
+}
 
 
 { TBoxKernel }
 
 function TBoxKernel.Filter(Value: TFloat): TFloat;
-begin
+{
   if (Value >= -0.5) and (Value <= 0.5) then Result := 1.0
   else Result := 0;
-end;
+}
 
 function TBoxKernel.GetWidth: TFloat;
-begin
+{
   Result := 1;
-end;
+}
 
 { TLinearKernel }
 
 function TLinearKernel.Filter(Value: TFloat): TFloat;
-begin
+{
   if Value < -1 then Result := 0
   else if Value < 0 then Result := 1 + Value
   else if Value < 1 then Result := 1 - Value
   else Result := 0;
-end;
+}
 
 function TLinearKernel.GetWidth: TFloat;
-begin
+{
   Result := 1;
-end;
+}
 
 { TCosineKernel }
 
 function TCosineKernel.Filter(Value: TFloat): TFloat;
-begin
+{
   Result := 0;
   if Abs(Value) < 1 then
     Result := (Cos(Value * Pi) + 1) * 0.5;
-end;
+}
 
 function TCosineKernel.GetWidth: TFloat;
-begin
+{
   Result := 1;
-end;
+}
 
 { TSplineKernel }
 
@@ -2566,93 +1966,93 @@ var
 const
   TwoThirds = 2 / 3;
   OneSixth = 1 / 6;
-begin
+{
   Value := Abs(Value);
   if Value < 1 then
-  begin
+  {
     tt := Sqr(Value);
     Result := 0.5 * tt * Value - tt + TwoThirds;
   end
   else if Value < 2 then
-  begin
+  {
     Value := 2 - Value;
     Result := OneSixth * Sqr(Value) * Value;
   end
   else Result := 0;
-end;
+}
 
 function TSplineKernel.RangeCheck: Boolean;
-begin
+{
   Result := True;
-end;
+}
 
 function TSplineKernel.GetWidth: TFloat;
-begin
+{
   Result := 2;
-end;
+}
 
 { TWindowedSincKernel }
 
 function SInc(Value: TFloat): TFloat;
-begin
+{
   if Value <> 0 then
-  begin
+  {
     Value := Value * Pi;
     Result := Sin(Value) / Value;
   end
   else Result := 1;
-end;
+}
 
 constructor TWindowedSincKernel.Create;
-begin
+{
   FWidth := 3;
   FWidthReciprocal := 1 / FWidth;
-end;
+}
 
 function TWindowedSincKernel.Filter(Value: TFloat): TFloat;
-begin
+{
   Value := Abs(Value);
   if Value < FWidth then
     Result := SInc(Value) * Window(Value)
   else
     Result := 0;
-end;
+}
 
 function TWindowedSincKernel.RangeCheck: Boolean;
-begin
+{
   Result := True;
-end;
+}
 
-procedure TWindowedSincKernel.SetWidth(Value: TFloat);
-begin
+void TWindowedSincKernel.SetWidth(Value: TFloat);
+{
   Value := Min(MAX_KERNEL_WIDTH, Value);
   if Value <> FWidth then
-  begin
+  {
     FWidth := Value;
     FWidthReciprocal := 1 / FWidth;
     Changed;
-  end;
-end;
+  }
+}
 
 function TWindowedSincKernel.GetWidth: TFloat;
-begin
+{
   Result := FWidth;
-end;
+}
 
 { TAlbrechtKernel }
 
 constructor TAlbrechtKernel.Create;
-begin
+{
   inherited;
   Terms := 7;
-end;
+}
 
-procedure TAlbrechtKernel.SetTerms(Value: Integer);
-begin
+void TAlbrechtKernel.SetTerms(Value: Integer);
+{
   if (Value < 2) then Value := 2;
   if (Value > 11) then Value := 11;
   if FTerms <> Value then
-  begin
+  {
     FTerms := Value;
     case Value of
       2 : Move(CAlbrecht2 [0], FCoefPointer[0], Value * SizeOf(Double));
@@ -2665,31 +2065,31 @@ begin
       9 : Move(CAlbrecht9 [0], FCoefPointer[0], Value * SizeOf(Double));
      10 : Move(CAlbrecht10[0], FCoefPointer[0], Value * SizeOf(Double));
      11 : Move(CAlbrecht11[0], FCoefPointer[0], Value * SizeOf(Double));
-    end;
-  end;
-end;
+    }
+  }
+}
 
 function TAlbrechtKernel.Window(Value: TFloat): TFloat;
 var
   cs : Double;
   i  : Integer;
-begin
+{
   cs := Cos(Pi * Value * FWidthReciprocal);
   i := FTerms - 1;
   Result := FCoefPointer[i];
   while i > 0 do
-  begin
+  {
     Dec(i);
     Result := Result * cs + FCoefPointer[i];
-  end;
-end;
+  }
+}
 
 { TLanczosKernel }
 
 function TLanczosKernel.Window(Value: TFloat): TFloat;
-begin
+{
   Result := SInc(Value * FWidthReciprocal); // Get rid of division
-end;
+}
 
 { TMitchellKernel }
 
@@ -2697,36 +2097,36 @@ function TMitchellKernel.Filter(Value: TFloat): TFloat;
 var
   tt, ttt: TFloat;
 const OneEighteenth = 1 / 18;
-begin
+{
   Value := Abs(Value);
   tt := Sqr(Value);
   ttt := tt * Value;
   if Value < 1 then Result := (21 * ttt - 36 * tt + 16 ) * OneEighteenth  // get rid of divisions
   else if Value < 2 then Result := (- 7 * ttt + 36 * tt - 60 * Value + 32) * OneEighteenth // "
   else Result := 0;
-end;
+}
 
 function TMitchellKernel.RangeCheck: Boolean;
-begin
+{
   Result := True;
-end;
+}
 
 function TMitchellKernel.GetWidth: TFloat;
-begin
+{
   Result := 2;
-end;
+}
 
 { TCubicKernel }
 
 constructor TCubicKernel.Create;
-begin
+{
   FCoeff := -0.5;
-end;
+}
 
 function TCubicKernel.Filter(Value: TFloat): TFloat;
 var
   tt, ttt: TFloat;
-begin
+{
   Value := Abs(Value);
   tt := Sqr(Value);
   ttt := tt * Value;
@@ -2736,130 +2136,130 @@ begin
     Result := FCoeff * (ttt - 5 * tt + 8 * Value - 4)
   else
     Result := 0;
-end;
+}
 
 function TCubicKernel.RangeCheck: Boolean;
-begin
+{
   Result := True;
-end;
+}
 
 function TCubicKernel.GetWidth: TFloat;
-begin
+{
   Result := 2;
-end;
+}
 
 { TGaussKernel }
 
 constructor TGaussianKernel.Create;
-begin
+{
   inherited;
   FSigma := 1.33;
   FSigmaReciprocalLn2 := -Ln(2) / FSigma;
-end;
+}
 
-procedure TGaussianKernel.SetSigma(const Value: TFloat);
-begin
+void TGaussianKernel.SetSigma(const Value: TFloat);
+{
   if (FSigma <> Value) and (FSigma <> 0) then
-  begin
+  {
     FSigma := Value;
     FSigmaReciprocalLn2 := -Ln(2) / FSigma;
     Changed;
-  end;
-end;
+  }
+}
 
 function TGaussianKernel.Window(Value: TFloat): TFloat;
-begin
+{
   Result := Exp(Sqr(Value) * FSigmaReciprocalLn2);       // get rid of nasty LN2 and divition
-end;
+}
 
-procedure TCubicKernel.SetCoeff(const Value: TFloat);
-begin
+void TCubicKernel.SetCoeff(const Value: TFloat);
+{
   if Value <> FCoeff then
-  begin
+  {
     FCoeff := Value;
     Changed;
   end
-end;
+}
 
 { TBlackmanKernel }
 
 function TBlackmanKernel.Window(Value: TFloat): TFloat;
-begin
+{
   Value := Cos(Pi * Value * FWidthReciprocal);                // get rid of division
   Result := 0.34 + 0.5 * Value + 0.16 * sqr(Value);
-end;
+}
 
 { THannKernel }
 
 function THannKernel.Window(Value: TFloat): TFloat;
-begin
+{
   Result := 0.5 + 0.5 * Cos(Pi * Value * FWidthReciprocal);   // get rid of division
-end;
+}
 
 { THammingKernel }
 
 function THammingKernel.Window(Value: TFloat): TFloat;
-begin
+{
   Result := 0.54 + 0.46 * Cos(Pi * Value * FWidthReciprocal); // get rid of division
-end;
+}
 
 { TSinshKernel }
 
 constructor TSinshKernel.Create;
-begin
+{
   FWidth := 3;
   FCoeff := 0.5;
-end;
+}
 
 function TSinshKernel.Filter(Value: TFloat): TFloat;
-begin
+{
   if Value = 0 then
     Result := 1
   else
     Result := FCoeff * Sin(Pi * Value) / Sinh(Pi * FCoeff * Value);
-end;
+}
 
 function TSinshKernel.RangeCheck: Boolean;
-begin
+{
   Result := True;
-end;
+}
 
-procedure TSinshKernel.SetWidth(Value: TFloat);
-begin
+void TSinshKernel.SetWidth(Value: TFloat);
+{
   if FWidth <> Value then
-  begin
+  {
     FWidth := Value;
     Changed;
-  end;
-end;
+  }
+}
 
 function TSinshKernel.GetWidth: TFloat;
-begin
+{
   Result := FWidth;
-end;
+}
 
-procedure TSinshKernel.SetCoeff(const Value: TFloat);
-begin
+void TSinshKernel.SetCoeff(const Value: TFloat);
+{
   if (FCoeff <> Value) and (FCoeff <> 0) then
-  begin
+  {
     FCoeff := Value;
     Changed;
-  end;
-end;
+  }
+}
 
 { THermiteKernel }
 
 constructor THermiteKernel.Create;
-begin
+{
   FBias := 0;
   FTension := 0;
-end;
+}
 
 function THermiteKernel.Filter(Value: TFloat): TFloat;
 var
   Z: Integer;
   t, t2, t3, m0, m1, a0, a1, a2, a3: TFloat;
-begin
+{
   t := (1 - FTension) * 0.5;
   m0 := (1 + FBias) * t;
   m1 := (1 - FBias) * t;
@@ -2881,91 +2281,91 @@ begin
      1: Result := -a1 * m0;
   else
     Result := 0;
-  end;
-end;
+  }
+}
 
 function THermiteKernel.GetWidth: TFloat;
-begin
+{
   Result := 2;
-end;
+}
 
 function THermiteKernel.RangeCheck: Boolean;
-begin
+{
   Result := True;
-end;
+}
 
-procedure THermiteKernel.SetBias(const Value: TFloat);
-begin
+void THermiteKernel.SetBias(const Value: TFloat);
+{
   if FBias <> Value then
-  begin
+  {
     FBias := Value;
     Changed;
-  end;
-end;
+  }
+}
 
-procedure THermiteKernel.SetTension(const Value: TFloat);
-begin
+void THermiteKernel.SetTension(const Value: TFloat);
+{
   if FTension <> Value then
-  begin
+  {
     FTension := Value;
     Changed;
-  end;
-end;
+  }
+}
 
 
 
 { TKernelResampler }
 
 constructor TKernelResampler.Create;
-begin
+{
   inherited;
   Kernel := TBoxKernel.Create;
   FTableSize := 32;
-end;
+}
 
 destructor TKernelResampler.Destroy;
-begin
+{
   FKernel.Free;
   inherited;
-end;
+}
 
 function TKernelResampler.GetKernelClassName: string;
-begin
+{
   Result := FKernel.ClassName;
-end;
+}
 
-procedure TKernelResampler.SetKernelClassName(Value: string);
+void TKernelResampler.SetKernelClassName(Value: string);
 var
   KernelClass: TCustomKernelClass;
-begin
+{
   if (Value <> '') and (FKernel.ClassName <> Value) and Assigned(KernelList) then
-  begin
+  {
     KernelClass := TCustomKernelClass(KernelList.Find(Value));
     if Assigned(KernelClass) then
-    begin
+    {
       FKernel.Free;
       FKernel := KernelClass.Create;
       Changed;
-    end;
-  end;
-end;
+    }
+  }
+}
 
-procedure TKernelResampler.SetKernel(const Value: TCustomKernel);
-begin
+void TKernelResampler.SetKernel(const Value: TCustomKernel);
+{
   if Assigned(Value) and (FKernel <> Value) then
-  begin
+  {
     FKernel.Free;
     FKernel := Value;
     Changed;
-  end;
-end;
+  }
+}
 
-procedure TKernelResampler.Resample(Dst: TCustomBitmap32; DstRect,
+void TKernelResampler.Resample(Dst: TCustomBitmap32; DstRect,
   DstClip: TRect; Src: TCustomBitmap32; SrcRect: TRect; CombineOp: TDrawMode;
   CombineCallBack: TPixelCombineEvent);
-begin
+{
   GR32_Resamplers.Resample(Dst, DstRect, DstClip, Src, SrcRect, FKernel, CombineOp, CombineCallBack);
-end;
+}
 
 {$WARNINGS OFF}
 
@@ -2994,7 +2394,7 @@ var
 
   Alpha: integer;
   OuterPremultColorR, OuterPremultColorG, OuterPremultColorB: Byte;
-begin
+{
   KWidth := Ceil(FKernel.GetWidth);
 
   clX := Ceil(X);
@@ -3002,21 +2402,21 @@ begin
 
   case PixelAccessMode of
     pamUnsafe, pamWrap:
-      begin
+      {
         LoX := -KWidth; HiX := KWidth;
         LoY := -KWidth; HiY := KWidth;
-      end;
+      }
 
     pamSafe, pamTransparentEdge:
-      begin
+      {
         with ClipRect do
-        begin
+        {
           if not ((clX < Left) or (clX > Right) or (clY < Top) or (clY > Bottom)) then
-          begin
+          {
             Edge := False;
 
             if clX - KWidth < Left then
-            begin
+            {
               LoX := Left - clX;
               Edge := True;
             end
@@ -3024,7 +2424,7 @@ begin
               LoX := -KWidth;
 
             if clX + KWidth >= Right then
-            begin
+            {
               HiX := Right - clX - 1;
               Edge := True;
             end
@@ -3032,7 +2432,7 @@ begin
               HiX := KWidth;
 
             if clY - KWidth < Top then
-            begin
+            {
               LoY := Top - clY;
               Edge := True;
             end
@@ -3040,7 +2440,7 @@ begin
               LoY := -KWidth;
 
             if clY + KWidth >= Bottom then
-            begin
+            {
               HiY := Bottom - clY - 1;
               Edge := True;
             end
@@ -3049,21 +2449,21 @@ begin
 
           end
           else
-          begin
+          {
             if PixelAccessMode = pamTransparentEdge then
               Result := 0
             else
               Result := FOuterColor;
             Exit;
-          end;
+          }
 
-        end;
-      end;
-  end;
+        }
+      }
+  }
 
   case FKernelMode of
     kmDynamic:
-      begin
+      {
         Filter := FKernel.Filter;
         fracXS := clX - X;
         fracYS := clY - Y;
@@ -3073,36 +2473,36 @@ begin
 
         Dev := -256;
         for I := -KWidth to KWidth do
-        begin
+        {
           W := Round(Filter(I + fracXS) * 256);
           HorzKernel[I] := W;
           Inc(Dev, W);
-        end;
+        }
         Dec(HorzKernel[0], Dev);
 
         Dev := -256;
         for I := -KWidth to KWidth do
-        begin
+        {
           W := Round(Filter(I + fracYS) * 256);
           VertKernel[I] := W;
           Inc(Dev, W);
-        end;
+        }
         Dec(VertKernel[0], Dev);
 
-      end;
+      }
     kmTableNearest:
-      begin
+      {
         W := FWeightTable.Height - 2;
         PHorzKernel := @FWeightTable.ValPtr[KWidth - MAX_KERNEL_WIDTH, Round((clX - X) * W)]^;
         PVertKernel := @FWeightTable.ValPtr[KWidth - MAX_KERNEL_WIDTH, Round((clY - Y) * W)]^;
-      end;
+      }
     kmTableLinear:
-      begin
+      {
         W := (FWeightTable.Height - 2) * $10000;
         J := FWeightTable.Width * 4;
 
         with TFixedRec(FracX) do
-        begin
+        {
           Fixed := Round((clX - X) * W);
           PHorzKernel := @HorzKernel;
           FloorKernel := @FWeightTable.ValPtr[KWidth - MAX_KERNEL_WIDTH, Int]^;
@@ -3113,16 +2513,16 @@ begin
           {$ENDIF}
           Dev := -256;
           for I := -KWidth to KWidth do
-          begin
+          {
             Wv :=  FloorKernel[I] + ((CeilKernel[I] - FloorKernel[I]) * Frac + $7FFF) div FixedOne;
             HorzKernel[I] := Wv;
             Inc(Dev, Wv);
-          end;
+          }
           Dec(HorzKernel[0], Dev);
-        end;
+        }
 
         with TFixedRec(FracY) do
-        begin
+        {
           Fixed := Round((clY - Y) * W);
           PVertKernel := @VertKernel;
           FloorKernel := @FWeightTable.ValPtr[KWidth - MAX_KERNEL_WIDTH, Int]^;
@@ -3133,99 +2533,99 @@ begin
           {$ENDIF}
           Dev := -256;
           for I := -KWidth to KWidth do
-          begin
+          {
             Wv := FloorKernel[I] + ((CeilKernel[I] - FloorKernel[I]) * Frac + $7FFF) div FixedOne;
             VertKernel[I] := Wv;
             Inc(Dev, Wv);
-          end;
+          }
           Dec(VertKernel[0], Dev);
-        end;
-      end;
+        }
+      }
 
-  end;
+  }
 
   VertEntry := EMPTY_ENTRY;
   case PixelAccessMode of
     pamUnsafe, pamSafe, pamTransparentEdge:
-      begin
+      {
         SrcP := PColor32Entry(Bitmap.PixelPtr[LoX + clX, LoY + clY]);
         Incr := Bitmap.Width - (HiX - LoX) - 1;
         for I := LoY to HiY do
-        begin
+        {
           Wv := PVertKernel[I];
           if Wv <> 0 then
-          begin
+          {
             HorzEntry := EMPTY_ENTRY;
             for J := LoX to HiX do
-            begin
+            {
               // Alpha=0 should not contribute to sample.
               Alpha := SrcP.A;
               if (Alpha <> 0) then
-              begin
+              {
                 W := PHorzKernel[J];
                 Inc(HorzEntry.A, Alpha * W);
                 // Sample premultiplied values
                 if (Alpha = 255) then
-                begin
+                {
                   Inc(HorzEntry.R, SrcP.R * W);
                   Inc(HorzEntry.G, SrcP.G * W);
                   Inc(HorzEntry.B, SrcP.B * W);
                 end else
-                begin
+                {
                   Inc(HorzEntry.R, Div255(Alpha * SrcP.R) * W);
                   Inc(HorzEntry.G, Div255(Alpha * SrcP.G) * W);
                   Inc(HorzEntry.B, Div255(Alpha * SrcP.B) * W);
-                end;
-              end;
+                }
+              }
               Inc(SrcP);
-            end;
+            }
             Inc(VertEntry.A, HorzEntry.A * Wv);
             Inc(VertEntry.R, HorzEntry.R * Wv);
             Inc(VertEntry.G, HorzEntry.G * Wv);
             Inc(VertEntry.B, HorzEntry.B * Wv);
           end else Inc(SrcP, HiX - LoX + 1);
           Inc(SrcP, Incr);
-        end;
+        }
 
         if (PixelAccessMode = pamSafe) and Edge then
-        begin
+        {
           Alpha := TColor32Entry(FOuterColor).A;
 
           // Alpha=0 should not contribute to sample.
           if (Alpha <> 0) then
-          begin
+          {
             // Sample premultiplied values
             OuterPremultColorR := Div255(Alpha * TColor32Entry(FOuterColor).R);
             OuterPremultColorG := Div255(Alpha * TColor32Entry(FOuterColor).G);
             OuterPremultColorB := Div255(Alpha * TColor32Entry(FOuterColor).B);
 
             for I := -KWidth to KWidth do
-            begin
+            {
               Wv := PVertKernel[I];
               if Wv <> 0 then
-              begin
+              {
                 HorzEntry := EMPTY_ENTRY;
                 for J := -KWidth to KWidth do
                   if (J < LoX) or (J > HiX) or (I < LoY) or (I > HiY) then
-                  begin
+                  {
                     W := PHorzKernel[J];
                     Inc(HorzEntry.A, Alpha * W);
                     Inc(HorzEntry.R, OuterPremultColorR * W);
                     Inc(HorzEntry.G, OuterPremultColorG * W);
                     Inc(HorzEntry.B, OuterPremultColorB * W);
-                  end;
+                  }
                 Inc(VertEntry.A, HorzEntry.A * Wv);
                 Inc(VertEntry.R, HorzEntry.R * Wv);
                 Inc(VertEntry.G, HorzEntry.G * Wv);
                 Inc(VertEntry.B, HorzEntry.B * Wv);
-              end;
+              }
             end
-          end;
-        end;
-      end;
+          }
+        }
+      }
 
     pamWrap:
-      begin
+      {
         WrapProcHorz := GetWrapProcEx(Bitmap.WrapMode, ClipRect.Left, ClipRect.Right - 1);
         WrapProcVert := GetWrapProcEx(Bitmap.WrapMode, ClipRect.Top, ClipRect.Bottom - 1);
 
@@ -3233,242 +2633,242 @@ begin
           MappingX[I] := WrapProcHorz(clX + I, ClipRect.Left, ClipRect.Right - 1);
 
         for I := -KWidth to KWidth do
-        begin
+        {
           Wv := PVertKernel[I];
           if Wv <> 0 then
-          begin
+          {
             MappingY := WrapProcVert(clY + I, ClipRect.Top, ClipRect.Bottom - 1);
             Colors := PColor32EntryArray(Bitmap.ScanLine[MappingY]);
             HorzEntry := EMPTY_ENTRY;
             for J := -KWidth to KWidth do
-            begin
+            {
               C := Colors[MappingX[J]];
               Alpha := C.A;
               // Alpha=0 should not contribute to sample.
               if (Alpha <> 0) then
-              begin
+              {
                 W := PHorzKernel[J];
                 Inc(HorzEntry.A, Alpha * W);
                 // Sample premultiplied values
                 if (Alpha = 255) then
-                begin
+                {
                   Inc(HorzEntry.R, C.R * W);
                   Inc(HorzEntry.G, C.G * W);
                   Inc(HorzEntry.B, C.B * W);
                 end else
-                begin
+                {
                   Inc(HorzEntry.R, Div255(Alpha * C.R) * W);
                   Inc(HorzEntry.G, Div255(Alpha * C.G) * W);
                   Inc(HorzEntry.B, Div255(Alpha * C.B) * W);
-                end;
-              end;
-            end;
+                }
+              }
+            }
             Inc(VertEntry.A, HorzEntry.A * Wv);
             Inc(VertEntry.R, HorzEntry.R * Wv);
             Inc(VertEntry.G, HorzEntry.G * Wv);
             Inc(VertEntry.B, HorzEntry.B * Wv);
-          end;
-        end;
-      end;
-  end;
+          }
+        }
+      }
+  }
 
   // Round and unpremultiply result
   with TColor32Entry(Result) do
-  begin
+  {
     if FKernel.RangeCheck then
-    begin
+    {
       A := Clamp(TFixedRec(Integer(VertEntry.A + FixedHalf)).Int);
       if (A = 255) then
-      begin
+      {
         R := Clamp(TFixedRec(Integer(VertEntry.R + FixedHalf)).Int);
         G := Clamp(TFixedRec(Integer(VertEntry.G + FixedHalf)).Int);
         B := Clamp(TFixedRec(Integer(VertEntry.B + FixedHalf)).Int);
       end else
       if (A <> 0) then
-      begin
+      {
         R := Clamp(TFixedRec(Integer(VertEntry.R + FixedHalf)).Int * 255 div A);
         G := Clamp(TFixedRec(Integer(VertEntry.G + FixedHalf)).Int * 255 div A);
         B := Clamp(TFixedRec(Integer(VertEntry.B + FixedHalf)).Int * 255 div A);
       end else
-      begin
+      {
         R := 0;
         G := 0;
         B := 0;
-      end;
+      }
     end
     else
-    begin
+    {
       A := TFixedRec(Integer(VertEntry.A + FixedHalf)).Int;
       if (A = 255) then
-      begin
+      {
         R := TFixedRec(Integer(VertEntry.R + FixedHalf)).Int;
         G := TFixedRec(Integer(VertEntry.G + FixedHalf)).Int;
         B := TFixedRec(Integer(VertEntry.B + FixedHalf)).Int;
       end else
       if (A <> 0) then
-      begin
+      {
         R := TFixedRec(Integer(VertEntry.R + FixedHalf)).Int * 255 div A;
         G := TFixedRec(Integer(VertEntry.G + FixedHalf)).Int * 255 div A;
         B := TFixedRec(Integer(VertEntry.B + FixedHalf)).Int * 255 div A;
       end else
-      begin
+      {
         R := 0;
         G := 0;
         B := 0;
-      end;
-    end;
-  end;
-end;
+      }
+    }
+  }
+}
 {$WARNINGS ON}
 
 function TKernelResampler.GetWidth: TFloat;
-begin
+{
   Result := Kernel.GetWidth;
-end;
+}
 
-procedure TKernelResampler.SetKernelMode(const Value: TKernelMode);
-begin
+void TKernelResampler.SetKernelMode(const Value: TKernelMode);
+{
   if FKernelMode <> Value then
-  begin
+  {
     FKernelMode := Value;
     Changed;
-  end;
-end;
+  }
+}
 
-procedure TKernelResampler.SetTableSize(Value: Integer);
-begin
+void TKernelResampler.SetTableSize(Value: Integer);
+{
   if Value < 2 then Value := 2;
   if FTableSize <> Value then
-  begin
+  {
     FTableSize := Value;
     Changed;
-  end;
-end;
+  }
+}
 
-procedure TKernelResampler.FinalizeSampling;
-begin
+void TKernelResampler.FinalizeSampling;
+{
   if FKernelMode in [kmTableNearest, kmTableLinear] then
     FWeightTable.Free;
   inherited;
-end;
+}
 
-procedure TKernelResampler.PrepareSampling;
+void TKernelResampler.PrepareSampling;
 var
   I, J, W, Weight, Dev: Integer;
   Fraction: TFloat;
   KernelPtr: PKernelEntry;
-begin
+{
   inherited;
   FOuterColor := Bitmap.OuterColor;
   W := Ceil(FKernel.GetWidth);
   if FKernelMode in [kmTableNearest, kmTableLinear] then
-  begin
+  {
     FWeightTable := TIntegerMap.Create;
     FWeightTable.SetSize(W * 2 + 1, FTableSize + 1);
     for I := 0 to FTableSize do
-    begin
+    {
       Fraction := I / (FTableSize - 1);
       KernelPtr :=  @FWeightTable.ValPtr[W - MAX_KERNEL_WIDTH, I]^;
       Dev := - 256;
       for J := -W to W do
-      begin
+      {
         Weight := Round(FKernel.Filter(J + Fraction) * 256);
         KernelPtr[J] := Weight;
         Inc(Dev, Weight);
-      end;
+      }
       Dec(KernelPtr[0], Dev);
-    end;
-  end;
-end;
+    }
+  }
+}
 
 { TCustomBitmap32NearestResampler }
 
 function TNearestResampler.GetSampleInt(X, Y: Integer): TColor32;
-begin
+{
   Result := FGetSampleInt(X, Y);
-end;
+}
 
 function TNearestResampler.GetSampleFixed(X, Y: TFixed): TColor32;
-begin
+{
   Result := FGetSampleInt(FixedRound(X), FixedRound(Y));
-end;
+}
 
 function TNearestResampler.GetSampleFloat(X, Y: TFloat): TColor32;
-begin
+{
   Result := FGetSampleInt(Round(X), Round(Y));
-end;
+}
 
 function TNearestResampler.GetWidth: TFloat;
-begin
+{
   Result := 1;
-end;
+}
 
 function TNearestResampler.GetPixelTransparentEdge(X,Y: Integer): TColor32;
 var
   I, J: Integer;
-begin
+{
   with Bitmap, Bitmap.ClipRect do
-  begin
+  {
     I := Clamp(X, Left, Right - 1);
     J := Clamp(Y, Top, Bottom - 1);
     Result := Pixel[I, J];
     if (I <> X) or (J <> Y) then
       Result := Result and $00FFFFFF;
-  end;
-end;
+  }
+}
 
-procedure TNearestResampler.PrepareSampling;
-begin
+void TNearestResampler.PrepareSampling;
+{
   inherited;
   case PixelAccessMode of
     pamUnsafe: FGetSampleInt := TCustomBitmap32Access(Bitmap).GetPixel;
     pamSafe: FGetSampleInt := TCustomBitmap32Access(Bitmap).GetPixelS;
     pamWrap: FGetSampleInt := TCustomBitmap32Access(Bitmap).GetPixelW;
     pamTransparentEdge: FGetSampleInt := GetPixelTransparentEdge;
-  end;
-end;
+  }
+}
 
-procedure TNearestResampler.Resample(
+void TNearestResampler.Resample(
   Dst: TCustomBitmap32; DstRect: TRect; DstClip: TRect;
   Src: TCustomBitmap32; SrcRect: TRect;
   CombineOp: TDrawMode; CombineCallBack: TPixelCombineEvent);
-begin
+{
   StretchNearest(Dst, DstRect, DstClip, Src, SrcRect, CombineOp, CombineCallBack)
-end;
+}
 
 
 { TCustomBitmap32LinearResampler }
 
 constructor TLinearResampler.Create;
-begin
+{
   inherited;
   FLinearKernel := TLinearKernel.Create;
-end;
+}
 
 destructor TLinearResampler.Destroy;
-begin
+{
   FLinearKernel.Free;
   inherited Destroy;
-end;
+}
 
 function TLinearResampler.GetSampleFixed(X, Y: TFixed): TColor32;
-begin
+{
   Result := FGetSampleFixed(X, Y);
-end;
+}
 
 function TLinearResampler.GetSampleFloat(X, Y: TFloat): TColor32;
-begin
+{
   Result := FGetSampleFixed(Round(X * FixedOne), Round(Y * FixedOne));
-end;
+}
 
 function TLinearResampler.GetPixelTransparentEdge(X, Y: TFixed): TColor32;
 var
   I, J, X1, X2, Y1, Y2, WX, R, B: TFixed;
   C1, C2, C3, C4: TColor32;
   PSrc: PColor32Array;
-begin
+{
   with TCustomBitmap32Access(Bitmap), Bitmap.ClipRect do
-  begin
+  {
     R := Right - 1;
     B := Bottom - 1;
 
@@ -3476,13 +2876,13 @@ begin
     J := TFixedRec(Y).Int;
 
     if (I >= Left) and (J >= Top) and (I < R) and (J < B) then
-    begin //Safe
+    { //Safe
       Result := GET_T256(X shr 8, Y shr 8);
       EMMS;
     end
     else
     if (I >= Left - 1) and (J >= Top - 1) and (I <= R) and (J <= B) then
-    begin //Near edge, on edge or outside
+    { //Near edge, on edge or outside
 
       X1 := Clamp(I, R);
       X2 := Clamp(I + Sign(X), R);
@@ -3496,26 +2896,26 @@ begin
       C4 := PSrc[X2 + Y2];
 
       if X <= Fixed(Left) then
-      begin
+      {
         C1 := C1 and $00FFFFFF;
         C3 := C3 and $00FFFFFF;
       end
       else if I = R then
-      begin
+      {
         C2 := C2 and $00FFFFFF;
         C4 := C4 and $00FFFFFF;
-      end;
+      }
 
       if Y <= Fixed(Top) then
-      begin
+      {
         C1 := C1 and $00FFFFFF;
         C2 := C2 and $00FFFFFF;
       end
       else if J = B then
-      begin
+      {
         C3 := C3 and $00FFFFFF;
         C4 := C4 and $00FFFFFF;
-      end;
+      }
 
       WX := GAMMA_TABLE[((X shr 8) and $FF) xor $FF];
       Result := CombineReg(CombineReg(C1, C2, WX),
@@ -3525,33 +2925,33 @@ begin
     end  
     else  
       Result := 0; //Nothing really makes sense here, return zero
-  end;
-end;
+  }
+}
 
-procedure TLinearResampler.PrepareSampling;
-begin
+void TLinearResampler.PrepareSampling;
+{
   inherited;
   case PixelAccessMode of
     pamUnsafe: FGetSampleFixed := TCustomBitmap32Access(Bitmap).GetPixelX;
     pamSafe: FGetSampleFixed := TCustomBitmap32Access(Bitmap).GetPixelXS;
     pamWrap: FGetSampleFixed := TCustomBitmap32Access(Bitmap).GetPixelXW;
     pamTransparentEdge: FGetSampleFixed := GetPixelTransparentEdge;
-  end;
-end;
+  }
+}
 
 function TLinearResampler.GetWidth: TFloat;
-begin
+{
   Result := 1;
-end;
+}
 
-procedure TLinearResampler.Resample(
+void TLinearResampler.Resample(
   Dst: TCustomBitmap32; DstRect: TRect; DstClip: TRect;
   Src: TCustomBitmap32; SrcRect: TRect;
   CombineOp: TDrawMode; CombineCallBack: TPixelCombineEvent);
 var
   SrcW, SrcH: TFloat;
   DstW, DstH: Integer;
-begin
+{
   SrcW := SrcRect.Right - SrcRect.Left;
   SrcH := SrcRect.Bottom - SrcRect.Top;
   DstW := DstRect.Right - DstRect.Left;
@@ -3560,166 +2960,166 @@ begin
     StretchHorzStretchVertLinear(Dst, DstRect, DstClip, Src, SrcRect, CombineOp, CombineCallBack)
   else
     GR32_Resamplers.Resample(Dst, DstRect, DstClip, Src, SrcRect, FLinearKernel, CombineOp, CombineCallBack);
-end;
+}
 
-procedure TDraftResampler.Resample(
+void TDraftResampler.Resample(
   Dst: TCustomBitmap32; DstRect: TRect; DstClip: TRect;
   Src: TCustomBitmap32; SrcRect: TRect;
   CombineOp: TDrawMode; CombineCallBack: TPixelCombineEvent);
-begin
+{
   DraftResample(Dst, DstRect, DstClip, Src, SrcRect, FLinearKernel, CombineOp, CombineCallBack)
-end;
+}
 
 { TTransformer }
 
 function TTransformer.GetSampleInt(X, Y: Integer): TColor32;
 var
   U, V: TFixed;
-begin
+{
   FTransformationReverseTransformFixed(X * FixedOne + FixedHalf, Y * FixedOne + FixedHalf, U, V);
   Result := FGetSampleFixed(U - FixedHalf, V - FixedHalf);
-end;
+}
 
 function TTransformer.GetSampleFixed(X, Y: TFixed): TColor32;
 var
   U, V: TFixed;
-begin
+{
   FTransformationReverseTransformFixed(X + FixedHalf, Y + FixedHalf, U, V);
   Result := FGetSampleFixed(U - FixedHalf, V - FixedHalf);
-end;
+}
 
 function TTransformer.GetSampleFloat(X, Y: TFloat): TColor32;
 var
   U, V: TFloat;
-begin
+{
   FTransformationReverseTransformFloat(X + 0.5, Y + 0.5, U, V);
   Result := FGetSampleFloat(U - 0.5, V - 0.5);
-end;
+}
 
-procedure TTransformer.SetTransformation(const Value: TTransformation);
-begin
+void TTransformer.SetTransformation(const Value: TTransformation);
+{
   FTransformation := Value;
   if Assigned(Value) then
-  begin
+  {
     FTransformationReverseTransformInt := TTransformationAccess(FTransformation).ReverseTransformInt;
     FTransformationReverseTransformFixed := TTransformationAccess(FTransformation).ReverseTransformFixed;
     FTransformationReverseTransformFloat := TTransformationAccess(FTransformation).ReverseTransformFloat;
-  end;
-end;
+  }
+}
 
 constructor TTransformer.Create(ASampler: TCustomSampler; ATransformation: TTransformation);
-begin
+{
   inherited Create(ASampler);
   Transformation := ATransformation;
-end;
+}
 
-procedure TTransformer.PrepareSampling;
-begin
+void TTransformer.PrepareSampling;
+{
   inherited;
   with TTransformationAccess(FTransformation) do
     if not TransformValid then
       PrepareTransform;
-end;
+}
 
 function TTransformer.GetSampleBounds: TFloatRect;
-begin
+{
   IntersectRect(Result, inherited GetSampleBounds, FTransformation.SrcRect);
   Result := FTransformation.GetTransformedBounds(Result);
-end;
+}
 
 function TTransformer.HasBounds: Boolean;
-begin
+{
   Result := FTransformation.HasTransformedBounds and inherited HasBounds;
-end;
+}
 
 
 { TSuperSampler }
 
 constructor TSuperSampler.Create(Sampler: TCustomSampler);
-begin
+{
   inherited Create(Sampler);
   FSamplingX := 4;
   FSamplingY := 4;
   SamplingX := 4;
   SamplingY := 4;
-end;
+}
 
 function TSuperSampler.GetSampleFixed(X, Y: TFixed): TColor32;
 var
   I, J: Integer;
   dX, dY, tX: TFixed;
   Buffer: TBufferEntry;
-begin
+{
   Buffer := EMPTY_ENTRY;
   tX := X + FOffsetX;
   Inc(Y, FOffsetY);
   dX := FDistanceX;
   dY := FDistanceY;
   for J := 1 to FSamplingY do
-  begin
+  {
     X := tX;
     for I := 1 to FSamplingX do
-    begin
+    {
       IncBuffer(Buffer, FGetSampleFixed(X, Y));
       Inc(X, dX);
-    end;
+    }
     Inc(Y, dY);
-  end;
+  }
   MultiplyBuffer(Buffer, FScale);
   Result := BufferToColor32(Buffer, 16);
-end;
+}
 
-procedure TSuperSampler.SetSamplingX(const Value: TSamplingRange);
-begin
+void TSuperSampler.SetSamplingX(const Value: TSamplingRange);
+{
   FSamplingX := Value;
   FDistanceX := Fixed(1 / Value);
   FOffsetX := Fixed(((1 / Value) - 1) * 0.5);     // replaced "/2" by "*0.5"
   FScale := Fixed(1 / (FSamplingX * FSamplingY));
-end;
+}
 
-procedure TSuperSampler.SetSamplingY(const Value: TSamplingRange);
-begin
+void TSuperSampler.SetSamplingY(const Value: TSamplingRange);
+{
   FSamplingY := Value;
   FDistanceY := Fixed(1 / Value);
   FOffsetY := Fixed(((1 / Value) - 1) * 0.5);     // replaced "/2" by "*0.5"
   FScale := Fixed(1 / (FSamplingX * FSamplingY));
-end;
+}
 
 { TAdaptiveSuperSampler }
 
 function TAdaptiveSuperSampler.CompareColors(C1, C2: TColor32): Boolean;
 var
   Diff: TColor32Entry;
-begin
+{
   Diff.ARGB := ColorDifference(C1, C2);
   Result := FTolerance < Diff.R + Diff.G + Diff.B;
-end;
+}
 
 constructor TAdaptiveSuperSampler.Create(Sampler: TCustomSampler);
-begin
+{
   inherited Create(Sampler);
   Level := 4;
   Tolerance := 256;
-end;
+}
 
 function TAdaptiveSuperSampler.DoRecurse(X, Y, Offset: TFixed; const A, B,
   C, D, E: TColor32): TColor32;
 var
   C1, C2, C3, C4: TColor32;
-begin
+{
   C1 := QuadrantColor(A, E, X - Offset, Y - Offset, Offset, RecurseAC);
   C2 := QuadrantColor(B, E, X + Offset, Y - Offset, Offset, RecurseBD);
   C3 := QuadrantColor(E, C, X + Offset, Y + Offset, Offset, RecurseAC);
   C4 := QuadrantColor(E, D, X - Offset, Y + Offset, Offset, RecurseBD);
   Result := ColorAverage(ColorAverage(C1, C2), ColorAverage(C3, C4));
-end;
+}
 
 function TAdaptiveSuperSampler.GetSampleFixed(X, Y: TFixed): TColor32;
 var
   A, B, C, D, E: TColor32;
 const
   FIXED_HALF = 32768;
-begin
+{
   A := FGetSampleFixed(X - FIXED_HALF, Y - FIXED_HALF);
   B := FGetSampleFixed(X + FIXED_HALF, Y - FIXED_HALF);
   C := FGetSampleFixed(X + FIXED_HALF, Y + FIXED_HALF);
@@ -3727,54 +3127,54 @@ begin
   E := FGetSampleFixed(X, Y);
   Result := Self.DoRecurse(X, Y, 16384, A, B, C, D, E);
   EMMS;
-end;
+}
 
 function TAdaptiveSuperSampler.QuadrantColor(const C1, C2: TColor32; X, Y,
   Offset: TFixed; Proc: TRecurseProc): TColor32;
-begin
+{
   if CompareColors(C1, C2) and (Offset >= FMinOffset) then
     Result := Proc(X, Y, Offset, C1, C2)
   else
     Result := ColorAverage(C1, C2);
-end;
+}
 
 function TAdaptiveSuperSampler.RecurseAC(X, Y, Offset: TFixed; const A,
   C: TColor32): TColor32;
 var
   B, D, E: TColor32;
-begin
+{
   EMMS;
   B := FGetSampleFixed(X + Offset, Y - Offset);
   D := FGetSampleFixed(X - Offset, Y + Offset);
   E := FGetSampleFixed(X, Y);
   Result := DoRecurse(X, Y, Offset shr 1, A, B, C, D, E);
-end;
+}
 
 function TAdaptiveSuperSampler.RecurseBD(X, Y, Offset: TFixed; const B,
   D: TColor32): TColor32;
 var
   A, C, E: TColor32;
-begin
+{
   EMMS;
   A := FGetSampleFixed(X - Offset, Y - Offset);
   C := FGetSampleFixed(X + Offset, Y + Offset);
   E := FGetSampleFixed(X, Y);
   Result := DoRecurse(X, Y, Offset shr 1, A, B, C, D, E);
-end;
+}
 
-procedure TAdaptiveSuperSampler.SetLevel(const Value: Integer);
-begin
+void TAdaptiveSuperSampler.SetLevel(const Value: Integer);
+{
   FLevel := Value;
   FMinOffset := Fixed(1 / (1 shl Value));
-end;
+}
 
 { TPatternSampler }
 
 destructor TPatternSampler.Destroy;
-begin
+{
   if Assigned(FPattern) then FPattern := nil;
   inherited;
-end;
+}
 
 function TPatternSampler.GetSampleFixed(X, Y: TFixed): TColor32;
 var
@@ -3784,7 +3184,7 @@ var
   Buffer: TBufferEntry;
   GetSample: TGetSampleFixed;
   WrapProcHorz: TWrapProc;
-begin
+{
   GetSample := FSampler.GetSampleFixed;
   PY := WrapProcVert(TFixedRec(Y).Int, High(FPattern));
   I := High(FPattern[PY]);
@@ -3793,152 +3193,152 @@ begin
   Buffer := EMPTY_ENTRY;
   P := @Points[0];
   for I := 0 to High(Points) do
-  begin
+  {
     IncBuffer(Buffer, GetSample(P.X + X, P.Y + Y));
     Inc(P);
-  end;
+  }
   MultiplyBuffer(Buffer, FixedOne div Length(Points));
   Result := BufferToColor32(Buffer, 16);
-end;
+}
 
-procedure TPatternSampler.SetPattern(const Value: TFixedSamplePattern);
-begin
+void TPatternSampler.SetPattern(const Value: TFixedSamplePattern);
+{
   if Assigned(Value) then
-  begin
+  {
     FPattern := nil;
     FPattern := Value;
     WrapProcVert := GetOptimalWrap(High(FPattern));
-  end;
-end;
+  }
+}
 
 function JitteredPattern(XRes, YRes: Integer): TArrayOfFixedPoint;
 var
   I, J: Integer;
-begin
+{
   SetLength(Result, XRes * YRes);
   for I := 0 to XRes - 1 do
     for J := 0 to YRes - 1 do
       with Result[I + J * XRes] do
-        begin
+        {
           X := (Random(65536) + I * 65536) div XRes - 32768;
           Y := (Random(65536) + J * 65536) div YRes - 32768;
-        end;
-end;
+        }
+}
 
 function CreateJitteredPattern(TileWidth, TileHeight, SamplesX, SamplesY: Integer): TFixedSamplePattern;
 var
   I, J: Integer;
-begin
+{
   SetLength(Result, TileHeight, TileWidth);
   for I := 0 to TileWidth - 1 do
     for J := 0 to TileHeight - 1 do
       Result[J][I] := JitteredPattern(SamplesX, SamplesY);
-end;
+}
 
-procedure RegisterResampler(ResamplerClass: TCustomResamplerClass);
-begin
+void RegisterResampler(ResamplerClass: TCustomResamplerClass);
+{
   if not Assigned(ResamplerList) then ResamplerList := TClassList.Create;
   ResamplerList.ADD(ResamplerClass);
-end;
+}
 
-procedure RegisterKernel(KernelClass: TCustomKernelClass);
-begin
+void RegisterKernel(KernelClass: TCustomKernelClass);
+{
   if not Assigned(KernelList) then KernelList := TClassList.Create;
   KernelList.ADD(KernelClass);
-end;
+}
 
 { TNestedSampler }
 
-procedure TNestedSampler.AssignTo(Dst: TPersistent);
-begin
+void TNestedSampler.AssignTo(Dst: TPersistent);
+{
   if Dst is TNestedSampler then
     SmartAssign(Self, Dst)
   else
     inherited;
-end;
+}
 
 constructor TNestedSampler.Create(ASampler: TCustomSampler);
-begin
+{
   inherited Create;
   Sampler := ASampler;
-end;
+}
 
-procedure TNestedSampler.FinalizeSampling;
-begin
+void TNestedSampler.FinalizeSampling;
+{
   if not Assigned(FSampler) then
     raise ENestedException.Create(SSamplerNil)
   else
     FSampler.FinalizeSampling;
-end;
+}
 
 {$WARNINGS OFF}
 function TNestedSampler.GetSampleBounds: TFloatRect;
-begin
+{
   if not Assigned(FSampler) then
     raise ENestedException.Create(SSamplerNil)
   else
     Result := FSampler.GetSampleBounds;
-end;
+}
 
 function TNestedSampler.HasBounds: Boolean;
-begin
+{
   if not Assigned(FSampler) then
     raise ENestedException.Create(SSamplerNil)
   else
     Result := FSampler.HasBounds;
-end;
+}
 {$WARNINGS ON}
 
-procedure TNestedSampler.PrepareSampling;
-begin
+void TNestedSampler.PrepareSampling;
+{
   if not Assigned(FSampler) then
     raise ENestedException.Create(SSamplerNil)
   else
     FSampler.PrepareSampling;
-end;
+}
 
-procedure TNestedSampler.SetSampler(const Value: TCustomSampler);
-begin
+void TNestedSampler.SetSampler(const Value: TCustomSampler);
+{
   FSampler := Value;
   if Assigned(Value) then
-  begin
+  {
     FGetSampleInt := FSampler.GetSampleInt;
     FGetSampleFixed := FSampler.GetSampleFixed;
     FGetSampleFloat := FSampler.GetSampleFloat;
-  end;
-end;
+  }
+}
 
 
 { TKernelSampler }
 
 function TKernelSampler.ConvertBuffer(var Buffer: TBufferEntry): TColor32;
-begin
+{
   Buffer.A := Constrain(Buffer.A, 0, $FFFF);
   Buffer.R := Constrain(Buffer.R, 0, $FFFF);
   Buffer.G := Constrain(Buffer.G, 0, $FFFF);
   Buffer.B := Constrain(Buffer.B, 0, $FFFF);
 
   Result := BufferToColor32(Buffer, 8);
-end;
+}
 
 constructor TKernelSampler.Create(ASampler: TCustomSampler);
-begin
+{
   inherited;
   FKernel := TIntegerMap.Create;
   FStartEntry := EMPTY_ENTRY;
-end;
+}
 
 destructor TKernelSampler.Destroy;
-begin
+{
   FKernel.Free;
   inherited;
-end;
+}
 
 function TKernelSampler.GetSampleFixed(X, Y: TFixed): TColor32;
 var
   I, J: Integer;
   Buffer: TBufferEntry;
-begin
+{
   X := X + FCenterX shl 16;
   Y := Y + FCenterY shl 16;
   Buffer := FStartEntry;
@@ -3947,13 +3347,13 @@ begin
       UpdateBuffer(Buffer, FGetSampleFixed(X - I shl 16, Y - J shl 16), FKernel[I, J]);
 
   Result := ConvertBuffer(Buffer);
-end;
+}
 
 function TKernelSampler.GetSampleInt(X, Y: Integer): TColor32;
 var
   I, J: Integer;
   Buffer: TBufferEntry;
-begin
+{
   X := X + FCenterX;
   Y := Y + FCenterY;
   Buffer := FStartEntry;
@@ -3962,181 +3362,181 @@ begin
       UpdateBuffer(Buffer, FGetSampleInt(X - I, Y - J), FKernel[I, J]);
 
   Result := ConvertBuffer(Buffer);
-end;
+}
 
 { TConvolver }
 
-procedure TConvolver.UpdateBuffer(var Buffer: TBufferEntry; Color: TColor32;
+void TConvolver.UpdateBuffer(var Buffer: TBufferEntry; Color: TColor32;
   Weight: Integer);
-begin
+{
   with TColor32Entry(Color) do
-  begin
+  {
     Inc(Buffer.A, A * Weight);
     Inc(Buffer.R, R * Weight);
     Inc(Buffer.G, G * Weight);
     Inc(Buffer.B, B * Weight);
-  end;
-end;
+  }
+}
 
 { TDilater }
 
-procedure TDilater.UpdateBuffer(var Buffer: TBufferEntry; Color: TColor32;
+void TDilater.UpdateBuffer(var Buffer: TBufferEntry; Color: TColor32;
   Weight: Integer);
-begin
+{
   with TColor32Entry(Color) do
-  begin
+  {
     Buffer.A := Max(Buffer.A, A + Weight);
     Buffer.R := Max(Buffer.R, R + Weight);
     Buffer.G := Max(Buffer.G, G + Weight);
     Buffer.B := Max(Buffer.B, B + Weight);
-  end;
-end;
+  }
+}
 
 { TEroder }
 
 constructor TEroder.Create(ASampler: TCustomSampler);
 const
   START_ENTRY: TBufferEntry = (B: $FFFF; G: $FFFF; R: $FFFF; A: $FFFF);
-begin
+{
   inherited;
   FStartEntry := START_ENTRY;
-end;
+}
 
-procedure TEroder.UpdateBuffer(var Buffer: TBufferEntry; Color: TColor32;
+void TEroder.UpdateBuffer(var Buffer: TBufferEntry; Color: TColor32;
   Weight: Integer);
-begin
+{
   with TColor32Entry(Color) do
-  begin
+  {
     Buffer.A := Min(Buffer.A, A - Weight);
     Buffer.R := Min(Buffer.R, R - Weight);
     Buffer.G := Min(Buffer.G, G - Weight);
     Buffer.B := Min(Buffer.B, B - Weight);
-  end;
-end;
+  }
+}
 
 { TExpander }
 
-procedure TExpander.UpdateBuffer(var Buffer: TBufferEntry; Color: TColor32;
+void TExpander.UpdateBuffer(var Buffer: TBufferEntry; Color: TColor32;
   Weight: Integer);
-begin
+{
   with TColor32Entry(Color) do
-  begin
+  {
     Buffer.A := Max(Buffer.A, A * Weight);
     Buffer.R := Max(Buffer.R, R * Weight);
     Buffer.G := Max(Buffer.G, G * Weight);
     Buffer.B := Max(Buffer.B, B * Weight);
-  end;
-end;
+  }
+}
 
 { TContracter }
 
 function TContracter.GetSampleFixed(X, Y: TFixed): TColor32;
-begin
+{
   Result := ColorSub(FMaxWeight, inherited GetSampleFixed(X, Y));
-end;
+}
 
 function TContracter.GetSampleInt(X, Y: Integer): TColor32;
-begin
+{
   Result := ColorSub(FMaxWeight, inherited GetSampleInt(X, Y));
-end;
+}
 
-procedure TContracter.PrepareSampling;
+void TContracter.PrepareSampling;
 var
   I, J, W: Integer;
-begin
+{
   W := Low(Integer);
   for I := 0 to FKernel.Width - 1 do
     for J := 0 to FKernel.Height - 1 do
       W := Max(W, FKernel[I, J]);
   if W > 255 then W := 255;
   FMaxWeight := Gray32(W, W);
-end;
+}
 
-procedure TContracter.UpdateBuffer(var Buffer: TBufferEntry; Color: TColor32;
+void TContracter.UpdateBuffer(var Buffer: TBufferEntry; Color: TColor32;
   Weight: Integer);
-begin
+{
   inherited UpdateBuffer(Buffer, Color xor $FFFFFFFF, Weight);
-end;
+}
 
 { TMorphologicalSampler }
 
 function TMorphologicalSampler.ConvertBuffer(
   var Buffer: TBufferEntry): TColor32;
-begin
+{
   Buffer.A := Constrain(Buffer.A, 0, $FF);
   Buffer.R := Constrain(Buffer.R, 0, $FF);
   Buffer.G := Constrain(Buffer.G, 0, $FF);
   Buffer.B := Constrain(Buffer.B, 0, $FF);
 
   with TColor32Entry(Result) do
-  begin
+  {
     A := Buffer.A;
     R := Buffer.R;
     G := Buffer.G;
     B := Buffer.B;
-  end;
-end;
+  }
+}
 
 { TSelectiveConvolver }
 
 function TSelectiveConvolver.ConvertBuffer(var Buffer: TBufferEntry): TColor32;
-begin
+{
   with TColor32Entry(Result) do
-  begin
+  {
     A := Buffer.A div FWeightSum.A;
     R := Buffer.R div FWeightSum.R;
     G := Buffer.G div FWeightSum.G;
     B := Buffer.B div FWeightSum.B;
-  end;
-end;
+  }
+}
 
 constructor TSelectiveConvolver.Create(ASampler: TCustomSampler);
-begin
+{
   inherited;
   FDelta := 30;
-end;
+}
 
 function TSelectiveConvolver.GetSampleFixed(X, Y: TFixed): TColor32;
-begin
+{
   FRefColor := FGetSampleFixed(X, Y);
   FWeightSum := EMPTY_ENTRY;
   Result := inherited GetSampleFixed(X, Y);
-end;
+}
 
 function TSelectiveConvolver.GetSampleInt(X, Y: Integer): TColor32;
-begin
+{
   FRefColor := FGetSampleInt(X, Y);
   FWeightSum := EMPTY_ENTRY;
   Result := inherited GetSampleInt(X, Y);
-end;
+}
 
-procedure TSelectiveConvolver.UpdateBuffer(var Buffer: TBufferEntry;
+void TSelectiveConvolver.UpdateBuffer(var Buffer: TBufferEntry;
   Color: TColor32; Weight: Integer);
-begin
+{
   with TColor32Entry(Color) do
-  begin
+  {
     if Abs(TColor32Entry(FRefColor).A - A) <= FDelta then
-    begin
+    {
       Inc(Buffer.A, A * Weight);
       Inc(FWeightSum.A, Weight);
-    end;
+    }
     if Abs(TColor32Entry(FRefColor).R - R) <= FDelta then
-    begin
+    {
       Inc(Buffer.R, R * Weight);
       Inc(FWeightSum.R, Weight);
-    end;
+    }
     if Abs(TColor32Entry(FRefColor).G - G) <= FDelta then
-    begin
+    {
       Inc(Buffer.G, G * Weight);
       Inc(FWeightSum.G, Weight);
-    end;
+    }
     if Abs(TColor32Entry(FRefColor).B - B) <= FDelta then
-    begin
+    {
       Inc(Buffer.B, B * Weight);
       Inc(FWeightSum.B, Weight);
-    end;
-  end;
-end;
+    }
+  }
+}
 
 {CPU target and feature Function templates}
 
@@ -4147,8 +3547,8 @@ const
 var
   Registry: TFunctionRegistry;
 
-procedure RegisterBindings;
-begin
+void RegisterBindings;
+{
   Registry := NewRegistry('GR32_Resamplers bindings');
   Registry.RegisterBinding(FID_BLOCKAVERAGE, @@BlockAverage);
   Registry.RegisterBinding(FID_INTERPOLATOR, @@Interpolator);
@@ -4165,7 +3565,7 @@ begin
   Registry.ADD(FID_INTERPOLATOR, @Interpolator_SSE2, [ciSSE2]);
 {$ENDIF}
   Registry.RebindAll;
-end;
+}
 
 initialization
   RegisterBindings;
