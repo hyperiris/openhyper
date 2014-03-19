@@ -72,6 +72,36 @@
     <ClInclude Include="..\GR32_DrawingEx.h">
       <Filter>Graphic32</Filter>
     </ClInclude>
+    <ClInclude Include="..\GR32_ExtImage.h">
+      <Filter>Graphic32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GR32_Filters.h">
+      <Filter>Graphic32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GR32_Geometry.h">
+      <Filter>Graphic32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GR32_Layers.h">
+      <Filter>Graphic32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GR32_Polygons.h">
+      <Filter>Graphic32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GR32_RangeBars.h">
+      <Filter>Graphic32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GR32_Rasterizers.h">
+      <Filter>Graphic32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GR32_Resamplers.h">
+      <Filter>Graphic32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GR32_Transforms.h">
+      <Filter>Graphic32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GR32_VectorMaps.h">
+      <Filter>Graphic32</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -120,6 +150,36 @@
       <Filter>Graphic32</Filter>
     </ClCompile>
     <ClCompile Include="..\GR32_DrawingEx.cpp">
+      <Filter>Graphic32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GR32_ExtImage.cpp">
+      <Filter>Graphic32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GR32_Filters.cpp">
+      <Filter>Graphic32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GR32_Geometry.cpp">
+      <Filter>Graphic32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GR32_Layers.cpp">
+      <Filter>Graphic32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GR32_Polygons.cpp">
+      <Filter>Graphic32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GR32_RangeBar.cpp">
+      <Filter>Graphic32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GR32_Rasterizers.cpp">
+      <Filter>Graphic32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GR32_Resamplers.cpp">
+      <Filter>Graphic32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GR32_Transforms.cpp">
+      <Filter>Graphic32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GR32_VectorMaps.cpp">
       <Filter>Graphic32</Filter>
     </ClCompile>
   </ItemGroup>

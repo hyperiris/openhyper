@@ -80,13 +80,23 @@
     <ClInclude Include="..\GR32_Blend.h" />
     <ClInclude Include="..\GR32_Containers.h" />
     <ClInclude Include="..\GR32_DrawingEx.h" />
+    <ClInclude Include="..\GR32_ExtImage.h" />
+    <ClInclude Include="..\GR32_Filters.h" />
+    <ClInclude Include="..\GR32_Geometry.h" />
     <ClInclude Include="..\GR32_Image.h" />
+    <ClInclude Include="..\GR32_Layers.h" />
     <ClInclude Include="..\GR32_LowLevel.h" />
     <ClInclude Include="..\GR32_Math.h" />
     <ClInclude Include="..\GR32_MicroTiles.h" />
     <ClInclude Include="..\GR32_OrdinalMaps.h" />
+    <ClInclude Include="..\GR32_Polygons.h" />
+    <ClInclude Include="..\GR32_RangeBars.h" />
+    <ClInclude Include="..\GR32_Rasterizers.h" />
     <ClInclude Include="..\GR32_RepaintOpt.h" />
+    <ClInclude Include="..\GR32_Resamplers.h" />
     <ClInclude Include="..\GR32_System.h" />
+    <ClInclude Include="..\GR32_Transforms.h" />
+    <ClInclude Include="..\GR32_VectorMaps.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -99,13 +109,23 @@
     <ClCompile Include="..\GR32_Blend.cpp" />
     <ClCompile Include="..\GR32_Containers.cpp" />
     <ClCompile Include="..\GR32_DrawingEx.cpp" />
+    <ClCompile Include="..\GR32_ExtImage.cpp" />
+    <ClCompile Include="..\GR32_Filters.cpp" />
+    <ClCompile Include="..\GR32_Geometry.cpp" />
     <ClCompile Include="..\GR32_Image.cpp" />
+    <ClCompile Include="..\GR32_Layers.cpp" />
     <ClCompile Include="..\GR32_LowLevel.cpp" />
     <ClCompile Include="..\GR32_Math.cpp" />
     <ClCompile Include="..\GR32_MicroTiles.cpp" />
     <ClCompile Include="..\GR32_OrdinalMaps.cpp" />
+    <ClCompile Include="..\GR32_Polygons.cpp" />
+    <ClCompile Include="..\GR32_RangeBar.cpp" />
+    <ClCompile Include="..\GR32_Rasterizers.cpp" />
     <ClCompile Include="..\GR32_RepaintOpt.cpp" />
+    <ClCompile Include="..\GR32_Resamplers.cpp" />
     <ClCompile Include="..\GR32_System.cpp" />
+    <ClCompile Include="..\GR32_Transforms.cpp" />
+    <ClCompile Include="..\GR32_VectorMaps.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
