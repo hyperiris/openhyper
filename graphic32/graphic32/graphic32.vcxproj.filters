@@ -36,6 +36,15 @@
     <ClInclude Include="..\GR32_Backends.h">
       <Filter>Graphic32</Filter>
     </ClInclude>
+    <ClInclude Include="..\GR32_Image.h">
+      <Filter>Graphic32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GR32_Containers.h">
+      <Filter>Graphic32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GR32_RepaintOpt.h">
+      <Filter>Graphic32</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -48,6 +57,15 @@
       <Filter>Graphic32</Filter>
     </ClCompile>
     <ClCompile Include="..\GR32_Backends.cpp">
+      <Filter>Graphic32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GR32_Image.cpp">
+      <Filter>Graphic32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GR32_Containers.cpp">
+      <Filter>Graphic32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GR32_RepaintOpt.cpp">
       <Filter>Graphic32</Filter>
     </ClCompile>
   </ItemGroup>
