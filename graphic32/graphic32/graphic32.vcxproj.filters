@@ -45,6 +45,12 @@
     <ClInclude Include="..\GR32_RepaintOpt.h">
       <Filter>Graphic32</Filter>
     </ClInclude>
+    <ClInclude Include="..\GR32_LowLevel.h">
+      <Filter>Graphic32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GR32_OrdinalMaps.h">
+      <Filter>Graphic32</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -66,6 +72,12 @@
       <Filter>Graphic32</Filter>
     </ClCompile>
     <ClCompile Include="..\GR32_RepaintOpt.cpp">
+      <Filter>Graphic32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GR32_LowLevel.cpp">
+      <Filter>Graphic32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GR32_OrdinalMaps.cpp">
       <Filter>Graphic32</Filter>
     </ClCompile>
   </ItemGroup>
