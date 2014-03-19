@@ -63,6 +63,15 @@
     <ClInclude Include="..\GR32_Backends_VCL.h">
       <Filter>Graphic32</Filter>
     </ClInclude>
+    <ClInclude Include="..\GR32_Bindings.h">
+      <Filter>Graphic32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GR32_Blend.h">
+      <Filter>Graphic32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GR32_DrawingEx.h">
+      <Filter>Graphic32</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -102,6 +111,15 @@
       <Filter>Graphic32</Filter>
     </ClCompile>
     <ClCompile Include="..\GR32_Backends_Generic.cpp">
+      <Filter>Graphic32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GR32_Bindings.cpp">
+      <Filter>Graphic32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GR32_Blend.cpp">
+      <Filter>Graphic32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GR32_DrawingEx.cpp">
       <Filter>Graphic32</Filter>
     </ClCompile>
   </ItemGroup>
