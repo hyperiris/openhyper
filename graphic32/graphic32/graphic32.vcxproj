@@ -74,6 +74,8 @@
   <ItemGroup>
     <ClInclude Include="..\GR32.h" />
     <ClInclude Include="..\GR32_Backends.h" />
+    <ClInclude Include="..\GR32_Backends_Generic.h" />
+    <ClInclude Include="..\GR32_Backends_VCL.h" />
     <ClInclude Include="..\GR32_Containers.h" />
     <ClInclude Include="..\GR32_Image.h" />
     <ClInclude Include="..\GR32_LowLevel.h" />
@@ -88,6 +90,8 @@
   <ItemGroup>
     <ClCompile Include="..\GR32.cpp" />
     <ClCompile Include="..\GR32_Backends.cpp" />
+    <ClCompile Include="..\GR32_Backends_Generic.cpp" />
+    <ClCompile Include="..\GR32_Backends_VCL.cpp" />
     <ClCompile Include="..\GR32_Containers.cpp" />
     <ClCompile Include="..\GR32_Image.cpp" />
     <ClCompile Include="..\GR32_LowLevel.cpp" />
