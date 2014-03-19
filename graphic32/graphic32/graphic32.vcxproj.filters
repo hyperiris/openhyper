@@ -51,6 +51,12 @@
     <ClInclude Include="..\GR32_OrdinalMaps.h">
       <Filter>Graphic32</Filter>
     </ClInclude>
+    <ClInclude Include="..\GR32_Math.h">
+      <Filter>Graphic32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GR32_MicroTiles.h">
+      <Filter>Graphic32</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -78,6 +84,12 @@
       <Filter>Graphic32</Filter>
     </ClCompile>
     <ClCompile Include="..\GR32_OrdinalMaps.cpp">
+      <Filter>Graphic32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GR32_Math.cpp">
+      <Filter>Graphic32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GR32_MicroTiles.cpp">
       <Filter>Graphic32</Filter>
     </ClCompile>
   </ItemGroup>

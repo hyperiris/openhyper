@@ -77,6 +77,8 @@
     <ClInclude Include="..\GR32_Containers.h" />
     <ClInclude Include="..\GR32_Image.h" />
     <ClInclude Include="..\GR32_LowLevel.h" />
+    <ClInclude Include="..\GR32_Math.h" />
+    <ClInclude Include="..\GR32_MicroTiles.h" />
     <ClInclude Include="..\GR32_OrdinalMaps.h" />
     <ClInclude Include="..\GR32_RepaintOpt.h" />
     <ClInclude Include="..\GR32_System.h" />
@@ -89,6 +91,8 @@
     <ClCompile Include="..\GR32_Containers.cpp" />
     <ClCompile Include="..\GR32_Image.cpp" />
     <ClCompile Include="..\GR32_LowLevel.cpp" />
+    <ClCompile Include="..\GR32_Math.cpp" />
+    <ClCompile Include="..\GR32_MicroTiles.cpp" />
     <ClCompile Include="..\GR32_OrdinalMaps.cpp" />
     <ClCompile Include="..\GR32_RepaintOpt.cpp" />
     <ClCompile Include="..\GR32_System.cpp" />
