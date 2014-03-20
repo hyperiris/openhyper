@@ -194,23 +194,23 @@ const TColor32 clTrGreen32             = 0x7F00FF00;
 const TColor32 clTrBlue32              = 0x7F0000FF;
 
 // Color construction and conversion functions
-function Color32(WinColor: TColor): TColor32; overload;
-function Color32(R, G, B: Byte; A: Byte = $FF): TColor32; overload;
-function Color32(Index: Byte; var Palette: TPalette32): TColor32; overload;
-function Gray32(Intensity: Byte; Alpha: Byte = $FF): TColor32; {$IFDEF USEINLINING} inline; {$ENDIF}
-function WinColor(Color32: TColor32): TColor;
-function ArrayOfColor32(Colors: array of TColor32): TArrayOfColor32;
+TColor32 Color32(WinColor: TColor);
+TColor32 Color32(R, G, B: Byte; A: Byte = $FF);
+TColor32 Color32(Index: Byte; var Palette : TPalette32);
+TColor32 Gray32(Intensity: Byte; Alpha: Byte = $FF);
+TColor WinColor(Color32: TColor32);
+TArrayOfColor32 ArrayOfColor32(Colors: array of TColor32);
 
 // Color component access
-procedure Color32ToRGB(Color32: TColor32; var R, G, B: Byte);
-procedure Color32ToRGBA(Color32: TColor32; var R, G, B, A: Byte);
-function Color32Components(R, G, B, A: Boolean): TColor32Components;
-function RedComponent(Color32: TColor32): Integer; {$IFDEF USEINLINING} inline; {$ENDIF}
-function GreenComponent(Color32: TColor32): Integer; {$IFDEF USEINLINING} inline; {$ENDIF}
-function BlueComponent(Color32: TColor32): Integer; {$IFDEF USEINLINING} inline; {$ENDIF}
-function AlphaComponent(Color32: TColor32): Integer; {$IFDEF USEINLINING} inline; {$ENDIF}
-function Intensity(Color32: TColor32): Integer; {$IFDEF USEINLINING} inline; {$ENDIF}
-function SetAlpha(Color32: TColor32; NewAlpha: Integer): TColor32; {$IFDEF USEINLINING} inline; {$ENDIF}
+void Color32ToRGB(Color32: TColor32; var R, G, B: Byte);
+void Color32ToRGBA(Color32: TColor32; var R, G, B, A: Byte);
+TColor32Components Color32Components(R, G, B, A: Boolean);
+function RedComponent(Color32: TColor32): Integer; 
+function GreenComponent(Color32: TColor32): Integer; 
+function BlueComponent(Color32: TColor32): Integer; 
+function AlphaComponent(Color32: TColor32): Integer; 
+function Intensity(Color32: TColor32): Integer; 
+function SetAlpha(Color32: TColor32; NewAlpha: Integer): TColor32; 
 
 // Color space conversion
 function HSLtoRGB(H, S, L: Single): TColor32; overload;
@@ -284,8 +284,8 @@ const int FixedHalf = 0x7FFF;
   FixedPI  = Round(PI * FixedOne);
   FixedToFloat = 1/FixedOne;
 
-function Fixed(S: Single): TFixed; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function Fixed(I: Integer): TFixed; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
+function Fixed(S: Single): TFixed; overload; 
+function Fixed(I: Integer): TFixed; overload; 
 
 //{ Points }
 
@@ -329,16 +329,16 @@ type
   TArrayOfArrayOfFixedPoint = array of TArrayOfFixedPoint;
 
 // construction and conversion of point types
-function Point(X, Y: Integer): TPoint; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function Point(const FP: TFloatPoint): TPoint; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function Point(const FXP: TFixedPoint): TPoint; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function FloatPoint(X, Y: Single): TFloatPoint; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function FloatPoint(const P: TPoint): TFloatPoint; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function FloatPoint(const FXP: TFixedPoint): TFloatPoint; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function FixedPoint(X, Y: Integer): TFixedPoint; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function FixedPoint(X, Y: Single): TFixedPoint; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function FixedPoint(const P: TPoint): TFixedPoint; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function FixedPoint(const FP: TFloatPoint): TFixedPoint; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
+function Point(X, Y: Integer): TPoint; overload; 
+function Point(const FP: TFloatPoint): TPoint; overload; 
+function Point(const FXP: TFixedPoint): TPoint; overload; 
+function FloatPoint(X, Y: Single): TFloatPoint; overload; 
+function FloatPoint(const P: TPoint): TFloatPoint; overload; 
+function FloatPoint(const FXP: TFixedPoint): TFloatPoint; overload; 
+function FixedPoint(X, Y: Integer): TFixedPoint; overload; 
+function FixedPoint(X, Y: Single): TFixedPoint; overload; 
+function FixedPoint(const P: TPoint): TFixedPoint; overload; 
+function FixedPoint(const FP: TFloatPoint): TFixedPoint; overload; 
 
 { Rectangles }
 
@@ -364,35 +364,35 @@ typedef PRECT PRect;
   TRectRounding = (rrClosest, rrOutside, rrInside);
 
 // Rectangle construction/conversion functions
-function MakeRect(const L, T, R, B: Integer): TRect; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
+function MakeRect(const L, T, R, B: Integer): TRect; overload; 
 function MakeRect(const FR: TFloatRect; Rounding: TRectRounding = rrClosest): TRect; overload;
 function MakeRect(const FXR: TFixedRect; Rounding: TRectRounding = rrClosest): TRect; overload;
-function FixedRect(const L, T, R, B: TFixed): TFixedRect; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function FixedRect(const ARect: TRect): TFixedRect; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function FixedRect(const FR: TFloatRect): TFixedRect; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function FloatRect(const L, T, R, B: TFloat): TFloatRect; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function FloatRect(const ARect: TRect): TFloatRect; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function FloatRect(const FXR: TFixedRect): TFloatRect; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
+function FixedRect(const L, T, R, B: TFixed): TFixedRect; overload; 
+function FixedRect(const ARect: TRect): TFixedRect; overload; 
+function FixedRect(const FR: TFloatRect): TFixedRect; overload; 
+function FloatRect(const L, T, R, B: TFloat): TFloatRect; overload; 
+function FloatRect(const ARect: TRect): TFloatRect; overload; 
+function FloatRect(const FXR: TFixedRect): TFloatRect; overload; 
 
 // Some basic operations over rectangles
 function IntersectRect(out Dst: TRect; const R1, R2: TRect): Boolean; overload;
 function IntersectRect(out Dst: TFloatRect; const FR1, FR2: TFloatRect): Boolean; overload;
 function UnionRect(out Rect: TRect; const R1, R2: TRect): Boolean; overload;
 function UnionRect(out Rect: TFloatRect; const R1, R2: TFloatRect): Boolean; overload;
-function EqualRect(const R1, R2: TRect): Boolean; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function EqualRect(const R1, R2: TFloatRect): Boolean; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-procedure InflateRect(var R: TRect; Dx, Dy: Integer); overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-procedure InflateRect(var FR: TFloatRect; Dx, Dy: TFloat); overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-procedure OffsetRect(var R: TRect; Dx, Dy: Integer); overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-procedure OffsetRect(var FR: TFloatRect; Dx, Dy: TFloat); overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function IsRectEmpty(const R: TRect): Boolean; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function IsRectEmpty(const FR: TFloatRect): Boolean; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function PtInRect(const R: TRect; const P: TPoint): Boolean; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function PtInRect(const R: TFloatRect; const P: TPoint): Boolean; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function PtInRect(const R: TRect; const P: TFloatPoint): Boolean; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function PtInRect(const R: TFloatRect; const P: TFloatPoint): Boolean; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function EqualRectSize(const R1, R2: TRect): Boolean; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
-function EqualRectSize(const R1, R2: TFloatRect): Boolean; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
+function EqualRect(const R1, R2: TRect): Boolean; overload; 
+function EqualRect(const R1, R2: TFloatRect): Boolean; overload; 
+procedure InflateRect(var R: TRect; Dx, Dy: Integer); overload; 
+procedure InflateRect(var FR: TFloatRect; Dx, Dy: TFloat); overload; 
+procedure OffsetRect(var R: TRect; Dx, Dy: Integer); overload; 
+procedure OffsetRect(var FR: TFloatRect; Dx, Dy: TFloat); overload; 
+function IsRectEmpty(const R: TRect): Boolean; overload; 
+function IsRectEmpty(const FR: TFloatRect): Boolean; overload; 
+function PtInRect(const R: TRect; const P: TPoint): Boolean; overload; 
+function PtInRect(const R: TFloatRect; const P: TPoint): Boolean; overload; 
+function PtInRect(const R: TRect; const P: TFloatPoint): Boolean; overload; 
+function PtInRect(const R: TFloatRect; const P: TFloatPoint): Boolean; overload; 
+function EqualRectSize(const R1, R2: TRect): Boolean; overload; 
+function EqualRectSize(const R1, R2: TFloatRect): Boolean; overload; 
 
 type
 //{ TBitmap32 draw mode }
@@ -570,7 +570,7 @@ class TCustomBackend;
     procedure BackendChangingHandler(Sender: TObject); virtual;
 
 {$IFDEF BITS_GETTER}
-    function GetBits: PColor32Array;     {$IFDEF USEINLINING} inline; {$ENDIF}
+    function GetBits: PColor32Array;     
 {$ENDIF}
 
     function GetPixelPtr(X, Y: Integer): PColor32;
@@ -612,13 +612,13 @@ class TCustomBackend;
 
     function QueryInterface({$IFDEF FPC_HAS_CONSTREF}constref{$ELSE}const{$ENDIF} IID: TGUID; out Obj): HResult; override;
 
-    function  GetPixel(X, Y: Integer): TColor32; {$IFDEF USEINLINING} inline; {$ENDIF}
-    function  GetPixelS(X, Y: Integer): TColor32; {$IFDEF USEINLINING} inline; {$ENDIF}
-    function  GetPixelW(X, Y: Integer): TColor32; {$IFDEF USEINLINING} inline; {$ENDIF}
+    function  GetPixel(X, Y: Integer): TColor32; 
+    function  GetPixelS(X, Y: Integer): TColor32; 
+    function  GetPixelW(X, Y: Integer): TColor32; 
 
-    function  GetPixelF(X, Y: Single): TColor32; {$IFDEF USEINLINING} inline; {$ENDIF}
-    function  GetPixelFS(X, Y: Single): TColor32; {$IFDEF USEINLINING} inline; {$ENDIF}
-    function  GetPixelFW(X, Y: Single): TColor32; {$IFDEF USEINLINING} inline; {$ENDIF}
+    function  GetPixelF(X, Y: Single): TColor32; 
+    function  GetPixelFS(X, Y: Single): TColor32; 
+    function  GetPixelFW(X, Y: Single): TColor32; 
 
     function  GetPixelX(X, Y: TFixed): TColor32;
     function  GetPixelXS(X, Y: TFixed): TColor32;
@@ -627,13 +627,13 @@ class TCustomBackend;
     function GetPixelFR(X, Y: Single): TColor32;
     function GetPixelXR(X, Y: TFixed): TColor32;
 
-    function  GetPixelB(X, Y: Integer): TColor32; {$IFDEF USEINLINING} inline; {$ENDIF}
+    function  GetPixelB(X, Y: Integer): TColor32; 
 
-    procedure SetPixel(X, Y: Integer; Value: TColor32); {$IFDEF USEINLINING} inline; {$ENDIF}
+    procedure SetPixel(X, Y: Integer; Value: TColor32); 
     procedure SetPixelS(X, Y: Integer; Value: TColor32);
-    procedure SetPixelW(X, Y: Integer; Value: TColor32); {$IFDEF USEINLINING} inline; {$ENDIF}
+    procedure SetPixelW(X, Y: Integer; Value: TColor32); 
 
-    procedure SetPixelF(X, Y: Single; Value: TColor32);  {$IFDEF USEINLINING} inline; {$ENDIF}
+    procedure SetPixelF(X, Y: Single; Value: TColor32);  
     procedure SetPixelFS(X, Y: Single; Value: TColor32);
     procedure SetPixelFW(X, Y: Single; Value: TColor32);
 
@@ -814,11 +814,11 @@ class TCustomBackend;
     
     procedure FontChanged(Sender: TObject);
     procedure CanvasChanged(Sender: TObject);
-    function GetCanvas: TCanvas;         {$IFDEF USEINLINING} inline; {$ENDIF}
+    function GetCanvas: TCanvas;         
 
-    function GetBitmapInfo: TBitmapInfo; {$IFDEF USEINLINING} inline; {$ENDIF}
-    function GetHandle: HBITMAP;         {$IFDEF USEINLINING} inline; {$ENDIF}
-    function GetHDC: HDC;                {$IFDEF USEINLINING} inline; {$ENDIF}
+    function GetBitmapInfo: TBitmapInfo; 
+    function GetHandle: HBITMAP;         
+    function GetHDC: HDC;                
 
     function GetFont: TFont;
     procedure SetFont(Value: TFont);
