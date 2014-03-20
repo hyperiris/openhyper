@@ -535,9 +535,9 @@ type
   TAreaChangedEvent = procedure(Sender: TObject; const Area: TRect;
     const Info: Cardinal) of object;
 
-  TCustomResampler = class;
+class TCustomResampler;
 
-  TCustomBackend = class;
+class TCustomBackend;
   TCustomBackendClass = class of TCustomBackend;
 
   TCustomBitmap32 = class(TCustomMap)
@@ -875,13 +875,14 @@ type
     property OnHandleChanged: TNotifyEvent read FOnHandleChanged write FOnHandleChanged;
   end;
 
-  { TCustomBackend }
-  { This class functions as backend for the TBitmap32 class.
-    It manages and provides the backing buffer as well as OS or
-    graphics subsystem specific features.}
+//{ TCustomBackend }
+//{ This class functions as backend for the TBitmap32 class.
+//  It manages and provides the backing buffer as well as OS or
+//  graphics subsystem specific features.}
 
-  TCustomBackend = class(TThreadPersistent)
-  protected
+class TCustomBackend : public TThreadPersistent
+{
+protected:
     FBits: PColor32Array;
     FOwner: TCustomBitmap32;
     FOnChanging: TNotifyEvent;
@@ -894,7 +895,7 @@ type
 
     procedure InitializeSurface(NewWidth, NewHeight: Integer; ClearBuffer: Boolean); virtual;
     procedure FinalizeSurface; virtual;
-  public
+public:
     constructor Create; overload; override;
     constructor Create(Owner: TCustomBitmap32); reintroduce; overload; virtual;
     destructor Destroy; override;
@@ -913,7 +914,7 @@ type
 {$ENDIF}
 
     property OnChanging: TNotifyEvent read FOnChanging write FOnChanging;
-  end;
+};
 
   { TCustomSampler }
   TCustomSampler = class(TNotifiablePersistent)
