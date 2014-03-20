@@ -4,8 +4,6 @@
 
 #include "GR32_LowLevel.h"
 
-{$IFDEF Windows}
-
 var
   TempPath: TFileName;
 
@@ -17,65 +15,61 @@ resourcestring
 function GetTempPath: TFileName;
 var
   PC: PChar;
-begin
+{
   PC := StrAlloc(MAX_PATH + 1);
   try
     Windows.GetTempPath(MAX_PATH, PC);
     Result := TFileName(PC);
   finally
     StrDispose(PC);
-  end;
-end;
+  }
+}
 
-{$ENDIF}
+//{ TMemoryBackend }
 
-{ TMemoryBackend }
-
-procedure TMemoryBackend.InitializeSurface(NewWidth, NewHeight: Integer; ClearBuffer: Boolean);
-begin
+void TMemoryBackend::InitializeSurface(NewWidth, NewHeight: Integer; ClearBuffer: Boolean);
+{
   GetMem(FBits, NewWidth * NewHeight * 4);
   if ClearBuffer then
     FillLongword(FBits[0], NewWidth * NewHeight, clBlack32);
-end;
+}
 
-procedure TMemoryBackend.FinalizeSurface;
-begin
+void TMemoryBackend::FinalizeSurface;
+{
   if Assigned(FBits) then
-  begin
+  {
     FreeMem(FBits);
     FBits := nil;
-  end;
-end;
+  }
+}
 
-{$IFDEF Windows}
-
-{ TMMFBackend }
+//{ TMMFBackend }
 
 constructor TMMFBackend.Create(Owner: TCustomBitmap32; IsTemporary: Boolean = True; const MapFileName: string = '');
-begin
+{
   FMapFileName := MapFileName;
   FMapIsTemporary := IsTemporary;
   InitializeFileMapping(FMapHandle, FMapFileHandle, FMapFileName);
   inherited Create(Owner);
-end;
+}
 
 destructor TMMFBackend.Destroy;
-begin
+{
   DeinitializeFileMapping(FMapHandle, FMapFileHandle, FMapFileName);
   inherited;
-end;
+}
 
 procedure TMMFBackend.FinalizeSurface;
-begin
+{
   if Assigned(FBits) then
-  begin
+  {
     UnmapViewOfFile(FBits);
     FBits := nil;
-  end;
-end;
+  }
+}
 
 procedure TMMFBackend.InitializeSurface(NewWidth, NewHeight: Integer; ClearBuffer: Boolean);
-begin
+{
   CreateFileMapping(FMapHandle, FMapFileHandle, FMapFileName, FMapIsTemporary, NewWidth, NewHeight);
   FBits := MapViewOfFile(FMapHandle, FILE_MAP_ALL_ACCESS, 0, 0, 0);
 
@@ -84,29 +78,29 @@ begin
 
   if ClearBuffer then
     FillLongword(FBits[0], NewWidth * NewHeight, clBlack32);
-end;
+}
 
 
-class procedure TMMFBackend.InitializeFileMapping(var MapHandle, MapFileHandle: THandle; var MapFileName: string);
-begin
+void TMMFBackend::InitializeFileMapping(var MapHandle, MapFileHandle: THandle; var MapFileName: string);
+{
   MapHandle := INVALID_HANDLE_VALUE;
   MapFileHandle := INVALID_HANDLE_VALUE;
   if MapFileName <> '' then
     ForceDirectories(IncludeTrailingPathDelimiter(ExtractFilePath(MapFileName)));
-end;
+}
 
-class procedure TMMFBackend.DeinitializeFileMapping(MapHandle, MapFileHandle: THandle; const MapFileName: string);
-begin
+void TMMFBackend::DeinitializeFileMapping(MapHandle, MapFileHandle: THandle; const MapFileName: string);
+{
   if MapFileName <> '' then
-  begin
+  {
     CloseHandle(MapHandle);
     CloseHandle(MapFileHandle);
     if FileExists(MapFileName) then
       DeleteFile(MapFileName);
-  end;
-end;
+  }
+}
 
-class procedure TMMFBackend.CreateFileMapping(var MapHandle, MapFileHandle: THandle;
+void TMMFBackend::CreateFileMapping(var MapHandle, MapFileHandle: THandle;
   var MapFileName: string; IsTemporary: Boolean; NewWidth, NewHeight: Integer);
 var
   Flags: Cardinal;
@@ -117,44 +111,44 @@ var
   function GetTempFileName(const Prefix: string): string;
   var
     GUID: TGUID;
-  begin
+  {
     repeat
       CoCreateGuid(GUID);
       Result := TempPath + Prefix + GUIDToString(GUID);
     until not FileExists(Result);
-  end;
+  }
 
 {$ELSE}
 
   function GetTempFileName(const Prefix: string): string;
   var
     PC: PChar;
-  begin
+  {
     PC := StrAlloc(MAX_PATH + 1);
     Windows.GetTempFileName(PChar(GetTempPath), PChar(Prefix), 0, PC);
     Result := string(PC);
     StrDispose(PC);
-  end;
+  }
 
 {$ENDIF}
 
-begin
+{
   // close previous handles
   if MapHandle <> INVALID_HANDLE_VALUE then
-  begin
+  {
     CloseHandle(MapHandle);
     MapHandle := INVALID_HANDLE_VALUE;
-  end;
+  }
 
   if MapFileHandle <> INVALID_HANDLE_VALUE then
-  begin
+  {
     CloseHandle(MapFileHandle);
     MapHandle := INVALID_HANDLE_VALUE;
-  end;
+  }
 
   // Do we want to use an external map file?
   if (MapFileName <> '') or IsTemporary then
-  begin
+  {
     if MapFileName = '' then
     {$IFDEF HAS_NATIVEINT}
       MapFileName := GetTempFileName(IntToStr(NativeUInt(Self)));
@@ -176,11 +170,11 @@ begin
       0, nil, CREATE_ALWAYS, Flags, 0);
 
     if MapFileHandle = INVALID_HANDLE_VALUE then
-    begin
+    {
       if not IsTemporary then
         raise Exception.CreateFmt(RCStrFailedToCreateMapFile, [MapFileName])
       else
-      begin
+      {
         // Reset and fall back to allocating in the system's paging file...
 
         // delete file if exists
@@ -188,8 +182,8 @@ begin
           DeleteFile(MapFileName);
           
         MapFileName := '';
-      end;
-    end;
+      }
+    }
   end
   else // use the system's paging file
     MapFileHandle := INVALID_HANDLE_VALUE;
@@ -199,16 +193,10 @@ begin
 
   if MapHandle = 0 then
     raise Exception.Create(RCStrFailedToMapFile);
-end;
+}
 
-{$ENDIF}
-
-{$IFDEF Windows}
 initialization
   TempPath := IncludeTrailingPathDelimiter(GetTempPath);
 
 finalization
   TempPath := '';
-{$ENDIF}
-
-end.

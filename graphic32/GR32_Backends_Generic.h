@@ -4,40 +4,37 @@
 #include "GR32.h"
 #include "GR32_Backends.h"
 
-type
-  { TMemoryBackend }
-  { A backend that keeps the backing buffer entirely in memory.}
+//{ TMemoryBackend }
+//{ A backend that keeps the backing buffer entirely in memory.}
 
-  TMemoryBackend = class(TCustomBackend)
-  protected
-    procedure InitializeSurface(NewWidth, NewHeight: Integer; ClearBuffer: Boolean); override;
-    procedure FinalizeSurface; override;
-  end;
+class TMemoryBackend : public TCustomBackend
+{
+protected:
+    void InitializeSurface(NewWidth, NewHeight: Integer; ClearBuffer: Boolean); override;
+    void FinalizeSurface; override;
+};
 
-{$IFDEF Windows}
 
-  { TMMFBackend }
-  { A backend that uses memory mapped files or mapped swap space for the
-    backing buffer.}
+//{ TMMFBackend }
+//{ A backend that uses memory mapped files or mapped swap space for the
+//  backing buffer.}
 
-  TMMFBackend = class(TMemoryBackend)
+class TMMFBackend : public TMemoryBackend
+{
   private
     FMapHandle: THandle;
     FMapIsTemporary: boolean;
     FMapFileHandle: THandle;
     FMapFileName: string;
   protected
-    procedure InitializeSurface(NewWidth, NewHeight: Integer; ClearBuffer: Boolean); override;
-    procedure FinalizeSurface; override;
+    void InitializeSurface(NewWidth, NewHeight: Integer; ClearBuffer: Boolean); override;
+    void FinalizeSurface; override;
   public
     constructor Create(Owner: TCustomBitmap32; IsTemporary: Boolean = True; const MapFileName: string = ''); virtual;
     destructor Destroy; override;
 
-    class procedure InitializeFileMapping(var MapHandle, MapFileHandle: THandle; var MapFileName: string);
-    class procedure DeinitializeFileMapping(MapHandle, MapFileHandle: THandle; const MapFileName: string);
-    class procedure CreateFileMapping(var MapHandle, MapFileHandle: THandle; var MapFileName: string; IsTemporary: Boolean; NewWidth, NewHeight: Integer);
-  end;
+    static void InitializeFileMapping(var MapHandle, MapFileHandle: THandle; var MapFileName: string);
+	static void DeinitializeFileMapping(MapHandle, MapFileHandle: THandle; const MapFileName : string);
+	static void CreateFileMapping(var MapHandle, MapFileHandle: THandle; var MapFileName : string; IsTemporary: Boolean; NewWidth, NewHeight: Integer);
+};
 
-{$ENDIF}
-
-implementation
